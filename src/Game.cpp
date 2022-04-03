@@ -45,7 +45,7 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	Entity& entity = entityManager.AddEntity();
 	entity.AddComponent<Transform>();
-	entity.GetComponent<Transform>().SetPosition(Vector2(1, 0));
+	entity.GetComponent<Transform>().SetPosition({ 1, 0 });
 
 	SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
 	testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);

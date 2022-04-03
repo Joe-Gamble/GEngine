@@ -11,19 +11,36 @@ namespace GUtility
 		Vector2(const float& x, const float& y);
 		Vector2(const Vector2& rhs);
 
-		Vector2 operator=(const Vector2& rhs);
-		bool operator==(const Vector2& rhs);
+		//ASSINGMENT AND EQUALITY OPERATIONS
+		inline Vector2& operator = (const Vector2& v) { x = v.x; y = v.y; return *this; }
+		inline Vector2& operator = (const float& f) { x = f; y = f; return *this; }
+		inline Vector2& operator - (void) { x = -x; y = -y; return *this; }
+		inline bool operator == (const Vector2& v) const { return (x == v.x) && (y == v.y); }
+		inline bool operator != (const Vector2& v) const { return (x != v.x) || (y != v.y); }
 
-		Vector2 operator*(Vector2& rhs);
+		//VECTOR2 TO VECTOR2 OPERATIONS
+		inline const Vector2 operator + (const Vector2& v) const { return Vector2(x + v.x, y + v.y); }
+		inline const Vector2 operator - (const Vector2& v) const { return Vector2(x - v.x, y - v.y); }
+		inline const Vector2 operator * (const Vector2& v) const { return Vector2(x * v.x, y * v.y); }
+		inline const Vector2 operator / (const Vector2& v) const { return Vector2(x / v.x, y / v.y); }
 
-		Vector2 operator/(Vector2& rhs);
-		Vector2 operator/(float& rhs);
+		//VECTOR2 TO THIS OPERATIONS
+		inline Vector2& operator += (const Vector2& v) { x += v.x; y += v.y; return *this; }
+		inline Vector2& operator -= (const Vector2& v) { x -= v.x; y -= v.y; return *this; }
+		inline Vector2& operator *= (const Vector2& v) { x *= v.x; y *= v.y; return *this; }
+		inline Vector2& operator /= (const Vector2& v) { x /= v.x; y /= v.y; return *this; }
 
-		Vector2 operator/=(Vector2& rhs);
-		Vector2 operator/=(float& rhs);
+		//SCALER TO VECTOR2 OPERATIONS
+		inline const Vector2 operator + (float v) const { return Vector2(x + v, y + v); }
+		inline const Vector2 operator - (float v) const { return Vector2(x - v, y - v); }
+		inline const Vector2 operator * (float v) const { return Vector2(x * v, y * v); }
+		inline const Vector2 operator / (float v) const { return Vector2(x / v, y / v); }
 
-		Vector2 operator+(Vector2& rhs);
-		Vector2 operator-(Vector2& rhs);
+		//SCALER TO THIS OPERATIONS
+		inline Vector2& operator += (float v) { x += v; y += v; return *this; }
+		inline Vector2& operator -= (float v) { x -= v; y -= v; return *this; }
+		inline Vector2& operator *= (float v) { x *= v; y *= v; return *this; }
+		inline Vector2& operator /= (float v) { x /= v; y /= v; return *this; }
 
 		static Vector2 Zero();
 
