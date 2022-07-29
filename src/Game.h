@@ -4,7 +4,6 @@
 #define GAME_H
 
 #include "SDL.h"
-#include "SDL_image.h"
 #include <stdio.h>
 #include "EntityManager.h"
 

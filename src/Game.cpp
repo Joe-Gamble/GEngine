@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 #include "Transform.h"
+#include "NetTransform.h"
 
 using namespace Engine;
 
@@ -44,13 +45,13 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	Entity& entity = entityManager.AddEntity();
-	entity.AddComponent<Transform>();
-	entity.GetComponent<Transform>().SetPosition({ 1, 0 });
+	entity.AddComponent<NetTransform>();
+	entity.GetComponent<NetTransform>().SetPosition({ 1, 0 });
 
-	SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
-	testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
+	// SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
+	// testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
 
-	SDL_FreeSurface(tmpSurface);
+	//SDL_FreeSurface(tmpSurface);
 }
 	
 void Game::handleEvents()

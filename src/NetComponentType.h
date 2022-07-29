@@ -1,0 +1,14 @@
+#pragma once
+
+#ifndef NET_COMPONENT_TYPE
+#define NET_COMPONENT_TYPE
+#endif // !NETCOMPONENTTYPE
+
+enum NetComponentType
+{
+	TYPE_UNDEFINED,
+	TYPE_TRANSFORM,
+	TYPE_TEXT,
+	TYPE_RIGIDBODY,
+};
+
