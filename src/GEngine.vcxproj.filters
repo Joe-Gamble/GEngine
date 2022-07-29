@@ -66,7 +66,7 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Source Files\Engine\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="Network.cpp">
+    <ClCompile Include="NetworkManager.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="NetComponent.cpp">
@@ -77,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="NetTransform.cpp">
       <Filter>Source Files\Network\NetComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

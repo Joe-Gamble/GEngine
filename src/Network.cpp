@@ -2,11 +2,11 @@
 
 using namespace GNet;
 
-bool NetworkManager::Initialise()
+bool NetworkManager::Initialise(bool isServer,  )
 {
     if (Network::Initialize())
     {
-
+        server = new Server();
     }
 }
 
