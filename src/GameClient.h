@@ -7,5 +7,6 @@
 
 class GameClient : GNet::Client
 {
-
+public:
+	GameClient(const std::string ip);
 };

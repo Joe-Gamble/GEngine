@@ -45,7 +45,7 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		running = true;
 	}
 
-	networkManager->Initialise();
+	networkManager->MakeServer();
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();
@@ -67,6 +67,10 @@ void Game::handleEvents()
 		case SDL_QUIT:
 		{
 			running = false;
+			break;
+		}
+		case SDLK_SPACE:
+		{
 			break;
 		}
 		default:
@@ -92,11 +96,8 @@ void Game::Destroy()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
-	if (networkManager)
-	{
-		networkManager->ShutDown();
-	}
-		
+	networkManager->ShutDown();
+	networkManager.release();
 	
 	std::cout << "Game Destroyed" << std::endl;
 }

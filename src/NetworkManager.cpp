@@ -4,19 +4,55 @@ bool NetworkManager::Initialise()
 {
     if (GNet::Network::Initialize())
     {
-        server = new GameServer();
+        initialised = true;
         return true;
     }
 }
 
-bool NetworkManager::IsHost()
+bool NetworkManager::MakeServer()
+{
+    if (!IsServer() && !IsClient())
+    {
+        if (!initialised)
+        {
+            if (!Initialise())
+            {
+                return false;
+            }
+        }
+
+        server = new GameServer();
+        return true;
+    }
+    return false;
+}
+
+bool NetworkManager::JoinServer(const std::string& ip)
+{
+    if (!IsServer() && !IsClient())
+    {
+        if (!initialised)
+        {
+            if (!Initialise())
+            {
+                return false;
+            }
+        }
+
+        client = new GameClient(ip);
+        return true;
+    }
+    return false;
+}
+
+bool NetworkManager::IsServer()
 {
     return server != nullptr;
 }
 
-int NetworkManager::GetConnectedUsers()
+bool NetworkManager::IsClient()
 {
-    return 0;
+    return client != nullptr;
 }
 
 void NetworkManager::ShutDown()
@@ -26,6 +62,8 @@ void NetworkManager::ShutDown()
 
     if (client != nullptr)
         delete server;
+
+    initialised = false;
 
     GNet::Network::Shutdown();
 }

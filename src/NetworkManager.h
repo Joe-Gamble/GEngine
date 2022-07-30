@@ -10,14 +10,21 @@
 class NetworkManager
 {
 public:
-	bool Initialise();
-	bool IsHost();
-	int GetConnectedUsers();
+	bool MakeServer();
+	bool JoinServer(const std::string& ip);
+
+	bool IsServer();
+	bool IsClient();
 
 	void ShutDown();
+	inline bool isInitialised() { return initialised; }
 
 private:
+	bool Initialise();
+
 	GameServer* server = nullptr;
 	GameClient* client = nullptr;
+
+	bool initialised = false;
 };
 
