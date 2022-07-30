@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Projects\Personal\GNet\GNet;C:\Projects\vclib\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Projects\Personal\GNet\x64\Release;C:\Projects\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\joemi\Documents\Dev\GNet\GNet;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.0.22\include;C:\Projects\Personal\GNet\GNet;C:\Projects\vclib\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\joemi\Documents\Dev\GNet\x64\Debug;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.0.22\lib\x64;C:\Projects\Personal\GNet\x64\Release;C:\Projects\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -150,10 +150,11 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetComponent.cpp" />
     <ClCompile Include="NetTransform.cpp" />
-    <ClCompile Include="Network.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -161,13 +162,15 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
+    <ClInclude Include="GameServer.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="GameClient.h" />
     <ClInclude Include="NetComponent.h" />
     <ClInclude Include="NetComponentType.h" />
     <ClInclude Include="NetTransform.h" />
-    <ClInclude Include="Network.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

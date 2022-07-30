@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Transform.h"
 #include "NetTransform.h"
+#include "NetworkManager.h"
 
 using namespace Engine;
 
@@ -44,7 +45,9 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		running = true;
 	}
 
-	Entity& entity = entityManager.AddEntity();
+	networkManager->Initialise();
+
+	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();
 	entity.GetComponent<NetTransform>().SetPosition({ 1, 0 });
 
@@ -73,7 +76,7 @@ void Game::handleEvents()
 
 void Game::Update(double& dt)
 {
-	entityManager.Update(dt);
+	entityManager->Update(dt);
 }
 
 void Game::Render()
@@ -89,5 +92,11 @@ void Game::Destroy()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
+	if (networkManager)
+	{
+		networkManager->ShutDown();
+	}
+		
+	
 	std::cout << "Game Destroyed" << std::endl;
 }

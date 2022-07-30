@@ -43,11 +43,11 @@
     <Filter Include="Header Files\Engine\ECS\Network">
       <UniqueIdentifier>{72c044aa-bdfb-4928-a9f8-11737be5c6fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\ECS\Network\NetComponents">
-      <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Network\NetComponents">
       <UniqueIdentifier>{38c6ff50-c9c2-4b26-8649-79b486eb9286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Network\NetComponents">
+      <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -78,8 +78,11 @@
     <ClCompile Include="NetTransform.cpp">
       <Filter>Source Files\Network\NetComponents</Filter>
     </ClCompile>
-    <ClCompile Include="Network.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameServer.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClient.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,17 +107,23 @@
     <ClInclude Include="EntityManager.h">
       <Filter>Header Files\Engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Network.h">
+    <ClInclude Include="NetworkManager.h">
       <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
     <ClInclude Include="NetComponent.h">
-      <Filter>Header Files\Engine\ECS\Network\NetComponents</Filter>
+      <Filter>Header Files\Engine\Network\NetComponents</Filter>
     </ClInclude>
     <ClInclude Include="NetComponentType.h">
-      <Filter>Header Files\Engine\ECS\Network\NetComponents</Filter>
+      <Filter>Header Files\Engine\Network\NetComponents</Filter>
     </ClInclude>
     <ClInclude Include="NetTransform.h">
-      <Filter>Header Files\Engine\ECS\Network\NetComponents</Filter>
+      <Filter>Header Files\Engine\Network\NetComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient.h">
+      <Filter>Header Files\Engine\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer.h">
+      <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

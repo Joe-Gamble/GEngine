@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include <stdio.h>
 #include "EntityManager.h"
+#include "NetworkManager.h"
 
 namespace Engine
 {
@@ -30,7 +31,8 @@ namespace Engine
 		SDL_Window* window = nullptr;
 		SDL_Renderer* renderer = nullptr;
 
-		EntityManager entityManager;
+		std::unique_ptr<NetworkManager> networkManager = std::make_unique<NetworkManager>();
+		std::unique_ptr<EntityManager> entityManager = std::make_unique<EntityManager>();
 	};
 }
 

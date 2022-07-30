@@ -1,6 +1,31 @@
-#include "Network.h"
+#include "NetworkManager.h"
 
-bool Network::Initialise()
+bool NetworkManager::Initialise()
 {
-	return false;
+    if (GNet::Network::Initialize())
+    {
+        server = new GameServer();
+        return true;
+    }
+}
+
+bool NetworkManager::IsHost()
+{
+    return server != nullptr;
+}
+
+int NetworkManager::GetConnectedUsers()
+{
+    return 0;
+}
+
+void NetworkManager::ShutDown()
+{
+    if (server != nullptr)
+        delete server;
+
+    if (client != nullptr)
+        delete server;
+
+    GNet::Network::Shutdown();
 }

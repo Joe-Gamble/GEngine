@@ -26,6 +26,5 @@ private:
 	Vector2 position;
 	Vector2 scale;
 	//Quaternion Rotaion
-
 };
 
