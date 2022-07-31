@@ -16,6 +16,12 @@ Vector2::Vector2(const Vector2& rhs)
 	y = rhs.y;
 }
 
+GUtility::Vector2::Vector2(Vector2Mold& mold)
+{
+	x = mold.x;
+	y = mold.y;
+}
+
 Vector2 Vector2::Zero()
 {
 	return Vector2(0, 0);

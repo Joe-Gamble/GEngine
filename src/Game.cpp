@@ -46,6 +46,7 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	networkManager->MakeServer();
+	networkManager->JoinServer("192.168.0.23");
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();

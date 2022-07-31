@@ -22,6 +22,7 @@ bool NetworkManager::MakeServer()
         }
 
         server = new GameServer();
+        server->TestSend();
         return true;
     }
     return false;
@@ -29,6 +30,9 @@ bool NetworkManager::MakeServer()
 
 bool NetworkManager::JoinServer(const std::string& ip)
 {
+    client = new GameClient(ip);
+    return true;
+
     if (!IsServer() && !IsClient())
     {
         if (!initialised)
@@ -38,9 +42,6 @@ bool NetworkManager::JoinServer(const std::string& ip)
                 return false;
             }
         }
-
-        client = new GameClient(ip);
-        return true;
     }
     return false;
 }
@@ -57,10 +58,10 @@ bool NetworkManager::IsClient()
 
 void NetworkManager::ShutDown()
 {
-    if (server != nullptr)
-        delete server;
-
     if (client != nullptr)
+        delete client;
+
+    if (server != nullptr)
         delete server;
 
     initialised = false;

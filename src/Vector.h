@@ -2,6 +2,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "Vector2Mold.h"
+
 namespace GUtility
 {
 	class Vector2
@@ -10,6 +12,17 @@ namespace GUtility
 		Vector2() = default;
 		Vector2(const float& x, const float& y);
 		Vector2(const Vector2& rhs);
+
+		Vector2(Vector2Mold& mold);
+
+		static inline Vector2Mold& CreateMold(const Vector2& transform)
+		{
+			Vector2Mold mold;
+
+			mold.x = transform.x;
+			mold.y = transform.y;
+			return mold;
+		}
 
 		//ASSINGMENT AND EQUALITY OPERATIONS
 		inline Vector2& operator = (const Vector2& v) { x = v.x; y = v.y; return *this; }

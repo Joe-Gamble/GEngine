@@ -151,6 +151,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GamePacket.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetComponent.cpp" />
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
+    <ClInclude Include="GamePacket.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
@@ -170,9 +172,11 @@
     <ClInclude Include="NetComponent.h" />
     <ClInclude Include="NetComponentType.h" />
     <ClInclude Include="NetTransform.h" />
+    <ClInclude Include="NetTransformMold.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="Vector2Mold.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -49,6 +49,9 @@
     <Filter Include="Header Files\Engine\Network\NetComponents">
       <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Network\NetComponents\NetComponentMolds">
+      <UniqueIdentifier>{65ca79fb-5a78-4e18-bf87-9b365fc0fabb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,6 +85,9 @@
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="GameClient.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePacket.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
@@ -124,6 +130,15 @@
     </ClInclude>
     <ClInclude Include="GameServer.h">
       <Filter>Header Files\Engine\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePacket.h">
+      <Filter>Header Files\Engine\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetTransformMold.h">
+      <Filter>Header Files\Engine\Network\NetComponents\NetComponentMolds</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2Mold.h">
+      <Filter>Header Files\Engine\Network\NetComponents\NetComponentMolds</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
