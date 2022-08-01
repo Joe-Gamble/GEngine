@@ -15,6 +15,8 @@ namespace GUtility
 
 		Vector2(Vector2Mold& mold);
 
+		static const void* Serialise(const Vector2& transform);
+
 		static inline Vector2Mold& CreateMold(const Vector2& transform)
 		{
 			Vector2Mold mold;
