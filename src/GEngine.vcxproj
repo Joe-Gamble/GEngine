@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\include;C:\Users\joemi\Documents\Dev\GNet\GNet;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.0.22\include;C:\Projects\Personal\GNet\GNet;C:\Projects\vclib\SDL2-2.0.22\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\lib-vc2022;C:\Users\joemi\Documents\Dev\GNet\x64\Debug;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.0.22\lib\x64;C:\Projects\Personal\GNet\x64\Release;C:\Projects\vclib\SDL2-2.0.22\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\include;C:\Users\joemi\Documents\Dev\GNet\GNet;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.24.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\lib-vc2022;C:\Users\joemi\Documents\Dev\GNet\x64\Debug;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.24.0\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

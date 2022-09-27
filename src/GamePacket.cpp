@@ -44,15 +44,18 @@ GamePacket& GamePacket::operator>>(NetTransform& transform)
     return *this;
 }
 
+
 GamePacket& GamePacket::operator<<(const Vector2& vector)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
 
     *packet << sizeof(Vector2Mold);
-    Append(Vector2::Serialise(vector), sizeof(Vector2Mold));
+    // Append(Vector2::Serialise(vector), sizeof(Vector2Mold));
 
     return *this;
 }
+
+
 
 GamePacket& GamePacket::operator>>(Vector2& vector)
 {
@@ -78,14 +81,14 @@ GamePacket& GamePacket::operator>>(Vector2& vector)
         if (mold == nullptr)
             return *this;
 
-        vector = Vcetor2(*mold);
+        vector = Vector2(*mold);
 
         extractionOffset += vectorSize;
 
         std::free(data);
     }
 
-    return *this
+    return *this;
 
     /*
 
