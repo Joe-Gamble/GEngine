@@ -2,18 +2,19 @@
 #include "NetTransform.h"
 #include "GamePacket.h"
 
+using namespace GEngine::Networking;
+
 GameClient::GameClient(const std::string ip)
 {
 	if (Connect(ip))
 	{
-		thread = std::make_unique<std::thread>(std::thread(&GameClient::Tick, this));
+		//thread = std::make_unique<std::thread>(std::thread(&GameClient::Tick, this));
 	}
 }
 
 GameClient::~GameClient()
 {
-	CloseConnection("Client Exited the application.");
-	thread->detach();
+	CloseConnection("Client exited the application.");
 }
 
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
@@ -33,7 +34,7 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 void GameClient::OnConnect()
 {
-	std::cout << "COnnected to the server" << std::endl;
+	std::cout << "Connected to the server" << std::endl;
 }
 
 void GameClient::Tick()

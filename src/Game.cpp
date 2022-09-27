@@ -4,19 +4,24 @@
 #include "NetTransform.h"
 #include "NetworkManager.h"
 
-using namespace Engine;
+using namespace GEngine;
 
 SDL_Texture* testTexture;
 
 Game::Game()
 {
-	
+	name = "My Game Window!";
+}
+
+GEngine::Game::Game(const std::string& _name)
+{
+	name = _name;
 }
 
 Game::~Game()
 {}
 
-void Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
 
@@ -29,7 +34,7 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
-		SDL_Window* window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		SDL_Window* window = SDL_CreateWindow(name.c_str(), xpos, ypos, width, height, flags);
 		if (window)
 		{
 			std::cout << "Window created" << std::endl;
@@ -52,8 +57,8 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 	entity.AddComponent<NetTransform>();
 	entity.GetComponent<NetTransform>().SetPosition({ 1, 0 });
 
-	// SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
-	// testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
+	//SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
+	//testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
 
 	//SDL_FreeSurface(tmpSurface);
 }
@@ -65,17 +70,23 @@ void Game::handleEvents()
 
 	switch (event.type)
 	{
-		case SDL_QUIT:
+	case SDL_QUIT:
+	{
+		running = false;
+		break;
+	}
+	case SDL_KEYDOWN:
+	{
+		/* Check the SDLKey values and move change the coords */
+		switch (event.key.keysym.sym) 
 		{
-			running = false;
+		case SDLK_q:
+			std::cout << "Renderer created" << std::endl;
 			break;
 		}
-		case SDLK_SPACE:
-		{
-			break;
-		}
-		default:
-			break;
+	}
+	default:
+		break;
 	}
 }
 

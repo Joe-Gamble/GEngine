@@ -6,9 +6,9 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-using namespace Engine;
+using namespace GEngine;
 
-Game* game = new Game();
+Game* game = new Game("Test Game");
 
 int main(int argc, char* args[])
 {
@@ -17,7 +17,7 @@ int main(int argc, char* args[])
 
 	double deltaTime = 0;
 
-	game->Init("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
+	game->Init(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
 	while (game->isRunning())
 	{

@@ -49,7 +49,7 @@
     <Filter Include="Header Files\Engine\Network\NetComponents">
       <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\Network\NetComponents\NetComponentMolds">
+    <Filter Include="Header Files\Engine\Network\NetComponents\Molds">
       <UniqueIdentifier>{65ca79fb-5a78-4e18-bf87-9b365fc0fabb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -135,10 +135,10 @@
       <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
     <ClInclude Include="NetTransformMold.h">
-      <Filter>Header Files\Engine\Network\NetComponents\NetComponentMolds</Filter>
+      <Filter>Header Files\Engine\Network\NetComponents\Molds</Filter>
     </ClInclude>
     <ClInclude Include="Vector2Mold.h">
-      <Filter>Header Files\Engine\Network\NetComponents\NetComponentMolds</Filter>
+      <Filter>Header Files\Engine\Network\NetComponents\Molds</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,24 +7,32 @@
 #include "GameServer.h"
 #include "GameClient.h"
 
-class NetworkManager
+namespace GEngine
 {
-public:
-	bool MakeServer();
-	bool JoinServer(const std::string& ip);
+	namespace Networking
+	{
+		class NetworkManager
+		{
+		public:
+			bool MakeServer();
+			bool JoinServer(const std::string& ip);
 
-	bool IsServer();
-	bool IsClient();
+			bool IsServer();
+			bool IsClient();
 
-	void ShutDown();
-	inline bool isInitialised() { return initialised; }
+			void ShutDown();
+			inline bool isInitialised() { return initialised; }
 
-private:
-	bool Initialise();
+		private:
+			bool Initialise();
 
-	GameServer* server = nullptr;
-	GameClient* client = nullptr;
+			GameServer* server = nullptr;
+			GameClient* client = nullptr;
 
-	bool initialised = false;
-};
+			bool initialised = false;
+		};
+	}
+}
+
+
 

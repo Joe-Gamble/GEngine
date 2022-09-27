@@ -1,5 +1,7 @@
 #include "GamePacket.h"
 
+using namespace GEngine::Networking;
+
 GamePacket& GamePacket::operator<<(const NetTransform& transform)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);

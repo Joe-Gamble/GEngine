@@ -9,15 +9,23 @@
 
 using namespace GNet;
 
-class GamePacket : public Packet
+namespace GEngine
 {
-public:
+	namespace Networking
+	{
+		class GamePacket : public Packet
+		{
+		public:
 
-	GamePacket(PacketType packetType) : Packet(packetType) {}
-	GamePacket& operator << (const NetTransform& data); // NetTransform insertion
-	GamePacket& operator >> (NetTransform& data); // NetTransform extraction
+			GamePacket(PacketType packetType) : Packet(packetType) {}
+			GamePacket& operator << (const NetTransform& data); // NetTransform insertion
+			GamePacket& operator >> (NetTransform& data); // NetTransform extraction
 
-	GamePacket& operator << (const Vector2& data);
-	GamePacket& operator >> (Vector2& data);
-};
+			GamePacket& operator << (const Vector2& data);
+			GamePacket& operator >> (Vector2& data);
+		};
+	}
+}
+
+
 

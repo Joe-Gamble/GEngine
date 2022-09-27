@@ -1,5 +1,7 @@
 #include "NetworkManager.h"
 
+using namespace GEngine::Networking;
+
 bool NetworkManager::Initialise()
 {
     if (GNet::Network::Initialize())
@@ -60,7 +62,7 @@ void NetworkManager::ShutDown()
 {
     if (client != nullptr)
         delete client;
-
+    
     if (server != nullptr)
         delete server;
 
