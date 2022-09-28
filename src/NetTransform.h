@@ -5,8 +5,10 @@
 #endif // !NET_TRANSFORM
 
 #include "NetComponent.h"
-#include "Transform.h"
+#include "Vector.h"
 #include "NetTransformMold.h"
+
+using namespace GUtility;
 
 struct NetTransform : NetComponent
 {

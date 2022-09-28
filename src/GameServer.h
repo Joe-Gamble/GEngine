@@ -19,12 +19,13 @@ namespace GEngine
 
 			// Test function : remove this at a later date
 			void TestSend();
+			void Tick();
+			inline bool IsRunning() { return isRunning; }
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;
 			virtual void OnDisconnect(TCPConnection& lostConnection, std::string reason) override;
 			virtual bool ProcessPacket(std::shared_ptr<Packet> packet) override;
 		private:
-			void Tick();
 			bool isRunning = false;
 			std::unique_ptr<std::thread> thread;
 		};

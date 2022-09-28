@@ -174,6 +174,7 @@
     <ClInclude Include="NetTransform.h" />
     <ClInclude Include="NetTransformMold.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2Mold.h" />

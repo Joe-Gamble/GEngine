@@ -5,6 +5,7 @@
 #include "NetworkManager.h"
 
 using namespace GEngine;
+using namespace Networking;
 
 SDL_Texture* testTexture;
 
@@ -50,8 +51,8 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 		running = true;
 	}
 
-	networkManager->MakeServer();
-	networkManager->JoinServer("192.168.0.23");
+	NetworkManager::Instance().MakeServer();
+	NetworkManager::Instance().JoinServer("192.168.0.23");
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();
@@ -108,8 +109,7 @@ void Game::Destroy()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
-	networkManager->ShutDown();
-	networkManager.release();
+	NetworkManager::Instance().ShutDown();
 	
 	std::cout << "Game Destroyed" << std::endl;
 }

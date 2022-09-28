@@ -52,6 +52,12 @@
     <Filter Include="Header Files\Engine\Network\NetComponents\Molds">
       <UniqueIdentifier>{65ca79fb-5a78-4e18-bf87-9b365fc0fabb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Physics">
+      <UniqueIdentifier>{e5d62106-5e95-43dc-806b-e72b2e5ab95d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Data">
+      <UniqueIdentifier>{6ac2e665-9293-4f1f-92fa-e67c13022a66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -139,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Vector2Mold.h">
       <Filter>Header Files\Engine\Network\NetComponents\Molds</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Engine\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

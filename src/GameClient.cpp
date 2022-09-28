@@ -8,7 +8,7 @@ GameClient::GameClient(const std::string ip)
 {
 	if (Connect(ip))
 	{
-		//thread = std::make_unique<std::thread>(std::thread(&GameClient::Tick, this));
+		
 	}
 }
 

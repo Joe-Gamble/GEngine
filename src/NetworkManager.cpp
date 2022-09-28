@@ -24,7 +24,8 @@ bool NetworkManager::MakeServer()
         }
 
         server = new GameServer();
-        server->TestSend();
+        networkThread = SDL_CreateThread(Tick, "Network Thread", (void*)NULL);
+        
         return true;
     }
     return false;
@@ -56,6 +57,23 @@ bool NetworkManager::IsServer()
 bool NetworkManager::IsClient()
 {
     return client != nullptr;
+}
+
+int NetworkManager::Tick(void* data)
+{
+    NetworkManager nm = NetworkManager::Instance();
+
+    if (nm.server != nullptr)
+    {
+        while (nm.server->IsRunning())
+            nm.server->Tick();
+    }
+    else if (nm.client != nullptr)
+    {
+        while (nm.client->IsConnected())
+            nm.client->Tick();
+    }
+    return 0;
 }
 
 void NetworkManager::ShutDown()

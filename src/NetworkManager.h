@@ -7,6 +7,9 @@
 #include "GameServer.h"
 #include "GameClient.h"
 
+#include "SDL_thread.h"
+#include "SDL.h"
+
 namespace GEngine
 {
 	namespace Networking
@@ -20,14 +23,29 @@ namespace GEngine
 			bool IsServer();
 			bool IsClient();
 
+			static inline NetworkManager& Instance()
+			{
+				static NetworkManager instance;
+				return instance;
+			}
+
+			static int Tick(void* data);
+
 			void ShutDown();
 			inline bool isInitialised() { return initialised; }
 
+			inline bool HasAuthority() { return (server != nullptr && client == nullptr); }
+
 		private:
+
+			NetworkManager() = default;
+
 			bool Initialise();
 
 			GameServer* server = nullptr;
 			GameClient* client = nullptr;
+			
+			SDL_Thread* networkThread = nullptr;
 
 			bool initialised = false;
 		};
