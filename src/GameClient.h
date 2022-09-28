@@ -11,13 +11,16 @@ namespace GEngine
 {
 	namespace Networking
 	{
-		class GameClient : public GNet::Client
+		class GameClient : private GNet::Client
 		{
 		public:
-			GameClient(const std::string ip);
+			GameClient();
+			bool ConnectToIP(const std::string ip);
 			~GameClient();
 
 			void Tick();
+
+			inline bool IsClientConnected() { return IsConnected(); }
 		protected:
 			bool ProcessPacket(std::shared_ptr<Packet> packet) override;
 			void OnConnect() override;

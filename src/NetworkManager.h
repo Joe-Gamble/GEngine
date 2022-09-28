@@ -32,7 +32,7 @@ namespace GEngine
 			static int Tick(void* data);
 
 			void ShutDown();
-			inline bool isInitialised() { return initialised; }
+			inline bool IsInitialised() { return initialised; }
 
 			inline bool HasAuthority() { return (server != nullptr && client == nullptr); }
 
@@ -41,12 +41,15 @@ namespace GEngine
 			NetworkManager() = default;
 
 			bool Initialise();
+			bool InitialiseThread();
 
 			GameServer* server = nullptr;
 			GameClient* client = nullptr;
 			
 			SDL_Thread* networkThread = nullptr;
 
+			// shutdown thread
+			bool shutdown = false;
 			bool initialised = false;
 		};
 	}

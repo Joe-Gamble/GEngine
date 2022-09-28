@@ -7,16 +7,12 @@ GameServer::GameServer()
 {
 	if (Initialise())
 	{
-		// TODO: FIX THE THREADING?!?!?!?!
-
 		isRunning = true;
-		// thread = std::make_unique<std::thread>(std::thread(&GameServer::Tick, this));
 	}
 }
 
 GameServer::~GameServer()
 {
-	// thread->detach();
 }
 
 void GameServer::TestSend()

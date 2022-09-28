@@ -4,12 +4,13 @@
 
 using namespace GEngine::Networking;
 
-GameClient::GameClient(const std::string ip)
+GameClient::GameClient()
 {
-	if (Connect(ip))
-	{
-		
-	}
+}
+
+bool GEngine::Networking::GameClient::ConnectToIP(const std::string ip)
+{
+	return Connect(ip);
 }
 
 GameClient::~GameClient()
