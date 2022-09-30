@@ -10,6 +10,11 @@
 #include "SDL_thread.h"
 #include "SDL.h"
 
+#include "EventDriver.h"
+
+#include <functional>
+
+
 namespace GEngine
 {
 	namespace Networking
@@ -22,6 +27,9 @@ namespace GEngine
 
 			bool IsServer();
 			bool IsClient();
+
+			void OnClientConnected() { std::cout << "Prayge" << std::endl; }
+			void OnClientReady() {}
 
 			static inline NetworkManager& Instance()
 			{

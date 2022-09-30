@@ -58,6 +58,9 @@
     <Filter Include="Header Files\Engine\Data">
       <UniqueIdentifier>{6ac2e665-9293-4f1f-92fa-e67c13022a66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{78e9cdd6-e598-4f8b-84f7-aa901f0445f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,13 +99,13 @@
     <ClCompile Include="GamePacket.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkUtils.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS.h">
       <Filter>Header Files\Engine\ECS</Filter>
@@ -148,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files\Engine\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkUtils.h">
+      <Filter>Header Files\Engine\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="EventDriver.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

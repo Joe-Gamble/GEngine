@@ -3,9 +3,11 @@
 #include "Transform.h"
 #include "NetTransform.h"
 #include "NetworkManager.h"
+#include "EventDriver.h";
 
 using namespace GEngine;
 using namespace Networking;
+using namespace GEngine::Callbacks;
 
 SDL_Texture* testTexture;
 
@@ -54,8 +56,17 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 	// if game host machine
 	NetworkManager::Instance().MakeServer();
 
+	EventDriver::Instance().RegisterCallback([]() 
+		{ 
+			std::cout << "Client Connected" << std::endl; 
+		}, 
+		Event::NETWORKING_CLIENT_CONNECTED
+	);
+
 	// if joining session
-	NetworkManager::Instance().JoinServer("192.168.0.22");
+	NetworkManager::Instance().JoinServer("192.168.0.23");
+
+	
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();
