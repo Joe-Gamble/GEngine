@@ -1,1 +1,1 @@
-GEngine is a sandbox engine for exploring system implemenations within C++. 
+GEngine is a sandbox engine for exploring system implemenations within C++. Curently developing a Threaded extension of GNet (Networking Librbary developed by me) to support game packets. Also developing an ECS alongside this with the hopes to produce a working game of a primitive nature sometiume in the near future.
