@@ -60,13 +60,18 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 		{ 
 			std::cout << "Client Connected" << std::endl; 
 		}, 
-		Event::NETWORKING_CLIENT_CONNECTED
+		Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL
 	);
 
-	// if joining session
-	NetworkManager::Instance().JoinServer("192.168.0.23");
+	EventDriver::Instance().RegisterCallback([]()
+		{
+			std::cout << "Client couldn't connect." << std::endl;
+		},
+		Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL
+			);
 
-	
+	// if joining session
+	NetworkManager::Instance().JoinServer("192.168.0.22");
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();
@@ -87,6 +92,7 @@ void Game::handleEvents()
 	{
 	case SDL_QUIT:
 	{
+		EventDriver::Instance().CallEvent(Event::GAME_QUIT);
 		running = false;
 		break;
 	}

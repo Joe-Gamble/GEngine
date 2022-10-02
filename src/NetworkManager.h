@@ -19,6 +19,17 @@ namespace GEngine
 {
 	namespace Networking
 	{
+		enum NetworkState
+		{
+			UNINITIALIZED,
+			INITIALIZED,
+			FREE,
+			CLIENT_CONNECTING,
+			CLIENT_SERVER_TICK,
+			SHUTDOWN,
+			MAX_STATE
+		};
+
 		class NetworkManager
 		{
 		public:
@@ -40,9 +51,9 @@ namespace GEngine
 			static int Tick(void* data);
 
 			void ShutDown();
-			inline bool IsInitialised() { return initialised; }
+			inline bool IsInitialised() { return m_initialised; }
 
-			inline bool HasAuthority() { return (server != nullptr && client == nullptr); }
+			inline bool HasAuthority() { return (m_server != nullptr && m_client == nullptr); }
 
 		private:
 
@@ -51,14 +62,17 @@ namespace GEngine
 			bool Initialise();
 			bool InitialiseThread();
 
-			GameServer* server = nullptr;
-			GameClient* client = nullptr;
+			GameServer* m_server = nullptr;
+			GameClient* m_client = nullptr;
 			
 			SDL_Thread* networkThread = nullptr;
 
 			// shutdown thread
-			bool shutdown = false;
-			bool initialised = false;
+			bool m_shutdown = false;
+			bool m_initialised = false;
+			NetworkState currentState = NetworkState::UNINITIALIZED;
+
+			std::string m_ipAddress;
 		};
 	}
 }
