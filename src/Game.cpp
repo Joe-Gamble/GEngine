@@ -71,7 +71,7 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 			);
 
 	// if joining session
-	NetworkManager::Instance().JoinServer("192.168.0.22");
+	NetworkManager::Instance().JoinServer("192.168.0.23");
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();

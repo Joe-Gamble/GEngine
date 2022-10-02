@@ -145,6 +145,7 @@ namespace GEngine::Networking
                 case NetworkState::SHUTDOWN:
                 {
                     nm->m_shutdown = true;
+                    nm->currentState = NetworkState::UNINITIALIZED;
                     return 0;
                 }
 

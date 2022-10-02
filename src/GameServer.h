@@ -27,7 +27,6 @@ namespace GEngine
 			virtual bool ProcessPacket(std::shared_ptr<Packet> packet) override;
 		private:
 			bool isRunning = false;
-			std::unique_ptr<std::thread> thread;
 		};
 	}
 }

@@ -26,7 +26,11 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		case PacketType::PT_TRANSFORM:
 			NetTransform transform = NetTransform();
 			gamePacket >> transform;
-			std::cout << "Recieved Transform:" << std::endl;
+
+			int x = transform.GetPosition().X();
+			int y = transform.GetPosition().Y();
+
+			std::cout << "Recieved Transform: " << x << " " << y << std::endl;
 			break;
 		}
 
@@ -40,7 +44,7 @@ void GameClient::OnConnect()
 
 void GameClient::Tick()
 {
-	while (IsConnected())
+	if (IsConnected())
 	{
 		Frame();
 	}

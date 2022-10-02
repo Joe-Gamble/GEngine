@@ -1,13 +1,16 @@
 #include "GameServer.h"
 #include "GamePacket.h"
+#include "EventDriver.h"
 
 using namespace GEngine::Networking;
+using namespace GEngine::Callbacks;
 
 GameServer::GameServer()
 {
 	if (Initialise())
 	{
 		isRunning = true;
+		EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_READY);
 	}
 }
 
@@ -36,6 +39,7 @@ void GameServer::OnConnect(TCPConnection& newConnection) noexcept
 
 void GameServer::OnDisconnect(TCPConnection& lostConnection, std::string reason)
 {
+	// Do we want clients to be able to reconnect to a session or do we quit the game if we lose our player?
 }
 
 bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet)
@@ -45,8 +49,7 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet)
 
 void GameServer::Tick()
 {
-	std::cout << "listening" << std::endl;
-	while (isRunning)
+	if (isRunning)
 	{
 		Frame();
 	}
