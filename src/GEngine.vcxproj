@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\include;C:\Users\joemi\Documents\Dev\GNet\GNet;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.24.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\lib-vc2022;C:\Users\joemi\Documents\Dev\GNet\x64\Debug;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.24.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libaries\OpenGL\include;$(SolutionDir)\..\GNet\GNet;$(SolutionDir)Libaries\SDL2-2.24.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libaries\OpenGL\lib-vc2022;$(SolutionDir)\..\GNet\x64\Debug;$(SolutionDir)Libaries\SDL2-2.24.0\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

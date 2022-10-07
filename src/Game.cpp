@@ -43,7 +43,7 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 			std::cout << "Window created" << std::endl;
 		}
 
-		renderer = SDL_CreateRenderer(window, -1, 0);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 		if (renderer)
 		{
 			std::cout << "Renderer created" << std::endl;
@@ -71,7 +71,7 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 			);
 
 	// if joining session
-	NetworkManager::Instance().JoinServer("192.168.0.23");
+	NetworkManager::Instance().JoinServer("192.168.0.203");
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();

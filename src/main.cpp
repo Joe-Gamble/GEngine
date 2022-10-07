@@ -12,26 +12,31 @@ Game* game = new Game("Test Game");
 
 int main(int argc, char* args[])
 {
-	Uint64 now = SDL_GetPerformanceCounter();
-	Uint64 last = 0;
+	unsigned int now = SDL_GetTicks();
+	unsigned int last = SDL_GetTicks();
 
-	double deltaTime = 0;
+	double timeBetweenFrames = 0;
 
 	game->Init(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
 	while (game->isRunning())
 	{
-		last = now;
-		now = SDL_GetPerformanceCounter();
+		now = SDL_GetTicks();
+		timeBetweenFrames = now - last;
 
-		deltaTime = ((now - last) * 1000 / (double)SDL_GetPerformanceFrequency());
+		if (timeBetweenFrames > 1000 / 60.0)
+		{
+			double delta = timeBetweenFrames / 1000.0f;
+			std::cout << "FPS: " << delta << std::endl;
 
-		game->handleEvents();
-		game->Update(deltaTime);
-		game->Render();
+			last = now;
+
+			game->handleEvents();
+			game->Update(delta);
+			game->Render();
+		}
 	}
 
 	game->Destroy();
-
 	return 0;
 }
