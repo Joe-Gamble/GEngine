@@ -104,3 +104,43 @@ GamePacket& GamePacket::operator>>(Vector2& vector)
     return *this;
     */
 }
+
+GamePacket& GamePacket::operator << (const short& shortData)
+{
+    Packet* packet = reinterpret_cast<Packet*>(this);
+
+    *packet << sizeof(short);
+    const void* data = reinterpret_cast<const void*>(&shortData);
+    Append(data, sizeof(short));
+
+    return *this;
+}
+
+GamePacket& GEngine::Networking::GamePacket::operator>>(short& newShort)
+{
+    uint32_t shortSize = 0;
+
+    Packet* packet = reinterpret_cast<Packet*>(this);
+    *packet >> shortSize;
+
+    if (extractionOffset + shortSize > buffer.size())
+        throw PacketException("[Packet::operator>>(Short& data)] - Extraction offset exceeded buffer size.");
+
+    void* data = malloc(sizeof(short));
+
+    if (data != nullptr && sizeof(data) > 0)
+    {
+        memcpy(data, &buffer[extractionOffset], sizeof(short));
+        short* shortData = reinterpret_cast<short*>(data);
+
+        if (shortData == nullptr)
+            return *this;
+
+        newShort = short(*shortData);
+
+        extractionOffset += shortSize;
+        std::free(data);
+    }
+
+    return *this;
+}

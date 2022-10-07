@@ -4,6 +4,7 @@
 #endif // !ENGINE_SERVER
 
 #include "IncludeMe.h"
+#include "Entity.h"
 //#include <thread>
 
 
@@ -17,6 +18,8 @@ namespace GEngine
 			GameClient();
 			bool ConnectToIP(const std::string ip);
 			~GameClient();
+
+			void SendServerRequest();
 
 			void Tick();
 

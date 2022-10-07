@@ -54,7 +54,6 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 	}
 
 	// if game host machine
-	NetworkManager::Instance().MakeServer();
 
 	EventDriver::Instance().RegisterCallback([]() 
 		{ 
@@ -71,7 +70,9 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 			);
 
 	// if joining session
-	NetworkManager::Instance().JoinServer("192.168.0.203");
+	// 
+	// work 192.168.0.203
+	// home 192.168.0.23
 
 	Entity& entity = entityManager->AddEntity();
 	entity.AddComponent<NetTransform>();
@@ -90,24 +91,36 @@ void Game::handleEvents()
 
 	switch (event.type)
 	{
-	case SDL_QUIT:
-	{
-		EventDriver::Instance().CallEvent(Event::GAME_QUIT);
-		running = false;
-		break;
-	}
-	case SDL_KEYDOWN:
-	{
-		/* Check the SDLKey values and move change the coords */
-		switch (event.key.keysym.sym) 
+		case SDL_QUIT:
 		{
-		case SDLK_q:
-			std::cout << "Renderer created" << std::endl;
+			EventDriver::Instance().CallEvent(Event::GAME_QUIT);
+			running = false;
 			break;
 		}
-	}
-	default:
-		break;
+		case SDL_KEYDOWN:
+		{
+			/* Check the SDLKey values and move change the coords */
+			switch (event.key.keysym.sym) 
+			{
+				case SDLK_q:
+				{
+					NetworkManager::Instance().MakeServer();
+					break;
+				}
+
+				case SDLK_w:
+				{
+					NetworkManager::Instance().JoinServer("192.168.0.23");
+					break;
+				}
+				default:
+					break;
+			}
+		}
+		default:
+		{
+			break;
+		}
 	}
 }
 

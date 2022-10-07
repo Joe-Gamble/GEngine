@@ -27,7 +27,7 @@ int main(int argc, char* args[])
 		if (timeBetweenFrames > 1000 / 60.0)
 		{
 			double delta = timeBetweenFrames / 1000.0f;
-			std::cout << "FPS: " << delta << std::endl;
+			// std::cout << "FPS: " << delta << std::endl;
 
 			last = now;
 

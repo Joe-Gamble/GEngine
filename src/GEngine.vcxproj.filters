@@ -37,9 +37,6 @@
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{130350fa-163a-4a8a-9ed3-313f75099c75}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\ECS\Network">
-      <UniqueIdentifier>{72c044aa-bdfb-4928-a9f8-11737be5c6fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Engine\Network\NetComponents">
       <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
     </Filter>

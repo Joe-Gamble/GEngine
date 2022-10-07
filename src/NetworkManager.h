@@ -23,7 +23,6 @@ namespace GEngine
 		{
 			UNINITIALIZED,
 			INITIALIZED,
-			FREE,
 			CLIENT_CONNECTING,
 			CLIENT_SERVER_TICK,
 			SHUTDOWN,
@@ -33,13 +32,15 @@ namespace GEngine
 		class NetworkManager
 		{
 		public:
+			static const short Version = 12346;
+
+		public:
 			bool MakeServer();
 			bool JoinServer(const std::string& ip);
 
 			bool IsServer();
 			bool IsClient();
 
-			void OnClientConnected() { std::cout << "Prayge" << std::endl; }
 			void OnClientReady() {}
 
 			static inline NetworkManager& Instance()
@@ -54,6 +55,8 @@ namespace GEngine
 			inline bool IsInitialised() { return m_initialised; }
 
 			inline bool HasAuthority() { return (m_server != nullptr && m_client == nullptr); }
+
+			inline void SetState(NetworkState state) { currentState = state; }
 
 		private:
 

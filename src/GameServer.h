@@ -5,7 +5,9 @@
 #endif // !ENGINE_SERVER
 
 #include "IncludeMe.h"
+#include "NetComponent.h"
 #include <thread>
+#include <map>
 
 namespace GEngine
 {
@@ -17,16 +19,21 @@ namespace GEngine
 			GameServer();
 			~GameServer();
 
-			// Test function : remove this at a later date
-			void TestSend();
+			void ChangeScene(const std::string& filepath);
 			void Tick();
 			inline bool IsRunning() { return isRunning; }
+			inline std::map<int, std::string>* GetConnectionsToClose() { return &connectionsToClose; }
+			inline bool HasConnectionsToClose() { return !connectionsToClose.empty(); }
+			inline void ClearConnectionsToClose() { connectionsToClose.clear(); }
+			void CloseConnectionWithClient(int clientID, const std::string& reason);
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;
 			virtual void OnDisconnect(TCPConnection& lostConnection, std::string reason) override;
-			virtual bool ProcessPacket(std::shared_ptr<Packet> packet) override;
+			virtual bool ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex) override;
 		private:
+			bool ValidateComponent(NetComponent* component);
 			bool isRunning = false;
+			std::map<int, std::string> connectionsToClose;
 		};
 	}
 }

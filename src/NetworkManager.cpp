@@ -53,6 +53,7 @@ namespace GEngine::Networking
             }
 
             m_server = new GameServer();
+            currentState = NetworkState::CLIENT_SERVER_TICK;
             return true;
         }
         return false;
@@ -102,7 +103,6 @@ namespace GEngine::Networking
             {
                 case NetworkState::UNINITIALIZED:
                 case NetworkState::INITIALIZED:
-                case NetworkState::FREE:
                     break;
 
                 case NetworkState::CLIENT_CONNECTING:
@@ -127,10 +127,20 @@ namespace GEngine::Networking
             
                 case NetworkState::CLIENT_SERVER_TICK:
                 {
-                    if (nm->m_server != nullptr)
+
+                    if (nm->m_server != nullptr && nm->m_server->IsRunning())
                     {
-                        if (nm->m_server->IsRunning())
-                            nm->m_server->Tick();
+                        if (nm->m_server->HasConnectionsToClose())
+                        {
+                            for (auto const& connection : *nm->m_server->GetConnectionsToClose())
+                            {
+                                nm->m_server->CloseConnectionWithClient(connection.first, connection.second);
+                            }
+
+                            nm->m_server->ClearConnectionsToClose();
+                        }
+
+                        nm->m_server->Tick();
                     }
 
                     if (nm->m_client != nullptr)
@@ -146,6 +156,20 @@ namespace GEngine::Networking
                 {
                     nm->m_shutdown = true;
                     nm->currentState = NetworkState::UNINITIALIZED;
+
+                    if (nm->m_client != nullptr)
+
+                        delete nm->m_client;
+
+                    if (nm->m_server != nullptr)
+                        delete nm->m_server;
+
+                    nm->m_initialised = false;
+
+                    Network::Shutdown();
+
+                    std::cout << "Shutdown";
+
                     return 0;
                 }
 
@@ -156,21 +180,10 @@ namespace GEngine::Networking
         return 0;
     }
 
-    // at some point we're gonna have to worry about mutiple game loops 
-    // actually I think the first check covers this
-
     void NetworkManager::ShutDown()
     {
         currentState = NetworkState::SHUTDOWN;
-        GNet::Network::Shutdown();
-
-        if (m_client != nullptr)
-            delete m_client;
-
-        if (m_server != nullptr)
-            delete m_server;
-
-        m_initialised = false;
+        SDL_DetachThread(networkThread);
     }
 
 }

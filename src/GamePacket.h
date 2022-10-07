@@ -23,6 +23,10 @@ namespace GEngine
 
 			GamePacket& operator << (const Vector2& data);
 			GamePacket& operator >> (Vector2& data);
+
+			GamePacket& operator << (const short& shortData);
+			GamePacket& operator >> (short& newShort);
+
 		};
 	}
 }

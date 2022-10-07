@@ -85,8 +85,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\joemi\Documents\Dev\Projects\C++\SDL2_image-2.0.5\include;C:\Users\joemi\Documents\Dev\Projects\C++\SDL2-2.0.18\include</IncludePath>
-    <LibraryPath>C:\Users\joemi\Documents\Dev\Projects\C++\SDL2_image-2.0.5\lib\x64;C:\Users\joemi\Documents\Dev\Projects\C++\SDL2-2.0.18\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Libraries\OpenGL\include;$(ProjectDir)\..\GNet\GNet;$(SolutionDir)Libraries\SDL2-2.24.0\include</IncludePath>
+    <LibraryPath>C:\Users\joemi\Documents\Dev\GEngine\Libaries\OpenGL\lib-vc2022;C:\Users\joemi\Documents\Dev\GEngine\Libaries\SDL2-2.24.0\lib\x64;C:\Users\joemi\Documents\Dev\GNet\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
