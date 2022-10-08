@@ -49,14 +49,13 @@ namespace GEngine
 				return instance;
 			}
 
-			static int Tick(void* data);
+			inline static bool VerifyVersion(const short& version) { return version == Version;  }
+
+			inline bool IsInitialised() { return m_initialised; }
+			inline bool HasAuthority() { return (m_server != nullptr && m_client == nullptr); }
+			inline void SetState(NetworkState state) { currentState = state; }
 
 			void ShutDown();
-			inline bool IsInitialised() { return m_initialised; }
-
-			inline bool HasAuthority() { return (m_server != nullptr && m_client == nullptr); }
-
-			inline void SetState(NetworkState state) { currentState = state; }
 
 		private:
 
@@ -64,6 +63,8 @@ namespace GEngine
 
 			bool Initialise();
 			bool InitialiseThread();
+
+			static int Tick(void* data);
 
 			GameServer* m_server = nullptr;
 			GameClient* m_client = nullptr;

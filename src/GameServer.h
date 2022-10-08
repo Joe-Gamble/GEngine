@@ -32,6 +32,8 @@ namespace GEngine
 			virtual bool ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex) override;
 		private:
 			bool ValidateComponent(NetComponent* component);
+			void ValidateClientVersion(const short& version, const int& connection);
+
 			bool isRunning = false;
 			std::map<int, std::string> connectionsToClose;
 		};

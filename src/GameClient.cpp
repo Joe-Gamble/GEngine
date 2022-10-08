@@ -28,7 +28,8 @@ bool GameClient::ConnectToIP(const std::string ip)
 
 GameClient::~GameClient()
 {
-	CloseConnection("Client exited the application.");
+	if (IsConnected())
+		CloseConnection("Client exited the application.");
 }
 
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)

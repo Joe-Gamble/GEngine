@@ -9,17 +9,21 @@ namespace GEngine::Networking
     {
         if (currentState == NetworkState::UNINITIALIZED)
         {
-            if (GNet::Network::Initialize())
+            if (!m_initialised)
             {
-                if (InitialiseThread())
-                {
-                    m_initialised = true;
-                    m_shutdown = false;
-
-                    currentState = NetworkState::INITIALIZED;
-                    return true;
-                }
+                if (!GNet::Network::Initialize())
+                    return false;
             }
+            
+            if (InitialiseThread())
+            {
+                m_initialised = true;
+                m_shutdown = false;
+
+                currentState = NetworkState::INITIALIZED;
+                return true;
+            }
+            
         }
 
         return false;
@@ -95,12 +99,22 @@ namespace GEngine::Networking
 
     int NetworkManager::Tick(void* data)
     {
+        unsigned int now = SDL_GetTicks();
+        unsigned int last = SDL_GetTicks();
+
+        double timeBetweenFrames = 0;
+
         NetworkManager* nm = &NetworkManager::Instance();
 
         while (!nm->m_shutdown)
         {
-            switch (nm->currentState)
+            now = SDL_GetTicks();
+            timeBetweenFrames = now - last;
+
+            if (timeBetweenFrames > 1000 / 60.0)
             {
+                switch (nm->currentState)
+                {
                 case NetworkState::UNINITIALIZED:
                 case NetworkState::INITIALIZED:
                     break;
@@ -108,23 +122,21 @@ namespace GEngine::Networking
                 case NetworkState::CLIENT_CONNECTING:
                 {
                     const std::string& ip = nm->m_ipAddress;
-                    std::cout << "Attempting to connect to " + ip << std::endl;
 
                     if (nm->m_client->ConnectToIP(ip))
                     {
                         EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-                        nm->currentState = NetworkState::CLIENT_SERVER_TICK;
+                        nm->SetState(NetworkState::CLIENT_SERVER_TICK);
                     }
                     else
                     {
                         EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
-                        
-                        nm->currentState = NetworkState::INITIALIZED;
-                        nm->m_ipAddress = "";
+
+                        nm->ShutDown();
                     }
                     break;
                 }
-            
+
                 case NetworkState::CLIENT_SERVER_TICK:
                 {
 
@@ -155,27 +167,30 @@ namespace GEngine::Networking
                 case NetworkState::SHUTDOWN:
                 {
                     nm->m_shutdown = true;
-                    nm->currentState = NetworkState::UNINITIALIZED;
+                    nm->SetState(NetworkState::UNINITIALIZED);
 
                     if (nm->m_client != nullptr)
-
+                    {
                         delete nm->m_client;
+                        nm->m_client = nullptr;
+                    }
 
                     if (nm->m_server != nullptr)
+                    {
                         delete nm->m_server;
+                        nm->m_server = nullptr;
+                    }
 
                     nm->m_initialised = false;
 
                     Network::Shutdown();
-
-                    std::cout << "Shutdown";
-
                     return 0;
                 }
 
                 default:
                     break;
-            }
+                }
+            } 
         }
         return 0;
     }
@@ -184,6 +199,7 @@ namespace GEngine::Networking
     {
         currentState = NetworkState::SHUTDOWN;
         SDL_DetachThread(networkThread);
+        networkThread = nullptr;
     }
 
 }

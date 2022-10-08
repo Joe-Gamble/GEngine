@@ -19,7 +19,7 @@ GameServer::~GameServer()
 {
 }
 
-void GEngine::Networking::GameServer::CloseConnectionWithClient(int clientID, const std::string& reason)
+void GameServer::CloseConnectionWithClient(int clientID, const std::string& reason)
 {
 	CloseConnection(clientID, reason);
 }
@@ -51,6 +51,15 @@ bool GameServer::ValidateComponent(NetComponent* component)
 	return true;
 }
 
+void GameServer::ValidateClientVersion(const short& version, const int& connection)
+{
+	if (!NetworkManager::VerifyVersion(version))
+	{
+		connectionsToClose.emplace(connection, "Invalid Version");
+		std::cout << "Version verified." << std::endl;
+	}
+}
+
 bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex)
 {
 	GamePacket gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
@@ -61,12 +70,7 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 			short version;
 			gamePacket >> version;
 
-			//Network Manager here instead
-
-			if (version != NetworkManager::Version)
-				connectionsToClose.emplace(connectionIndex, "Invalid Version");
-			else
-				std::cout << "Version verified." << std::endl;
+			ValidateClientVersion(version, connectionIndex);	
 			break;
 		}
 		case PacketType::PT_SCENE_LOAD:
