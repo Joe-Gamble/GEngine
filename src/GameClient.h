@@ -5,7 +5,7 @@
 
 #include "IncludeMe.h"
 #include "Entity.h"
-//#include <thread>
+#include "GamePacket.h"
 
 
 namespace GEngine
@@ -17,9 +17,13 @@ namespace GEngine
 		public:
 			GameClient();
 			bool ConnectToIP(const std::string ip);
+			void LeaveSession();
+
 			~GameClient();
 
 			void SendServerRequest();
+			void SendPacket(std::shared_ptr<GamePacket> packet);
+			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
 			void Tick();
 

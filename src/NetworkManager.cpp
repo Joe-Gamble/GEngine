@@ -7,7 +7,7 @@ namespace GEngine::Networking
 {
     bool NetworkManager::Initialise()
     {
-        if (currentState == NetworkState::UNINITIALIZED)
+        if (currentState == NetworkState::UNINITIALIZED || currentState == NetworkState::INITIALIZED)
         {
             if (!m_initialised)
             {
@@ -44,20 +44,23 @@ namespace GEngine::Networking
         return true;
     }
 
-    bool NetworkManager::MakeServer()
+    bool NetworkManager::MakeServer(ServerType type)
     {
         if (!IsServer() && !IsClient())
         {
-            if (!m_initialised)
+            if (!Initialise())
             {
-                if (!Initialise())
-                {
-                    return false;
-                }
+                return false;
+            }
+                
+            if (type == HOSTED)
+            {
+                m_client = new GameClient();
+                std::cout << "Server machine client created" << std::endl;
             }
 
-            m_server = new GameServer();
-            currentState = NetworkState::CLIENT_SERVER_TICK;
+            m_server = new GameServer(type);
+            currentState = NetworkState::SESSION_ACTIVE;
             return true;
         }
         return false;
@@ -65,7 +68,7 @@ namespace GEngine::Networking
 
     bool NetworkManager::JoinServer(const std::string& ip)
     {
-        if (!IsClient())
+        if (!IsClient() && !HasAuthority())
         {
             if (!m_initialised)
             {
@@ -75,15 +78,14 @@ namespace GEngine::Networking
                 }
             }
 
-            if (HasAuthority() || !IsServer())
-            {
-                m_client = new GameClient();
-                m_ipAddress = ip;
-                currentState = NetworkState::CLIENT_CONNECTING;
+            m_client = new GameClient();
+            m_ipAddress = ip;
+            currentState = NetworkState::CLIENT_CONNECTING;
+            
+            return true;
 
-                return true;
-            }
         }
+        std::cout << "Client already exists or this was called on a dedicated server. " << std::endl;
         return false;
     }
 
@@ -126,7 +128,7 @@ namespace GEngine::Networking
                     if (nm->m_client->ConnectToIP(ip))
                     {
                         EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-                        nm->SetState(NetworkState::CLIENT_SERVER_TICK);
+                        nm->SetState(NetworkState::SESSION_ACTIVE);
                     }
                     else
                     {
@@ -137,7 +139,7 @@ namespace GEngine::Networking
                     break;
                 }
 
-                case NetworkState::CLIENT_SERVER_TICK:
+                case NetworkState::SESSION_ACTIVE:
                 {
 
                     if (nm->m_server != nullptr && nm->m_server->IsRunning())
@@ -164,24 +166,36 @@ namespace GEngine::Networking
                     break;
                 }
 
-                case NetworkState::SHUTDOWN:
+                case NetworkState::SESSION_END:
                 {
-                    nm->m_shutdown = true;
-                    nm->SetState(NetworkState::UNINITIALIZED);
-
                     if (nm->m_client != nullptr)
                     {
+                        if (!nm->HasAuthority())
+                            nm->m_client->LeaveSession();
+
                         delete nm->m_client;
                         nm->m_client = nullptr;
                     }
 
                     if (nm->m_server != nullptr)
                     {
+                        nm->m_server->LeaveSession();
+
                         delete nm->m_server;
                         nm->m_server = nullptr;
                     }
 
+                    nm->SetState(NetworkState::INITIALIZED);
+                    std::cout << "Session Ended." << std::endl << std::endl;;
+                    return 0;
+                }
+
+                case NetworkState::SHUTDOWN:
+                {
+                    nm->m_shutdown = true;
                     nm->m_initialised = false;
+
+                    nm->SetState(NetworkState::UNINITIALIZED);
 
                     Network::Shutdown();
                     return 0;
@@ -195,11 +209,49 @@ namespace GEngine::Networking
         return 0;
     }
 
-    void NetworkManager::ShutDown()
+    bool NetworkManager::VerifyNewConnection(const short& version, const int& playerCount, std::string& error)
     {
-        currentState = NetworkState::SHUTDOWN;
+        if (version != Version)
+        {
+            error = "Invalid Version";
+            return false;
+        }
+        else
+            std::cout << "Version verified." << std::endl;
+        
+
+        if (playerCount > MaxPlayers)
+        {
+            error = "Connection Limit";
+            return false;
+        }
+
+        return true;
+    }
+
+    bool NetworkManager::HasAuthority()
+    {
+        if (m_server != nullptr)
+        {
+            if (m_server->GetServerType() == ServerType::HOSTED)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void NetworkManager::EndSession()
+    {
+        currentState = NetworkState::SESSION_END;
         SDL_DetachThread(networkThread);
         networkThread = nullptr;
+    }
+
+    void NetworkManager::ShutDown()
+    {
+        EndSession();
+        SetState(NetworkState::SHUTDOWN);
     }
 
 }

@@ -6,7 +6,7 @@
 using namespace GEngine::Networking;
 using namespace GEngine::Callbacks;
 
-GameServer::GameServer()
+GameServer::GameServer(ServerType type) : serverType(type)
 {
 	if (Initialise())
 	{
@@ -22,6 +22,24 @@ GameServer::~GameServer()
 void GameServer::CloseConnectionWithClient(int clientID, const std::string& reason)
 {
 	CloseConnection(clientID, reason);
+}
+
+void GameServer::SendPacket(std::shared_ptr<GamePacket> packet)
+{
+	if (NetworkManager::Instance().HasAuthority())
+	{
+		NetworkManager::Instance().GetClient()->ProcessLocalPacket(packet);
+	}
+
+	for (auto& connection : connections)
+	{
+		connection.pm_outgoing.Append(packet);
+	}
+}
+
+void GameServer::ProcessLocalPacket(std::shared_ptr<GamePacket> packet)
+{
+	ProcessPacket(packet, -1);
 }
 
 void GameServer::OnConnect(TCPConnection& newConnection) noexcept
@@ -53,10 +71,17 @@ bool GameServer::ValidateComponent(NetComponent* component)
 
 void GameServer::ValidateClientVersion(const short& version, const int& connection)
 {
-	if (!NetworkManager::VerifyVersion(version))
+	std::string errorString;
+
+	if (!NetworkManager::VerifyNewConnection(version, connections.size() + 1, errorString))
 	{
-		connectionsToClose.emplace(connection, "Invalid Version");
-		std::cout << "Version verified." << std::endl;
+		connectionsToClose.emplace(connection, errorString);
+	}
+	else
+	{
+		// Create some kind of Identifier and send back to client? NetID? 
+
+		// Server -> have a collection of
 	}
 }
 
@@ -107,5 +132,13 @@ void GameServer::Tick()
 	if (isRunning)
 	{
 		Frame();
+	}
+}
+
+void GameServer::LeaveSession()
+{
+	for (auto& connection : connections)
+	{
+		// send a disconnect packet?
 	}
 }

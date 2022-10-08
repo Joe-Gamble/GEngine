@@ -24,7 +24,8 @@ namespace GEngine
 			UNINITIALIZED,
 			INITIALIZED,
 			CLIENT_CONNECTING,
-			CLIENT_SERVER_TICK,
+			SESSION_ACTIVE,
+			SESSION_END,
 			SHUTDOWN,
 			MAX_STATE
 		};
@@ -33,13 +34,17 @@ namespace GEngine
 		{
 		public:
 			static const short Version = 12346;
+			static const int MaxPlayers = 2;
 
 		public:
-			bool MakeServer();
+			bool MakeServer(ServerType serverType);
 			bool JoinServer(const std::string& ip);
 
 			bool IsServer();
 			bool IsClient();
+
+			inline GameServer* GetServer() { return m_server; }
+			inline GameClient* GetClient() { return m_client; }
 
 			void OnClientReady() {}
 
@@ -49,13 +54,14 @@ namespace GEngine
 				return instance;
 			}
 
-			inline static bool VerifyVersion(const short& version) { return version == Version;  }
+			static bool VerifyNewConnection(const short& version, const int& playerCount, std::string& error);
 
 			inline bool IsInitialised() { return m_initialised; }
-			inline bool HasAuthority() { return (m_server != nullptr && m_client == nullptr); }
+			bool HasAuthority();
 			inline void SetState(NetworkState state) { currentState = state; }
 
 			void ShutDown();
+			void EndSession();
 
 		private:
 

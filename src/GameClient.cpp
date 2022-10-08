@@ -17,7 +17,7 @@ bool GameClient::ConnectToIP(const std::string ip)
 		short version = NetworkManager::Version;
 		*versionPacket << version;
 
-		connection.pm_outgoing.Append(versionPacket);
+		SendPacket(versionPacket);
 		return true;
 	}
 	else
@@ -26,9 +26,14 @@ bool GameClient::ConnectToIP(const std::string ip)
 	}
 }
 
+void GameClient::LeaveSession()
+{
+	CloseConnection("Session left");
+}
+
 GameClient::~GameClient()
 {
-	if (IsConnected())
+	if (IsConnected() && !NetworkManager::Instance().HasAuthority())
 		CloseConnection("Client exited the application.");
 }
 
@@ -66,6 +71,23 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 void GameClient::OnConnect()
 {
 	std::cout << "Connected to the server" << std::endl;
+}
+
+void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)
+{
+	if (NetworkManager::Instance().HasAuthority())
+	{
+		NetworkManager::Instance().GetServer()->ProcessLocalPacket(packet);
+	}
+	else
+	{
+		connection.pm_outgoing.Append(packet);
+	}
+}
+
+void GameClient::ProcessLocalPacket(std::shared_ptr<GamePacket> packet)
+{
+	ProcessPacket(packet);
 }
 
 void GameClient::Tick()

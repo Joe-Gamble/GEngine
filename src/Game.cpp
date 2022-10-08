@@ -104,7 +104,7 @@ void Game::handleEvents()
 			{
 				case SDLK_q:
 				{
-					NetworkManager::Instance().MakeServer();
+					NetworkManager::Instance().MakeServer(ServerType::HOSTED);
 					break;
 				}
 
@@ -113,6 +113,15 @@ void Game::handleEvents()
 					NetworkManager::Instance().JoinServer("192.168.0.23");
 					break;
 				}
+				case SDLK_e:
+				{
+					if (NetworkManager::Instance().GetClient()->IsClientConnected() || NetworkManager::Instance().HasAuthority())
+					{
+						NetworkManager::Instance().EndSession();
+					}
+					break;
+				}
+
 				default:
 					break;
 			}
