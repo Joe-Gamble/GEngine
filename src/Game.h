@@ -34,6 +34,7 @@ namespace GEngine
 		SDL_Renderer* renderer = nullptr;
 
 		std::unique_ptr<EntityManager> entityManager = std::make_unique<EntityManager>();
+
 	};
 }
 

@@ -115,7 +115,7 @@ void Game::handleEvents()
 				}
 				case SDLK_e:
 				{
-					if (NetworkManager::Instance().GetClient()->IsClientConnected() || NetworkManager::Instance().HasAuthority())
+					if (NetworkManager::Instance().GetClient().IsClientConnected() || NetworkManager::Instance().HasAuthority())
 					{
 						NetworkManager::Instance().EndSession();
 					}
@@ -125,6 +125,7 @@ void Game::handleEvents()
 				default:
 					break;
 			}
+			break;
 		}
 		default:
 		{
@@ -135,7 +136,7 @@ void Game::handleEvents()
 
 void Game::Update(double& dt)
 {
-	entityManager->Update(dt);
+	// Scene update here
 }
 
 void Game::Render()

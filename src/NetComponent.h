@@ -21,5 +21,5 @@ protected:
 	static const std::map<PacketType, NetComponent*> PacketPrototypes; // will need this eventually
 private:
 	bool hasDataToBeSent = false;
-	NetComponentType componentType = TYPE_UNDEFINED;
+	NetComponentType componentType = NetComponentType::TYPE_UNDEFINED;
 };

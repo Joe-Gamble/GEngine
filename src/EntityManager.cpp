@@ -36,3 +36,12 @@ Entity& EntityManager::AddEntity()
 
 	return *e;
 }	
+
+NetEntity& EntityManager::AddNetEntity(short netID)
+{
+	NetEntity* e = NetEntity::Instantiate();
+	std::unique_ptr<Entity> uPtr{ e };
+	entities.emplace_back(std::move(uPtr));
+
+	return *e;
+}

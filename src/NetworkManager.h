@@ -43,8 +43,8 @@ namespace GEngine
 			bool IsServer();
 			bool IsClient();
 
-			inline GameServer* GetServer() { return m_server; }
-			inline GameClient* GetClient() { return m_client; }
+			inline GameServer& GetServer() { return *m_server; }
+			inline GameClient& GetClient() { return *m_client; }
 
 			void OnClientReady() {}
 
@@ -72,8 +72,8 @@ namespace GEngine
 
 			static int Tick(void* data);
 
-			GameServer* m_server = nullptr;
-			GameClient* m_client = nullptr;
+			std::unique_ptr<GameServer> m_server = nullptr;
+			std::unique_ptr<GameClient> m_client = nullptr;
 			
 			SDL_Thread* networkThread = nullptr;
 

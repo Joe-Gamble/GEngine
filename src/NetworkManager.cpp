@@ -55,11 +55,13 @@ namespace GEngine::Networking
                 
             if (type == HOSTED)
             {
-                m_client = new GameClient();
+                m_client = std::make_unique<GameClient>();
+
                 std::cout << "Server machine client created" << std::endl;
             }
 
-            m_server = new GameServer(type);
+            m_server = std::make_unique<GameServer>(type);
+
             currentState = NetworkState::SESSION_ACTIVE;
             return true;
         }
@@ -77,8 +79,8 @@ namespace GEngine::Networking
                     return false;
                 }
             }
+            m_client = std::make_unique<GameClient>();
 
-            m_client = new GameClient();
             m_ipAddress = ip;
             currentState = NetworkState::CLIENT_CONNECTING;
             
@@ -173,16 +175,14 @@ namespace GEngine::Networking
                         if (!nm->HasAuthority())
                             nm->m_client->LeaveSession();
 
-                        delete nm->m_client;
-                        nm->m_client = nullptr;
+                        nm->m_client.reset();
                     }
 
                     if (nm->m_server != nullptr)
                     {
                         nm->m_server->LeaveSession();
 
-                        delete nm->m_server;
-                        nm->m_server = nullptr;
+                        nm->m_server.reset();
                     }
 
                     nm->SetState(NetworkState::INITIALIZED);

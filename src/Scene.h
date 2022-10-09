@@ -3,8 +3,8 @@
 #define SCENE_H
 #endif // !SCENE_H
 
-#include <vector>
-#include "Component.h"
+#include <memory>
+#include "EntityManager.h"
 
 class Scene
 {
@@ -12,12 +12,19 @@ public:
 	Scene();
 	~Scene();
 
-	Scene(Scene* previousScene);
+	Scene(std::shared_ptr<Scene> previousScene);
 	bool Back();
 
 	void Init();
 private:
-	std::vector<Entity*> m_components;
+	std::unique_ptr<EntityManager> entityManager = std::make_unique<EntityManager>();
+
+	/*
+	Entity* entity = entityManager->AddEntity();
+	entity->AddComponent<NetTransform>();
+	entity->GetComponent<NetTransform>().SetPosition({ 1, 0 });
+	*/
+
 	bool m_isActive = false;
-	Scene* m_previousScene = nullptr;
+	std::shared_ptr<Scene> m_previousScene = nullptr;
 };

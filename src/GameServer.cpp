@@ -28,7 +28,7 @@ void GameServer::SendPacket(std::shared_ptr<GamePacket> packet)
 {
 	if (NetworkManager::Instance().HasAuthority())
 	{
-		NetworkManager::Instance().GetClient()->ProcessLocalPacket(packet);
+		NetworkManager::Instance().GetClient().ProcessLocalPacket(packet);
 	}
 
 	for (auto& connection : connections)

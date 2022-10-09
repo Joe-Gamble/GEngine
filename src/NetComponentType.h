@@ -4,7 +4,9 @@
 #define NET_COMPONENT_TYPE
 #endif // !NETCOMPONENTTYPE
 
-enum NetComponentType
+#include <stdint.h>
+
+enum class NetComponentType : uint16_t // 2 bytes per type identifier
 {
 	TYPE_UNDEFINED,
 	TYPE_TRANSFORM,

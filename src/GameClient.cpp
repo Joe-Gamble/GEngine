@@ -77,7 +77,7 @@ void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)
 {
 	if (NetworkManager::Instance().HasAuthority())
 	{
-		NetworkManager::Instance().GetServer()->ProcessLocalPacket(packet);
+		NetworkManager::Instance().GetServer().ProcessLocalPacket(packet);
 	}
 	else
 	{
