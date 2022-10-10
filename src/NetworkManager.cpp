@@ -148,9 +148,9 @@ namespace GEngine::Networking
                     {
                         if (nm->m_server->HasConnectionsToClose())
                         {
-                            for (auto const& connection : *nm->m_server->GetConnectionsToClose())
+                            for (auto& connection : nm->m_server->GetConnectionsToClose())
                             {
-                                nm->m_server->CloseConnectionWithClient(connection.first, connection.second);
+                                nm->m_server->SendKickPacketToClient(connection.first, connection.second, 5000);
                             }
 
                             nm->m_server->ClearConnectionsToClose();
@@ -246,6 +246,11 @@ namespace GEngine::Networking
         currentState = NetworkState::SESSION_END;
         SDL_DetachThread(networkThread);
         networkThread = nullptr;
+    }
+
+    void NetworkManager::ProcessLocalPacket(std::shared_ptr<GamePacket>& packet)
+    {
+        m_client->ProcessLocalPacket(packet);
     }
 
     void NetworkManager::ShutDown()

@@ -33,7 +33,7 @@ namespace GEngine
 		class NetworkManager
 		{
 		public:
-			static const short Version = 12346;
+			static const short Version = 12351;
 			static const int MaxPlayers = 2;
 
 		public:
@@ -59,6 +59,8 @@ namespace GEngine
 			inline bool IsInitialised() { return m_initialised; }
 			bool HasAuthority();
 			inline void SetState(NetworkState state) { currentState = state; }
+
+			void ProcessLocalPacket(std::shared_ptr< GamePacket>& packet);
 
 			void ShutDown();
 			void EndSession();

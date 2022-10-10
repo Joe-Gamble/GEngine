@@ -12,13 +12,14 @@ namespace GEngine
 	namespace Callbacks
 	{
 		typedef std::function<void()> cb_0param;
-		//typedef std::function<void(uint32_t)> cb_1param;
+		//typedef std::function<void(GamePacket&)> cb_1param;
 
 		enum Event
 		{
 			NETWORKING_CLIENT_READY = 0,
 			NETWORKING_CLIENT_CONNECT_SUCCESSFUL,
 			NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL,
+			NETWORKING_SERVER_PACKET_SENT,
 			NETWORKING_CLIENT_DISCONNECTED,
 			NETWORKING_SERVER_READY,
 			NETWORKING_SERVER_SHUTDOWN,

@@ -6,6 +6,7 @@
 
 #include "IncludeMe.h"
 #include "NetTransform.h"
+#include "EventDriver.h"
 
 using namespace GNet;
 
@@ -18,6 +19,7 @@ namespace GEngine
 		public:
 
 			GamePacket(PacketType packetType) : Packet(packetType) {}
+
 			GamePacket& operator << (const NetTransform& data); // NetTransform insertion
 			GamePacket& operator >> (NetTransform& data); // NetTransform extraction
 

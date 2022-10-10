@@ -53,6 +53,14 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			std::cout << "Recieved Transform: " << x << " " << y << std::endl;
 			break;
 		}*/
+		case PacketType::PT_KICK:
+		{
+			std::string reason;
+			*packet >> reason;
+
+			CloseConnection(reason);
+			break;
+		}
 		case PacketType::PT_SCENE_LOAD:
 		{
 			// Load the scene

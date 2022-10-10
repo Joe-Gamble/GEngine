@@ -1,4 +1,5 @@
 #include "GamePacket.h"
+#include "NetworkManager.h"
 
 using namespace GEngine::Networking;
 
@@ -116,7 +117,7 @@ GamePacket& GamePacket::operator << (const short& shortData)
     return *this;
 }
 
-GamePacket& GEngine::Networking::GamePacket::operator>>(short& newShort)
+GamePacket& GamePacket::operator>>(short& newShort)
 {
     uint32_t shortSize = 0;
 

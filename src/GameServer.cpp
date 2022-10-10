@@ -19,21 +19,17 @@ GameServer::~GameServer()
 {
 }
 
-void GameServer::CloseConnectionWithClient(int clientID, const std::string& reason)
-{
-	CloseConnection(clientID, reason);
-}
-
 void GameServer::SendPacket(std::shared_ptr<GamePacket> packet)
 {
 	if (NetworkManager::Instance().HasAuthority())
 	{
-		NetworkManager::Instance().GetClient().ProcessLocalPacket(packet);
+		NetworkManager::Instance().ProcessLocalPacket(packet);
 	}
 
 	for (auto& connection : connections)
 	{
-		connection.pm_outgoing.Append(packet);
+		if (connection.IsActive())
+			connection.pm_outgoing.Append(packet);
 	}
 }
 
@@ -53,7 +49,7 @@ void GameServer::OnConnect(TCPConnection& newConnection) noexcept
 	//newConnection.pm_outgoing.Append(transformPacket);
 }
 
-void GameServer::OnDisconnect(TCPConnection& lostConnection, std::string reason)
+void GameServer::OnDisconnect(TCPConnection& lostConnection, const std::string& reason)
 {
 	std::cout << "[" << reason << "] Connection lost: " << lostConnection.ToString() << "." << std::endl;
 }
@@ -83,6 +79,39 @@ void GameServer::ValidateClientVersion(const short& version, const int& connecti
 
 		// Server -> have a collection of
 	}
+}
+
+void GameServer::SendKickPacketToClient(int clientID, std::string& reason, int timeout)
+{
+	std::shared_ptr<Packet> kickPacket = std::make_shared<Packet>(PacketType::PT_KICK);
+	//Packet* packet = reinterpret_cast<Packet*>(kickPacket.get());
+
+	*kickPacket << reason;
+
+	connections[clientID].pm_outgoing.Append(kickPacket);
+	connections[clientID].SetActive(false);
+
+	CloseConnectionDelayedData* data = new CloseConnectionDelayedData(&connections[clientID], reason, timeout);
+
+	SDL_Thread* thread = SDL_CreateThread(CloseConnectionDelayed, "serverThread", data);
+	SDL_DetachThread(thread);
+}
+
+int GameServer::CloseConnectionDelayed(void* data)
+{
+	GameServer& server = NetworkManager::Instance().GetServer();
+	
+	CloseConnectionDelayedData* connectionData = (CloseConnectionDelayedData*)data;
+
+	int timeout = connectionData->timeout;
+	TCPConnection& connection = *connectionData->connection;
+	std::string& reason = connectionData->reason;
+
+	SDL_Delay(timeout);
+	server.CloseConnection(&connection, reason);
+	delete connectionData;
+
+	return 0;
 }
 
 bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex)

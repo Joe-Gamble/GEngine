@@ -7,7 +7,8 @@
 #include "IncludeMe.h"
 #include "NetComponent.h"
 #include "GamePacket.h"
-#include <thread>
+#include "SDL_thread.h"
+#include "SDL.h"
 #include <map>
 
 namespace GEngine
@@ -33,17 +34,33 @@ namespace GEngine
 			inline bool IsRunning() { return isRunning; }
 			inline ServerType GetServerType() { return serverType; }
 
-			inline std::map<int, std::string>* GetConnectionsToClose() { return &connectionsToClose; }
+			inline std::map<int, std::string>& GetConnectionsToClose() { return connectionsToClose; }
 			inline bool HasConnectionsToClose() { return !connectionsToClose.empty(); }
 			inline void ClearConnectionsToClose() { connectionsToClose.clear(); }
-			void CloseConnectionWithClient(int clientID, const std::string& reason);
+
+			void SendKickPacketToClient(int clientID, std::string& reason, int timeout);
+
+			struct CloseConnectionDelayedData{
+				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, int _timeout)
+				{
+					connection = _connection;
+					reason = _reason;
+					timeout = _timeout;
+				}
+
+				TCPConnection* connection;
+				std::string reason;
+				int timeout;
+			};
+
+			static int CloseConnectionDelayed(void* data);
 
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;
-			virtual void OnDisconnect(TCPConnection& lostConnection, std::string reason) override;
+			virtual void OnDisconnect(TCPConnection& lostConnection, const std::string& reason) override;
 			virtual bool ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex) override;
 			//virtual void OnMaxConnectionsReached() override;
 		private:
