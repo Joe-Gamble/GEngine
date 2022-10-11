@@ -6,11 +6,12 @@
 
 #include <stdint.h>
 
-enum class NetComponentType : uint16_t // 2 bytes per type identifier
+enum class ComponentType : uint16_t // 2 bytes per type identifier
 {
 	TYPE_UNDEFINED,
 	TYPE_TRANSFORM,
 	TYPE_TEXT,
 	TYPE_RIGIDBODY,
+	TYPE_BACKGROUND_CHANGER
 };
 

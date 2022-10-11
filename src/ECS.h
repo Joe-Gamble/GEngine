@@ -6,8 +6,6 @@
 
 
 class Entity;
-struct Component;
-
 constexpr std::size_t MAX_COMPONENTS = 10;
 
 using ComponentID = std::size_t;

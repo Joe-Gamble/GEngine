@@ -1,7 +1,12 @@
 #include "NetEntity.h"
 
-NetEntity* NetEntity::Instantiate()
+NetEntity::NetEntity(short& _netID) : netID(_netID)
 {
-	NetEntity* go = new NetEntity();
+
+}
+
+NetEntity* NetEntity::Instantiate(short& netID)
+{
+	NetEntity* go = new NetEntity(netID);
 	return go;
 }

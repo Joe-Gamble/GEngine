@@ -60,7 +60,7 @@ void GameServer::ChangeScene(const std::string& filepath)
 	// Send this instruction to all connected clients
 }
 
-bool GameServer::ValidateComponent(NetComponent* component)
+bool GameServer::ValidateComponent(Component* component)
 {
 	return true;
 }

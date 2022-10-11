@@ -55,20 +55,14 @@
     <Filter Include="Source Files\Engine\Data">
       <UniqueIdentifier>{f3eeb891-f407-4379-a74c-39bceea5152c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\Network\NECS">
-      <UniqueIdentifier>{0a9a6f02-c445-42e6-9189-9c823989b9f1}</UniqueIdentifier>
+    <Filter Include="Source Files\Engine\ECS\NetComponents">
+      <UniqueIdentifier>{38c6ff50-c9c2-4b26-8649-79b486eb9286}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\Network\NECS\NetComponents">
-      <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\Network\NECS\NetComponents\Molds">
+    <Filter Include="Header Files\Engine\ECS\Components\ComponentMolds">
       <UniqueIdentifier>{65ca79fb-5a78-4e18-bf87-9b365fc0fabb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Network\NECS">
-      <UniqueIdentifier>{4446a161-3033-44da-a36d-3de7a3988f3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Network\NECS\NetComponents">
-      <UniqueIdentifier>{38c6ff50-c9c2-4b26-8649-79b486eb9286}</UniqueIdentifier>
+    <Filter Include="Header Files\Engine\ECS\Components\NetComponents">
+      <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,14 +84,11 @@
     <ClCompile Include="NetworkManager.cpp">
       <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
-    <ClCompile Include="NetComponent.cpp">
-      <Filter>Source Files\Engine\Network\NECS\NetComponents</Filter>
-    </ClCompile>
     <ClCompile Include="Vector.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="NetTransform.cpp">
-      <Filter>Source Files\Engine\Network\NECS\NetComponents</Filter>
+      <Filter>Source Files\Engine\ECS\NetComponents</Filter>
     </ClCompile>
     <ClCompile Include="GameServer.cpp">
       <Filter>Source Files\Engine\Network</Filter>
@@ -112,7 +103,7 @@
       <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
     <ClCompile Include="NetEntity.cpp">
-      <Filter>Source Files\Engine\Network\NECS</Filter>
+      <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,14 +128,8 @@
     <ClInclude Include="NetworkManager.h">
       <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
-    <ClInclude Include="NetComponent.h">
-      <Filter>Header Files\Engine\Network\NECS\NetComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="NetComponentType.h">
-      <Filter>Header Files\Engine\Network\NECS\NetComponents</Filter>
-    </ClInclude>
     <ClInclude Include="NetTransform.h">
-      <Filter>Header Files\Engine\Network\NECS\NetComponents</Filter>
+      <Filter>Header Files\Engine\ECS\Components\NetComponents</Filter>
     </ClInclude>
     <ClInclude Include="GameClient.h">
       <Filter>Header Files\Engine\Network</Filter>
@@ -156,10 +141,10 @@
       <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
     <ClInclude Include="NetTransformMold.h">
-      <Filter>Header Files\Engine\Network\NECS\NetComponents\Molds</Filter>
+      <Filter>Header Files\Engine\ECS\Components\ComponentMolds</Filter>
     </ClInclude>
     <ClInclude Include="Vector2Mold.h">
-      <Filter>Header Files\Engine\Network\NECS\NetComponents\Molds</Filter>
+      <Filter>Header Files\Engine\ECS\Components\ComponentMolds</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files\Engine\Data</Filter>
@@ -173,8 +158,11 @@
     <ClInclude Include="EventDriver.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentType.h">
+      <Filter>Header Files\Engine\ECS\Components</Filter>
+    </ClInclude>
     <ClInclude Include="NetEntity.h">
-      <Filter>Header Files\Engine\Network\NECS</Filter>
+      <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

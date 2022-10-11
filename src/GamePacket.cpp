@@ -6,17 +6,16 @@ using namespace GEngine::Networking;
 GamePacket& GamePacket::operator<<(const NetTransform& transform)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
+    NetTransform newTransform = transform;
 
     *packet << sizeof(NetTransformMold);
-    Append(NetTransform::Serialise(transform), sizeof(NetTransformMold));
+    Append(newTransform.Serialise(), sizeof(NetTransformMold));
 
     return *this;
 }
 
 GamePacket& GamePacket::operator>>(NetTransform& transform)
 {
-    transform.Clear();
-
     uint32_t transformSize = 0;
 
     Packet* packet = reinterpret_cast<Packet*>(this);

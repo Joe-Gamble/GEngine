@@ -5,7 +5,7 @@
 #endif // !ENGINE_SERVER
 
 #include "IncludeMe.h"
-#include "NetComponent.h"
+#include "Component.h"
 #include "GamePacket.h"
 #include "SDL_thread.h"
 #include "SDL.h"
@@ -64,7 +64,7 @@ namespace GEngine
 			virtual bool ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex) override;
 			//virtual void OnMaxConnectionsReached() override;
 		private:
-			bool ValidateComponent(NetComponent* component);
+			bool ValidateComponent(Component* component);
 			void ValidateClientVersion(const short& version, const int& connection);
 
 			bool isRunning = false;

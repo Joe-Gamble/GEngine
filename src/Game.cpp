@@ -78,6 +78,11 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 	entity.AddComponent<NetTransform>();
 	entity.GetComponent<NetTransform>().SetPosition({ 1, 0 });
 
+	const void* data = entity.GetComponent<NetTransform>().Serialise();
+
+	NetTransform transform;
+	transform.ApplyData(data);
+
 	//SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
 	//testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
 

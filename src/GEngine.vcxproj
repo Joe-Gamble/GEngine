@@ -154,7 +154,6 @@
     <ClCompile Include="GamePacket.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NetComponent.cpp" />
     <ClCompile Include="NetEntity.cpp" />
     <ClCompile Include="NetTransform.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
@@ -172,8 +171,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GameClient.h" />
-    <ClInclude Include="NetComponent.h" />
-    <ClInclude Include="NetComponentType.h" />
+    <ClInclude Include="ComponentType.h" />
     <ClInclude Include="NetEntity.h" />
     <ClInclude Include="NetTransform.h" />
     <ClInclude Include="NetTransformMold.h" />

@@ -4,21 +4,21 @@
 #define NET_TRANSFORM
 #endif // !NET_TRANSFORM
 
-#include "NetComponent.h"
+#include "Component.h"
 #include "Vector.h"
 #include "NetTransformMold.h"
 
 using namespace GUtility;
 
-struct NetTransform : NetComponent
+struct NetTransform : Component
 {
 public:
-	static const void* Serialise(const NetTransform& transform);
-	static std::unique_ptr<NetTransform> Deserialise();
+
+	const void* Serialise() override;
+	std::unique_ptr<Component> Deserialise() override;
 
 	void Update(double& dt) override;
-	void ApplyData(NetComponent* transform) override;
-	void Clear() override;
+	void ApplyData(const void* data) override;
 	bool SendData();
 private:
 

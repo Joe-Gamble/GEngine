@@ -9,6 +9,10 @@
 class NetEntity : public Entity
 {
 public:
-	static NetEntity* Instantiate();
+	NetEntity(short& netID);
+	static NetEntity* Instantiate(short& netID);
+
+private:
+	const short netID;
 };
 
