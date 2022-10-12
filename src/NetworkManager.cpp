@@ -1,5 +1,4 @@
 #include "NetworkManager.h"
-#include "NetworkUtils.h"
 
 using namespace GEngine::Callbacks;
 
@@ -156,6 +155,7 @@ namespace GEngine::Networking
                             nm->m_server->ClearConnectionsToClose();
                         }
 
+                        EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
                         nm->m_server->Tick();
                     }
 
@@ -231,9 +231,9 @@ namespace GEngine::Networking
 
     bool NetworkManager::HasAuthority()
     {
-        if (m_server != nullptr)
+        if (IsServer())
         {
-            if (m_server->GetServerType() == ServerType::HOSTED)
+            if (m_server->GetServerType() == ServerType::HOSTED && IsClient())
             {
                 return true;
             }
@@ -248,9 +248,12 @@ namespace GEngine::Networking
         networkThread = nullptr;
     }
 
-    void NetworkManager::ProcessLocalPacket(std::shared_ptr<GamePacket>& packet)
+    void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)
     {
-        m_client->ProcessLocalPacket(packet);
+        if (IsServer())
+            m_server->SendPacket(packet);
+        else
+            m_client->SendPacket(packet);
     }
 
     void NetworkManager::ShutDown()

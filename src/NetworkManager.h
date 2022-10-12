@@ -32,6 +32,8 @@ namespace GEngine
 
 		class NetworkManager
 		{
+			friend GameClient;
+			friend GameServer;
 		public:
 			static const short Version = 12351;
 			static const int MaxPlayers = 2;
@@ -60,7 +62,7 @@ namespace GEngine
 			bool HasAuthority();
 			inline void SetState(NetworkState state) { currentState = state; }
 
-			void ProcessLocalPacket(std::shared_ptr< GamePacket>& packet);
+			void SendPacket(std::shared_ptr< GamePacket>& packet);
 
 			void ShutDown();
 			void EndSession();

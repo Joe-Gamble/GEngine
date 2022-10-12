@@ -93,9 +93,9 @@ void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)
 	}
 }
 
-void GameClient::ProcessLocalPacket(std::shared_ptr<GamePacket> packet)
+bool GameClient::ProcessLocalPacket(std::shared_ptr<Packet> packet)
 {
-	ProcessPacket(packet);
+	return ProcessPacket(packet);
 }
 
 void GameClient::Tick()

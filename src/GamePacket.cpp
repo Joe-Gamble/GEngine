@@ -44,7 +44,6 @@ GamePacket& GamePacket::operator>>(NetTransform& transform)
     return *this;
 }
 
-
 GamePacket& GamePacket::operator<<(const Vector2& vector)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
@@ -54,8 +53,6 @@ GamePacket& GamePacket::operator<<(const Vector2& vector)
 
     return *this;
 }
-
-
 
 GamePacket& GamePacket::operator>>(Vector2& vector)
 {
@@ -139,6 +136,46 @@ GamePacket& GamePacket::operator>>(short& newShort)
         newShort = short(*shortData);
 
         extractionOffset += shortSize;
+        std::free(data);
+    }
+
+    return *this;
+}
+
+GamePacket& GamePacket::operator<<(ComponentType componentType)
+{
+    Packet* packet = reinterpret_cast<Packet*>(this);
+
+    *packet << sizeof(uint16_t);
+    const void* data = reinterpret_cast<const void*>(&componentType);
+    Append(data, sizeof(uint16_t));
+
+    return *this;
+}
+
+GamePacket& GamePacket::operator>>(ComponentType& componentType)
+{
+    uint32_t componentTypeSize = 0;
+
+    Packet* packet = reinterpret_cast<Packet*>(this);
+    *packet >> componentTypeSize;
+
+    if (extractionOffset + componentTypeSize > buffer.size())
+        throw PacketException("[Packet::operator>>(Short& data)] - Extraction offset exceeded buffer size.");
+
+    void* data = malloc(sizeof(uint32_t));
+
+    if (data != nullptr && sizeof(data) > 0)
+    {
+        memcpy(data, &buffer[extractionOffset], sizeof(short));
+        uint32_t* shortData = reinterpret_cast<uint32_t*>(data);
+
+        if (shortData == nullptr)
+            return *this;
+
+        componentType = ComponentType(*shortData);
+
+        extractionOffset += componentTypeSize;
         std::free(data);
     }
 

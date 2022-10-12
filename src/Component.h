@@ -7,7 +7,10 @@ class Entity;
 
 struct Component
 {
+	virtual ComponentType GetType() = 0;
 	virtual const void* Serialise() = 0;
+	virtual const uint32_t GetMoldSize() = 0;
+
 	virtual std::unique_ptr<Component> Deserialise() = 0;
 
 	Entity* entity = nullptr;
@@ -21,5 +24,4 @@ struct Component
 
 private:
 	bool hasDataToBeSent = false;
-	ComponentType componentType = ComponentType::TYPE_UNDEFINED;
 };

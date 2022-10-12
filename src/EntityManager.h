@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "NetEntity.h"
 
+using namespace GEngine::Networking;
 
 class EntityManager
 {
@@ -20,3 +21,4 @@ public:
 	Entity& AddEntity();
 	NetEntity& AddNetEntity(short& netID);
 };
+ 

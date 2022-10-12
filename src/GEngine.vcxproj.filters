@@ -99,9 +99,6 @@
     <ClCompile Include="GamePacket.cpp">
       <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkUtils.cpp">
-      <Filter>Source Files\Engine\Network</Filter>
-    </ClCompile>
     <ClCompile Include="NetEntity.cpp">
       <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
@@ -149,9 +146,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files\Engine\Data</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkUtils.h">
-      <Filter>Header Files\Engine\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Vector.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
@@ -163,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="NetEntity.h">
       <Filter>Header Files\Engine\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="NetComponent.h">
+      <Filter>Header Files\Engine\ECS\Components\NetComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

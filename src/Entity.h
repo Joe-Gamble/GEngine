@@ -66,5 +66,15 @@ public:
 		return *static_cast<T*>(ptr);
 	}
 
+	template<typename T>
+	T* TryGetComponent() const
+	{
+		if (!HasComponent<T>())
+			return nullptr;
+
+		auto ptr = componentArray[getComponentTypeID<T>()];
+		return static_cast<T*>(ptr);
+	}
+
 	std::vector<std::unique_ptr<Component>>* GetComponents();
 };

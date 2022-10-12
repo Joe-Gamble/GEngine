@@ -1,5 +1,8 @@
 #include "EntityManager.h"
 #include "Transform.h"
+#include "NetworkManager.h"
+
+using namespace GEngine::Networking;
 
 
 void EntityManager::Update(double& dt)
@@ -39,9 +42,16 @@ Entity& EntityManager::AddEntity()
 
 NetEntity& EntityManager::AddNetEntity(short& netID)
 {
-	NetEntity* e = NetEntity::Instantiate(netID);
-	std::unique_ptr<Entity> uPtr{ e };
-	entities.emplace_back(std::move(uPtr));
 
-	return *e;
+	// this should go in GameManager
+	NetworkManager& networkManager = NetworkManager::Instance();
+	
+	if (networkManager.HasAuthority())
+	{
+		NetEntity* e = NetEntity::Instantiate(netID);
+		std::unique_ptr<NetEntity> uPtr{ e };
+
+		netEntities.emplace_back(std::move(uPtr));
+		return *e;
+	}
 }

@@ -58,16 +58,22 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
+			Entity& MakeEntity();
+			void SendEntityToClients(Entity& entity);
+
+			short entityID = 0;
+
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;
 			virtual void OnDisconnect(TCPConnection& lostConnection, const std::string& reason) override;
 			virtual bool ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex) override;
-			//virtual void OnMaxConnectionsReached() override;
 		private:
 			bool ValidateComponent(Component* component);
 			void ValidateClientVersion(const short& version, const int& connection);
 
 			bool isRunning = false;
+			
+			
 			std::map<int, std::string> connectionsToClose;
 			ServerType serverType = ServerType::UNKNOWN;
 		};

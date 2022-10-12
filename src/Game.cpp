@@ -74,14 +74,41 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 	// work 192.168.0.203
 	// home 192.168.0.23
 
-	Entity& entity = entityManager->AddEntity();
-	entity.AddComponent<NetTransform>();
-	entity.GetComponent<NetTransform>().SetPosition({ 1, 0 });
+	
 
-	const void* data = entity.GetComponent<NetTransform>().Serialise();
+	short num = 1;
+	NetEntity* entity = NetEntity::Instantiate(num); 
+	entity->AddComponent<NetTransform>();
 
-	NetTransform transform;
-	transform.ApplyData(data);
+	NetTransform* transform = entity->TryGetComponent<NetTransform>();
+
+	/*
+	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(PacketType::PT_ENTITY_CHANGE);
+
+	uint32_t componentCount = entity->GetComponents()->size();
+	//*entityPacket << componentCount;
+
+	for (const auto& entry : *entity->GetComponents())
+	{
+		GamePacket& gamePacket = *entityPacket;
+		Packet* packet = reinterpret_cast<Packet*>(&gamePacket);
+
+		//*packet << newTransform;
+		//packet->Append(transform->Serialise(), sizeof(NetTransformMold));
+
+		//uint32_t componentSize = transform->GetMoldSize();
+		*packet << sizeof(NetTransformMold);
+		const void* data = transform->Serialise();
+
+		packet->Append(data, sizeof(NetTransformMold));
+	}
+
+	*/
+
+	std::shared_ptr<GamePacket> packet = NetEntity::MakeEntityPacket(entity);
+
+	
+	transform->SetPosition({ 1, 0 });
 
 	//SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
 	//testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);

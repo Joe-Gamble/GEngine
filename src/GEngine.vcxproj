@@ -157,7 +157,6 @@
     <ClCompile Include="NetEntity.cpp" />
     <ClCompile Include="NetTransform.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
-    <ClCompile Include="NetworkUtils.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -165,6 +164,7 @@
     <ClInclude Include="EventDriver.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GamePacket.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="Entity.h" />
@@ -172,11 +172,11 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="ComponentType.h" />
+    <ClInclude Include="NetComponent.h" />
     <ClInclude Include="NetEntity.h" />
     <ClInclude Include="NetTransform.h" />
     <ClInclude Include="NetTransformMold.h" />
     <ClInclude Include="NetworkManager.h" />
-    <ClInclude Include="NetworkUtils.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />

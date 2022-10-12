@@ -29,6 +29,9 @@ namespace GEngine
 			GamePacket& operator << (const short& shortData);
 			GamePacket& operator >> (short& newShort);
 
+			GamePacket& operator << (ComponentType componentType);
+			GamePacket& operator >> (ComponentType& componentType);
+
 		};
 	}
 }

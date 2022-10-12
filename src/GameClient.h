@@ -12,7 +12,7 @@ namespace GEngine
 {
 	namespace Networking
 	{
-		class GameClient : private GNet::Client
+		class GameClient : public GNet::Client
 		{
 		public:
 			GameClient();
@@ -21,9 +21,8 @@ namespace GEngine
 
 			~GameClient();
 
-			void SendServerRequest();
 			void SendPacket(std::shared_ptr<GamePacket> packet);
-			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
+			bool ProcessLocalPacket(std::shared_ptr<Packet> packet);
 
 			void Tick();
 

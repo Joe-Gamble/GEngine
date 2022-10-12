@@ -4,13 +4,13 @@
 #define NET_TRANSFORM
 #endif // !NET_TRANSFORM
 
-#include "Component.h"
+#include "NetComponent.h"
 #include "Vector.h"
 #include "NetTransformMold.h"
 
 using namespace GUtility;
 
-struct NetTransform : Component
+struct NetTransform : NetComponent
 {
 public:
 
@@ -20,6 +20,17 @@ public:
 	void Update(double& dt) override;
 	void ApplyData(const void* data) override;
 	bool SendData();
+
+	inline ComponentType GetType() override
+	{
+		return ComponentType::TYPE_TRANSFORM;
+	}
+
+	inline const uint32_t GetMoldSize() override
+	{
+		return sizeof(NetTransformMold);
+	}
+
 private:
 
 
