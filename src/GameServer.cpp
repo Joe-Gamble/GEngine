@@ -165,12 +165,12 @@ void GameServer::Tick()
 	}
 }
 
-Entity& GameServer::MakeEntity()
+NetEntity& GameServer::MakeEntity()
 {
-	Entity entity;
-	return entity;
-	//EntityManager
-	// // O: insert return statement here
+	short netID = entityID++;
+	NetEntity* entity = NetEntity::Instantiate(netID);
+
+	return *entity;
 }
 
 void GameServer::SendEntityToClients(Entity& entity)

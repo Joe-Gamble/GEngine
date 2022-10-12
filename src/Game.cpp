@@ -74,41 +74,8 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 	// work 192.168.0.203
 	// home 192.168.0.23
 
-	
-
 	short num = 1;
-	NetEntity* entity = NetEntity::Instantiate(num); 
-	entity->AddComponent<NetTransform>();
-
-	NetTransform* transform = entity->TryGetComponent<NetTransform>();
-
-	/*
-	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(PacketType::PT_ENTITY_CHANGE);
-
-	uint32_t componentCount = entity->GetComponents()->size();
-	//*entityPacket << componentCount;
-
-	for (const auto& entry : *entity->GetComponents())
-	{
-		GamePacket& gamePacket = *entityPacket;
-		Packet* packet = reinterpret_cast<Packet*>(&gamePacket);
-
-		//*packet << newTransform;
-		//packet->Append(transform->Serialise(), sizeof(NetTransformMold));
-
-		//uint32_t componentSize = transform->GetMoldSize();
-		*packet << sizeof(NetTransformMold);
-		const void* data = transform->Serialise();
-
-		packet->Append(data, sizeof(NetTransformMold));
-	}
-
-	*/
-
-	std::shared_ptr<GamePacket> packet = NetEntity::MakeEntityPacket(entity);
-
 	
-	transform->SetPosition({ 1, 0 });
 
 	//SDL_Surface* tmpSurface = IMG_Load("Assets/test.png");
 	//testTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
@@ -142,7 +109,7 @@ void Game::handleEvents()
 
 				case SDLK_w:
 				{
-					NetworkManager::Instance().JoinServer("192.168.0.23");
+					NetworkManager::Instance().JoinServer("192.168.0.203");
 					break;
 				}
 				case SDLK_e:
@@ -151,6 +118,23 @@ void Game::handleEvents()
 					{
 						NetworkManager::Instance().EndSession();
 					}
+					break;
+				}
+				case SDLK_r:
+				{
+					if (NetworkManager::Instance().IsServer())
+					{
+						NetEntity& entity = NetworkManager::Instance().GetServer().MakeEntity();
+
+						entity.AddComponent<NetTransform>();
+						NetTransform* transform = entity.TryGetComponent<NetTransform>();
+
+						std::shared_ptr<GamePacket> packet = NetEntity::MakeEntityPacket(&entity);
+
+						transform->SetPosition({ 1, 0 });
+						NetworkManager::Instance().GetServer().SendPacket(packet);
+					}
+					
 					break;
 				}
 

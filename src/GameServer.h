@@ -5,7 +5,7 @@
 #endif // !ENGINE_SERVER
 
 #include "IncludeMe.h"
-#include "Component.h"
+#include "NetEntity.h"
 #include "GamePacket.h"
 #include "SDL_thread.h"
 #include "SDL.h"
@@ -58,7 +58,7 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
-			Entity& MakeEntity();
+			NetEntity& MakeEntity();
 			void SendEntityToClients(Entity& entity);
 
 			short entityID = 0;

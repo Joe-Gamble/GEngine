@@ -70,6 +70,21 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		{
 			break;
 		}
+		case PacketType::PT_ENTITY_CHANGE:
+		{
+			/*short id = -1;
+			gamePacket >> id;
+
+			uint32_t componentCount = 0;
+
+
+			*gamePacket >> sizeof(uint32_t);
+			*entityPacket << componentCount;
+
+			entity->AddComponentDataToPacket(entityPacket);
+			return entityPacket;*/
+			break;
+		}
 		default:
 			return false;
 	}
