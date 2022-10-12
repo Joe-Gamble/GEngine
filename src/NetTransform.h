@@ -23,7 +23,7 @@ public:
 
 	inline ComponentType GetType() override
 	{
-		return ComponentType::TYPE_TRANSFORM;
+		return ComponentType::TYPE_NET_TRANSFORM;
 	}
 
 	inline const uint32_t GetMoldSize() override

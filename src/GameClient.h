@@ -4,7 +4,7 @@
 #endif // !ENGINE_SERVER
 
 #include "IncludeMe.h"
-#include "Entity.h"
+#include "NetEntity.h"
 #include "GamePacket.h"
 
 

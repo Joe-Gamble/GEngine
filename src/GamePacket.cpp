@@ -181,3 +181,83 @@ GamePacket& GamePacket::operator>>(ComponentType& componentType)
 
     return *this;
 }
+
+GamePacket& GamePacket::operator<<(NetEntity& entity)
+{
+    Packet* packet = reinterpret_cast<Packet*>(this);
+
+    /* short id = -1;
+    *packet << entity.netID;*/
+
+    uint32_t componentCount = entity.GetComponents()->size();
+    *packet << componentCount;
+
+    for (const auto& entry : *entity.GetComponents())
+    {
+        Component& component = *entry;
+
+        *this << component.GetType();
+
+        *packet << component.GetMoldSize();
+        packet->Append(component.Serialise(), component.GetMoldSize());
+    }
+
+    return *this;
+}
+
+GamePacket& GamePacket::operator>>(NetEntity& entity)
+{
+    Packet* packet = reinterpret_cast<Packet*>(this);
+    uint32_t componentCount = 0;
+
+    /* short id = -1;
+    *packet << entity.netID;*/
+
+    *packet >> componentCount;
+
+    if (componentCount <= 0)  
+        return *this;
+
+    for (int i = 0; i < componentCount; i++)
+    {
+        ComponentType componentType;
+        *this >> componentType;
+
+        uint32_t componentSize = 0;
+        *packet >> componentSize;
+
+        if (extractionOffset + componentSize > buffer.size())
+            throw PacketException("[GamePacket::operator>>(NetEntity& entity)] - Extraction offset exceeded buffer size.");
+
+        switch (componentType)
+        {
+            case ComponentType::TYPE_NET_TRANSFORM:
+            {
+                void* data = malloc(sizeof(NetTransformMold));
+
+                if (data != nullptr && sizeof(data) > 0)
+                {
+                    memcpy(data, &buffer[extractionOffset], componentSize);
+                    NetTransformMold* mold = reinterpret_cast<NetTransformMold*>(data);
+
+                    if (mold == nullptr)
+                        return *this;
+
+                    NetTransform* transform = entity.TryGetComponent<NetTransform>();
+
+                    if (transform != nullptr)
+                        transform = entity.AddComponent<NetTransform>();
+
+                    *transform = NetTransform(*mold);
+
+                    extractionOffset += componentSize;
+
+                    std::free(data);
+                }
+                break;
+            }
+        }
+    }
+
+    return *this;
+}

@@ -129,10 +129,17 @@ void Game::handleEvents()
 						entity.AddComponent<NetTransform>();
 						NetTransform* transform = entity.TryGetComponent<NetTransform>();
 
-						std::shared_ptr<GamePacket> packet = NetEntity::MakeEntityPacket(&entity);
-
 						transform->SetPosition({ 1, 0 });
-						NetworkManager::Instance().GetServer().SendPacket(packet);
+
+						 std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(PacketType::PT_ENTITY_CHANGE);
+						 *entityPacket << entity;
+
+						 std::cout << "Entity Packaged" << std::endl;
+
+						 NetworkManager::Instance().GetServer().SendPacket(entityPacket);
+						 std::cout << "Entity Sent" << std::endl;
+
+						 // std::shared_ptr<GamePacket> packet = NetEntity::MakeEntityPacket(&entity);
 					}
 					
 					break;

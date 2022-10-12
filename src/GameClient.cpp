@@ -39,7 +39,7 @@ GameClient::~GameClient()
 
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 {
-	GamePacket gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
+	GamePacket& gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
 	switch (packet->GetPacketType())
 	{
 		/*case PacketType::PT_TRANSFORM:
@@ -72,17 +72,12 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		}
 		case PacketType::PT_ENTITY_CHANGE:
 		{
-			/*short id = -1;
-			gamePacket >> id;
+			// Eventually will grab from entityManager using netID
 
-			uint32_t componentCount = 0;
+			NetEntity entity = NetEntity();
+			gamePacket >> entity;
 
-
-			*gamePacket >> sizeof(uint32_t);
-			*entityPacket << componentCount;
-
-			entity->AddComponentDataToPacket(entityPacket);
-			return entityPacket;*/
+			return true;
 			break;
 		}
 		default:

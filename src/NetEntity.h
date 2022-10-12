@@ -5,7 +5,7 @@
 #endif // !NET_ENTITY_H
 
 #include "Entity.h"
-#include "GamePacket.h"
+#include "NetComponent.h"
 
 namespace GEngine
 {
@@ -14,11 +14,9 @@ namespace GEngine
 		class NetEntity : public Entity
 		{
 		public:
+			NetEntity() {}
 			NetEntity(short& netID);
 			static NetEntity* Instantiate(short& netID);
-			void AddComponentDataToPacket(std::shared_ptr<GamePacket>& entityPacket);
-
-			static std::shared_ptr<GamePacket> MakeEntityPacket(NetEntity* entity);
 
 			template<typename T, typename... TArgs>
 			T* AddComponent(TArgs&&... mArgs)
@@ -39,7 +37,7 @@ namespace GEngine
 			 //std::shared_ptr<Component> GetNetComponents;
 
 		private:
-			const short netID;
+			const short netID = -1;
 			std::vector<std::shared_ptr<NetComponent>> netComponents;
 		};
 	}

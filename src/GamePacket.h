@@ -6,7 +6,7 @@
 
 #include "IncludeMe.h"
 #include "NetTransform.h"
-#include "EventDriver.h"
+#include "NetEntity.h"
 
 using namespace GNet;
 
@@ -31,6 +31,9 @@ namespace GEngine
 
 			GamePacket& operator << (ComponentType componentType);
 			GamePacket& operator >> (ComponentType& componentType);
+
+			GamePacket& operator << (NetEntity& entity);
+			GamePacket& operator >> (NetEntity& componentType);
 
 		};
 	}
