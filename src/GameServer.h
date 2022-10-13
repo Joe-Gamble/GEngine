@@ -10,6 +10,7 @@
 #include "SDL_thread.h"
 #include "SDL.h"
 #include <map>
+#include <chrono>
 
 namespace GEngine
 {
@@ -27,25 +28,29 @@ namespace GEngine
 			GameServer(ServerType type);
 			~GameServer();
 
+			bool InitialiseServer();
+
 			void ChangeScene(const std::string& filepath);
 			void Tick();
-			void LeaveSession();
+			void EndSession();
+
+			inline std::vector<TCPConnection>& GetConnections() { return connections; }
 
 			inline bool IsRunning() { return isRunning; }
+			inline bool InSession() { return inSession; }
+
 			inline ServerType GetServerType() { return serverType; }
 
-			inline std::map<int, std::string>& GetConnectionsToClose() { return connectionsToClose; }
+			inline std::map<TCPConnection*, std::string>& GetConnectionsToClose() { return connectionsToClose; }
 			inline bool HasConnectionsToClose() { return !connectionsToClose.empty(); }
 			inline void ClearConnectionsToClose() { connectionsToClose.clear(); }
 
-			void SendKickPacketToClient(int clientID, std::string& reason, int timeout);
+			void SendKickPacketToClient(TCPConnection* connection, std::string& reason, long long timeout);
 
-			struct CloseConnectionDelayedData{
-				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, int _timeout)
+			struct CloseConnectionDelayedData
+			{
+				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, long long _timeout) : connection(_connection), reason(_reason), timeout(_timeout)
 				{
-					connection = _connection;
-					reason = _reason;
-					timeout = _timeout;
 				}
 
 				TCPConnection* connection;
@@ -72,9 +77,9 @@ namespace GEngine
 			void ValidateClientVersion(const short& version, const int& connection);
 
 			bool isRunning = false;
+			bool inSession = false;
 			
-			
-			std::map<int, std::string> connectionsToClose;
+			std::map<TCPConnection*, std::string> connectionsToClose;
 			ServerType serverType = ServerType::UNKNOWN;
 		};
 	}

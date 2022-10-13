@@ -19,6 +19,8 @@ namespace GEngine
 
 		void Init(int xpos, int ypos, int width, int height, bool fullscreen);
 
+		inline void SetBackgroundToDefault(Uint8 r, Uint8 g, Uint8 b) { SDL_SetRenderDrawColor(renderer, r, g, b, 255); }
+
 		void handleEvents();
 		void Update(double& dt);
 		void Render();

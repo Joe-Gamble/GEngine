@@ -8,16 +8,26 @@ using namespace GEngine::Callbacks;
 
 GameServer::GameServer(ServerType type) : serverType(type)
 {
-	if (Initialise())
-	{
-		isRunning = true;
-		entityID = 0;
-		EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_READY);
-	}
+	NetworkManager::Instance().EndSession();
 }
 
 GameServer::~GameServer()
 {
+
+}
+
+bool GameServer::InitialiseServer()
+{
+	if (Initialise())
+	{
+		isRunning = true;
+		inSession = true;
+
+		entityID = 0;
+		return true;
+	}
+
+	return false;
 }
 
 void GameServer::OnConnect(TCPConnection& newConnection) noexcept
@@ -33,7 +43,7 @@ void GameServer::OnConnect(TCPConnection& newConnection) noexcept
 
 void GameServer::OnDisconnect(TCPConnection& lostConnection, const std::string& reason)
 {
-	std::cout << "[" << reason << "] Connection lost: " << lostConnection.ToString() << "." << std::endl;
+	lostConnection.SetActive(false);
 }
 
 void GameServer::SendPacket(std::shared_ptr<GamePacket> packet)
@@ -103,7 +113,7 @@ void GameServer::ValidateClientVersion(const short& version, const int& connecti
 
 	if (!NetworkManager::VerifyNewConnection(version, connections.size() + 1, errorString))
 	{
-		connectionsToClose.emplace(connection, errorString);
+		connectionsToClose.emplace(&connections.at(connection), errorString);
 	}
 	else
 	{
@@ -113,17 +123,15 @@ void GameServer::ValidateClientVersion(const short& version, const int& connecti
 	}
 }
 
-void GameServer::SendKickPacketToClient(int clientID, std::string& reason, int timeout)
+void GameServer::SendKickPacketToClient(TCPConnection* connection, std::string& reason, long long timeout)
 {
 	std::shared_ptr<Packet> kickPacket = std::make_shared<Packet>(PacketType::PT_KICK);
 	//Packet* packet = reinterpret_cast<Packet*>(kickPacket.get());
 
 	*kickPacket << reason;
+	connection->pm_outgoing.Append(kickPacket);
 
-	connections[clientID].pm_outgoing.Append(kickPacket);
-	connections[clientID].SetActive(false);
-
-	CloseConnectionDelayedData* data = new CloseConnectionDelayedData(&connections[clientID], reason, timeout);
+	CloseConnectionDelayedData* data = new CloseConnectionDelayedData(new TCPConnection(*connection), reason, timeout);
 
 	SDL_Thread* thread = SDL_CreateThread(CloseConnectionDelayed, "serverThread", data);
 	SDL_DetachThread(thread);
@@ -139,10 +147,23 @@ int GameServer::CloseConnectionDelayed(void* data)
 	TCPConnection& connection = *connectionData->connection;
 	std::string& reason = connectionData->reason;
 
-	SDL_Delay(timeout);
-	server.CloseConnection(&connection, reason);
-	delete connectionData;
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
+	while (connection.IsActive())
+	{
+		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
+		long long passed = std::chrono::duration_cast<std::chrono::milliseconds>(current - begin).count();
+
+		if (passed > timeout)
+		{
+			connection.SetActive(false);
+		}
+	}
+
+	if (NetworkManager::Instance().IsServer())
+		server.CloseConnection(connection, reason);
+
+	delete connectionData;
 	return 0;
 }
 
@@ -177,10 +198,13 @@ void GameServer::SendEntityToClients(Entity& entity)
 {
 }
 
-void GameServer::LeaveSession()
-{
-	for (auto& connection : connections)
+void GameServer::EndSession()
+{ 
+	inSession = false;
+
+	for (TCPConnection& connection : connections)
 	{
-		// send a disconnect packet?
+		std::string reason = "Session Ended";
+		connectionsToClose.emplace(&connection, reason);
 	}
 }

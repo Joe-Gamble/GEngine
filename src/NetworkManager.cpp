@@ -51,18 +51,25 @@ namespace GEngine::Networking
             {
                 return false;
             }
-                
-            if (type == HOSTED)
-            {
-                m_client = std::make_unique<GameClient>();
-
-                std::cout << "Server machine client created" << std::endl;
-            }
 
             m_server = std::make_unique<GameServer>(type);
 
-            currentState = NetworkState::SESSION_ACTIVE;
-            return true;
+            if (m_server->InitialiseServer())
+            {
+                if (type == HOSTED)
+                {
+                    m_client = std::make_unique<GameClient>();
+
+                    std::cout << "Server machine client created" << std::endl;
+                }
+
+                currentState = NetworkState::SESSION_ACTIVE;
+                EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_READY);
+
+                return true;
+            }
+
+            EndSession();
         }
         return false;
     }
@@ -84,7 +91,6 @@ namespace GEngine::Networking
             currentState = NetworkState::CLIENT_CONNECTING;
             
             return true;
-
         }
         std::cout << "Client already exists or this was called on a dedicated server. " << std::endl;
         return false;
@@ -116,93 +122,110 @@ namespace GEngine::Networking
 
             if (timeBetweenFrames > 1000 / 60.0)
             {
+                if (nm->IsServer())
+                {
+                    if (nm->m_server->HasConnectionsToClose())
+                    {
+                        for (auto& connection : nm->m_server->GetConnectionsToClose())
+                        {
+                            nm->m_server->SendKickPacketToClient(connection.first, connection.second, 5000);
+                        }
+                        nm->m_server->ClearConnectionsToClose();
+                    }
+                }
+                
                 switch (nm->currentState)
                 {
-                case NetworkState::UNINITIALIZED:
-                case NetworkState::INITIALIZED:
-                    break;
+                    case NetworkState::UNINITIALIZED:
+                    case NetworkState::INITIALIZED:
+                        break;
 
-                case NetworkState::CLIENT_CONNECTING:
-                {
-                    const std::string& ip = nm->m_ipAddress;
-
-                    if (nm->m_client->ConnectToIP(ip))
+                    case NetworkState::CLIENT_CONNECTING:
                     {
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-                        nm->SetState(NetworkState::SESSION_ACTIVE);
-                    }
-                    else
-                    {
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
+                        const std::string& ip = nm->m_ipAddress;
 
-                        nm->ShutDown();
-                    }
-                    break;
-                }
-
-                case NetworkState::SESSION_ACTIVE:
-                {
-
-                    if (nm->m_server != nullptr && nm->m_server->IsRunning())
-                    {
-                        if (nm->m_server->HasConnectionsToClose())
+                        if (nm->m_client->ConnectToIP(ip))
                         {
-                            for (auto& connection : nm->m_server->GetConnectionsToClose())
-                            {
-                                nm->m_server->SendKickPacketToClient(connection.first, connection.second, 5000);
-                            }
+                            EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
+                            nm->SetState(NetworkState::SESSION_ACTIVE);
+                        }
+                        else
+                        {
+                            EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
+                            nm->SetState(NetworkState::INITIALIZED);
+                            nm->EndSession();
+                        }
+                        break;
+                    }
 
-                            nm->m_server->ClearConnectionsToClose();
+                    case NetworkState::SESSION_ACTIVE:
+                    {
+
+                        if (nm->m_server != nullptr && nm->m_server->IsRunning())
+                        {
+                            EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
+                            nm->m_server->Tick();
                         }
 
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
-                        nm->m_server->Tick();
+                        if (nm->m_client != nullptr)
+                        {
+                            if (nm->m_client->IsClientConnected())
+                                nm->m_client->Tick();
+                        }
+
+                        break;
                     }
 
-                    if (nm->m_client != nullptr)
+                    case NetworkState::SESSION_END:
                     {
-                        if (nm->m_client->IsClientConnected())
-                            nm->m_client->Tick();
+                        if (nm->m_client != nullptr)
+                        {
+                            if (!nm->HasAuthority() && nm->GetClient().IsConnected())
+                                nm->m_client->LeaveSession();
+
+                            nm->m_client.reset();
+                        }
+
+                        if (nm->m_server != nullptr)
+                        {
+                            if (nm->m_server->InSession())
+                            {
+                                nm->m_server->EndSession();
+                            }
+
+                            if (nm->m_server->GetConnections().size() > 0)
+                            {
+                                nm->m_server->Tick();
+                                break;
+                            }
+
+                            if (!nm->GetServer().HasConnectionsToClose())
+                            {
+                                nm->m_server.reset();
+                                
+                            }
+                        }
+
+                        nm->SetState(NetworkState::INITIALIZED);
+                        std::cout << "Session Ended." << std::endl << std::endl;
+                        EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
+
+                        return 0;
                     }
 
-                    break;
-                }
-
-                case NetworkState::SESSION_END:
-                {
-                    if (nm->m_client != nullptr)
+                    case NetworkState::SHUTDOWN:
                     {
-                        if (!nm->HasAuthority())
-                            nm->m_client->LeaveSession();
+                        nm->m_shutdown = true;
+                        nm->m_initialised = false;
 
-                        nm->m_client.reset();
+                        nm->SetState(NetworkState::UNINITIALIZED);
+
+                        Network::Shutdown();
+                        return 0;
                     }
 
-                    if (nm->m_server != nullptr)
-                    {
-                        nm->m_server->LeaveSession();
-
-                        nm->m_server.reset();
-                    }
-
-                    nm->SetState(NetworkState::INITIALIZED);
-                    std::cout << "Session Ended." << std::endl << std::endl;;
-                    return 0;
-                }
-
-                case NetworkState::SHUTDOWN:
-                {
-                    nm->m_shutdown = true;
-                    nm->m_initialised = false;
-
-                    nm->SetState(NetworkState::UNINITIALIZED);
-
-                    Network::Shutdown();
-                    return 0;
-                }
-
-                default:
-                    break;
+                    default:
+                        break;
                 }
             } 
         }

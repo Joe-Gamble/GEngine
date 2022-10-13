@@ -245,7 +245,7 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
 
                     NetTransform* transform = entity.TryGetComponent<NetTransform>();
 
-                    if (transform != nullptr)
+                    if (transform == nullptr)
                         transform = entity.AddComponent<NetTransform>();
 
                     *transform = NetTransform(*mold);

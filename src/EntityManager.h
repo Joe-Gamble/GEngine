@@ -19,6 +19,6 @@ public:
 
 	void Refresh();
 	Entity& AddEntity();
-	NetEntity& AddNetEntity(short& netID);
+	NetEntity& AddNetEntity(NetEntity* entity);
 };
  

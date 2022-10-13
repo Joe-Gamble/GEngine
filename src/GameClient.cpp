@@ -33,8 +33,8 @@ void GameClient::LeaveSession()
 
 GameClient::~GameClient()
 {
-	if (IsConnected() && !NetworkManager::Instance().HasAuthority())
-		CloseConnection("Client exited the application.");
+	if (!NetworkManager::Instance().HasAuthority())
+		NetworkManager::Instance().EndSession();
 }
 
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
@@ -59,6 +59,8 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			*packet >> reason;
 
 			CloseConnection(reason);
+			NetworkManager::Instance().EndSession();
+
 			break;
 		}
 		case PacketType::PT_SCENE_LOAD:
@@ -89,6 +91,11 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 void GameClient::OnConnect()
 {
 	std::cout << "Connected to the server" << std::endl;
+}
+
+void GameClient::OnDisconnect(std::string reason)
+{
+    	
 }
 
 void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)

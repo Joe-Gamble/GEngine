@@ -47,7 +47,7 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 		if (renderer)
 		{
 			std::cout << "Renderer created" << std::endl;
-			SDL_SetRenderDrawColor(renderer, 15, 18, 186, 255);
+			SDL_SetRenderDrawColor(renderer, 32 , 90, 48, 255);
 		}
 
 		running = true;
@@ -55,12 +55,11 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 
 	// if game host machine
 
-	EventDriver::Instance().RegisterCallback([]() 
-		{ 
-			std::cout << "Client Connected" << std::endl; 
-		}, 
-		Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL
-	);
+	EventDriver::Instance().RegisterCallback(std::bind(&Game::SetBackgroundToDefault, this, 32, 90, 48), Event::NETWORKING_SESSION_ENDED);
+
+	EventDriver::Instance().RegisterCallback(std::bind(&Game::SetBackgroundToDefault, this, 90, 32, 48), Event::NETWORKING_SERVER_READY);
+
+	EventDriver::Instance().RegisterCallback(std::bind(&Game::SetBackgroundToDefault, this, 48, 32, 90), Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
 
 	EventDriver::Instance().RegisterCallback([]()
 		{
@@ -103,41 +102,39 @@ void Game::handleEvents()
 			{
 				case SDLK_q:
 				{
-					NetworkManager::Instance().MakeServer(ServerType::HOSTED);
+					NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
 					break;
 				}
 
 				case SDLK_w:
 				{
-					NetworkManager::Instance().JoinServer("192.168.0.203");
+					NetworkManager::Instance().JoinServer("192.168.0.23");
 					break;
 				}
 				case SDLK_e:
 				{
-					if (NetworkManager::Instance().GetClient().IsClientConnected() || NetworkManager::Instance().HasAuthority())
-					{
-						NetworkManager::Instance().EndSession();
-					}
+					NetworkManager::Instance().EndSession();
 					break;
 				}
 				case SDLK_r:
 				{
 					if (NetworkManager::Instance().IsServer())
 					{
-						NetEntity& entity = NetworkManager::Instance().GetServer().MakeEntity();
+						/*NetEntity& netEntity = NetworkManager::Instance().GetServer().MakeEntity();
+						entityManager->AddNetEntity(&netEntity);
 
-						entity.AddComponent<NetTransform>();
-						NetTransform* transform = entity.TryGetComponent<NetTransform>();
+						netEntity.AddComponent<NetTransform>();
+						NetTransform* transform = netEntity.TryGetComponent<NetTransform>();
 
 						transform->SetPosition({ 1, 0 });
 
 						 std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(PacketType::PT_ENTITY_CHANGE);
-						 *entityPacket << entity;
+						 *entityPacket << netEntity;
 
 						 std::cout << "Entity Packaged" << std::endl;
 
 						 NetworkManager::Instance().GetServer().SendPacket(entityPacket);
-						 std::cout << "Entity Sent" << std::endl;
+						 std::cout << "Entity Sent" << std::endl;*/
 
 						 // std::shared_ptr<GamePacket> packet = NetEntity::MakeEntityPacket(&entity);
 					}

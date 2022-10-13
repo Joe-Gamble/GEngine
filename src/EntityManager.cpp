@@ -40,18 +40,16 @@ Entity& EntityManager::AddEntity()
 	return *e;
 }	
 
-NetEntity& EntityManager::AddNetEntity(short& netID)
+NetEntity& EntityManager::AddNetEntity(NetEntity* entity)
 {
-
 	// this should go in GameManager
 	NetworkManager& networkManager = NetworkManager::Instance();
 	
 	if (networkManager.HasAuthority())
 	{
-		NetEntity* e = NetEntity::Instantiate(netID);
-		std::unique_ptr<NetEntity> uPtr{ e };
+		std::unique_ptr<NetEntity> uPtr{ entity };
 
 		netEntities.emplace_back(std::move(uPtr));
-		return *e;
+		return *entity;
 	}
 }
