@@ -157,6 +157,8 @@
     <ClCompile Include="NetEntity.cpp" />
     <ClCompile Include="NetTransform.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -178,6 +180,8 @@
     <ClInclude Include="NetTransformMold.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneMold.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2Mold.h" />

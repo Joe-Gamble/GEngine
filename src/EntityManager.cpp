@@ -29,6 +29,13 @@ void EntityManager::Refresh()
 			return mEntity->IsAlive();
 		}),
 		std::end(entities));
+
+	netEntities.erase(std::remove_if(std::begin(netEntities), std::end(netEntities),
+		[](const std::unique_ptr<NetEntity>& mEntity)
+		{
+			return mEntity->IsAlive();
+		}),
+		std::end(netEntities));
 }
 
 Entity& EntityManager::AddEntity()

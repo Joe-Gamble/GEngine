@@ -5,6 +5,7 @@
 
 #include <memory>
 #include "EntityManager.h"
+#include "SceneMold.h"
 
 class Scene
 {
@@ -13,9 +14,13 @@ public:
 	~Scene();
 
 	Scene(std::shared_ptr<Scene> previousScene);
+
 	bool Back();
 
 	void Init();
+
+	void Update(double& dt);
+	void Render();
 private:
 	std::unique_ptr<EntityManager> entityManager = std::make_unique<EntityManager>();
 
