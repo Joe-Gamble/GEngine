@@ -13,7 +13,8 @@ GameServer::GameServer(ServerType type) : serverType(type)
 
 GameServer::~GameServer()
 {
-
+	if (InSession())
+		EndSession();
 }
 
 bool GameServer::InitialiseServer()

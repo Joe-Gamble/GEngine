@@ -95,7 +95,10 @@ void GameClient::OnConnect()
 
 void GameClient::OnDisconnect(std::string reason)
 {
-    	
+	// Fallback disconnect
+	// reason should be an enum I think
+	if (reason == "Socket Error")
+		NetworkManager::Instance().EndSession();
 }
 
 void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)

@@ -78,13 +78,11 @@ namespace GEngine::Networking
     {
         if (!IsClient() && !HasAuthority())
         {
-            if (!m_initialised)
+            if (!Initialise())
             {
-                if (!Initialise())
-                {
-                    return false;
-                }
+                return false;
             }
+
             m_client = std::make_unique<GameClient>();
 
             m_ipAddress = ip;
@@ -191,18 +189,19 @@ namespace GEngine::Networking
                             if (nm->m_server->InSession())
                             {
                                 nm->m_server->EndSession();
-                            }
-
-                            if (nm->m_server->GetConnections().size() > 0)
-                            {
-                                nm->m_server->Tick();
                                 break;
                             }
-
-                            if (!nm->GetServer().HasConnectionsToClose())
+                            else 
                             {
-                                nm->m_server.reset();
-                                
+                                if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
+                                {
+                                    nm->m_server->Tick();
+                                    break;
+                                }
+                                else
+                                {
+                                    nm->m_server.reset();
+                                }
                             }
                         }
 
