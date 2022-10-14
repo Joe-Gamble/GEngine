@@ -35,7 +35,7 @@ namespace GEngine
 			friend GameClient;
 			friend GameServer;
 		public:
-			static const short Version = 12351;
+			static const short Version = 12353;
 			static const int MaxPlayers = 2;
 
 		public:

@@ -90,15 +90,15 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 void GameClient::OnConnect()
 {
-	std::cout << "Connected to the server" << std::endl;
+	
 }
 
 void GameClient::OnDisconnect(std::string reason)
 {
 	// Fallback disconnect
 	// reason should be an enum I think
-	if (reason == "Socket Error")
-		NetworkManager::Instance().EndSession();
+	std::cout << reason << std::endl;
+	NetworkManager::Instance().EndSession();
 }
 
 void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)

@@ -145,12 +145,15 @@ namespace GEngine::Networking
                         if (nm->m_client->ConnectToIP(ip))
                         {
                             EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
+                            std::cout << "Connected to the server" << std::endl;
                             nm->SetState(NetworkState::SESSION_ACTIVE);
                         }
                         else
                         {
                             EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
+                            std::cout << "Couldn't connect to the server" << std::endl;
                             nm->SetState(NetworkState::INITIALIZED);
+
                             nm->EndSession();
                         }
                         break;

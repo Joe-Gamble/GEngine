@@ -108,7 +108,7 @@ void Game::handleEvents()
 
 				case SDLK_w:
 				{
-					NetworkManager::Instance().JoinServer("192.168.0.23");
+					NetworkManager::Instance().JoinServer("192.168.0.203");
 					break;
 				}
 				case SDLK_e:
