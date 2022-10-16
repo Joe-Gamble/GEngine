@@ -9,5 +9,6 @@ struct SceneMold
 {
 	std::string sceneName;
 	bool addative;
+	bool inclusive;
 };
 

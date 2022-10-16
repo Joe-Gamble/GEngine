@@ -18,8 +18,10 @@ public:
 		return instance;
 	}
 
-	void LoadScene(std::string& sceneName, bool isAddative);
+	void LoadScene(std::string& sceneName, bool isAddative, bool showPrevious);
 	void LoadScene(SceneMold& mold);
+
+	void Back();
 
 	void Tick(double& dt);
 

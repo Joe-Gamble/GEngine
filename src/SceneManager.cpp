@@ -1,35 +1,41 @@
 #include "SceneManager.h"
 
-void SceneManager::LoadScene(std::string& sceneName, bool isAddative)
+void SceneManager::LoadScene(std::string& sceneName, bool isAddative, bool showPrevious)
 {
-	std::unique_ptr<Scene> scene;
-
-	if (isAddative && scenes.size() > 0)
+	if (!isAddative && scenes.size() > 0)
 	{
-		std::unique_ptr<Scene>* previousScene = &scenes.front();
-		scene = std::make_unique<Scene>(previousScene);
+		// clean up existing scenes
+		scenes.clear();
 	}
 	else
 	{
-		if (scenes.size() > 0)
-		{
-			// cleanup scenes
-			scene = std::make_unique<Scene>();
-		}
+		scenes.front()->SetActive(showPrevious);
 	}
-	scenes.push_back(scene);
+
+	scenes.push_back(std::make_unique<Scene>());
 }
 
 void SceneManager::LoadScene(SceneMold& mold)
 {
-	LoadScene(mold.sceneName, mold.addative);
+	LoadScene(mold.sceneName, mold.addative, mold.inclusive);
+}
+
+void SceneManager::Back()
+{
+	if (scenes.size() > 1)
+	{
+		scenes.pop_back();
+		scenes.front()->SetActive(true);
+	}
 }
 
 void SceneManager::Tick(double& dt)
 {
 	for (const auto& scene : scenes)
 	{
-		scene->Update();
-		scene->Render();
+		scene->Update(dt);
+
+		if (scene->IsActive())
+			scene->Render();
 	}
 }

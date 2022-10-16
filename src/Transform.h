@@ -1,4 +1,8 @@
 #pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
+#endif
+
 #include "Vector.h"
 #include "Component.h"
 

@@ -162,7 +162,7 @@ int GameServer::CloseConnectionDelayed(void* data)
 	}
 
 	if (NetworkManager::Instance().IsServer())
-		server.CloseConnection(&connection, reason);
+		server.CloseConnection(connection, reason);
 
 	delete connectionData;
 	return 0;

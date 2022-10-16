@@ -12,11 +12,14 @@
 using ComponentBitSet = std::bitset<MAX_COMPONENTS>;
 using ComponentArray = std::array<Component*, MAX_COMPONENTS>;
 
+class Scene;
+
 class Entity
 {
 private:
 	bool alive = true;
 	std::vector<std::unique_ptr<Component>> components;
+	Scene* scene = nullptr;
 
 	ComponentArray componentArray;
 	ComponentBitSet componentBitSet;

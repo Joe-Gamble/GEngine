@@ -34,9 +34,6 @@ namespace GEngine
 		bool running = false;;
 		SDL_Window* window = nullptr;
 		SDL_Renderer* renderer = nullptr;
-
-		std::unique_ptr<EntityManager> entityManager = std::make_unique<EntityManager>();
-
 	};
 }
 

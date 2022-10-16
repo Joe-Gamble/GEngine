@@ -99,14 +99,17 @@
     <ClCompile Include="GamePacket.cpp">
       <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
-    <ClCompile Include="NetEntity.cpp">
-      <Filter>Source Files\Engine\Network</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\Engine\Data</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Engine\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files\Engine\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="NetEntity.cpp">
+      <Filter>Source Files\Engine\ECS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,9 +164,6 @@
     <ClInclude Include="ComponentType.h">
       <Filter>Header Files\Engine\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="NetEntity.h">
-      <Filter>Header Files\Engine\Network</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
@@ -175,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files\Engine\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files\Engine\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="NetEntity.h">
+      <Filter>Header Files\Engine\ECS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
