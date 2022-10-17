@@ -4,6 +4,7 @@
 #endif
 
 #include "Component.h"
+#include "Entity.h"
 
 struct Input : public Component
 {
