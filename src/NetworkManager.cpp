@@ -152,7 +152,7 @@ namespace GEngine::Networking
                         {
                             EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
                             std::cout << "Couldn't connect to the server" << std::endl;
-                            nm->SetState(NetworkState::INITIALIZED);
+                            nm->SetState(NetworkState::SESSION_END);
 
                             nm->EndSession();
                         }
