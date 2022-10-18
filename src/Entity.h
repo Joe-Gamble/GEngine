@@ -1,4 +1,7 @@
 #pragma once
+#ifndef ENTITY_H
+#define ENTITY_H
+
 
 #include <array>
 #include <bitset>
@@ -8,76 +11,82 @@
 #include "Component.h"
 #include "ECS.h"
 
-
-using ComponentBitSet = std::bitset<MAX_COMPONENTS>;
-using ComponentArray = std::array<Component*, MAX_COMPONENTS>;
-
-class Scene;
-
-class Entity
+namespace GEngine
 {
-private:
-	bool alive = true;
-	std::vector<std::unique_ptr<Component>> components;
-	Scene* scene = nullptr;
+	class Scene;
 
-	ComponentArray componentArray;
-	ComponentBitSet componentBitSet;
+	using ComponentBitSet = std::bitset<MAX_COMPONENTS>;
+	using ComponentArray = std::array<Component*, MAX_COMPONENTS>;
 
-public:
-
-	static Entity* Instantiate();
-	static Entity* Instantiate(const Entity&);
-
-	void Update(double& dt);
-	void Render();
-
-	bool IsAlive() const;
-	void Destroy();
-
-	template<typename T>
-	bool HasComponent() const
+	class Entity
 	{
-		return componentBitSet[getComponentTypeID<T>()];
-	}
+	private:
+		bool alive = true;
+		std::vector<std::unique_ptr<Component>> components;
+		Scene* scene = nullptr;
 
-	template<typename T, typename... TArgs>
-	T& AddComponent(TArgs&&... mArgs)
-	{
-		assert(!HasComponent<T>());
+		ComponentArray componentArray = {};
+		ComponentBitSet componentBitSet = {};
 
-		T* c(new T(std::forward<TArgs>(mArgs)...));
-		c->entity = this;
+	protected:
+		Entity(Scene* _scene) : scene(_scene) {}
 
-		std::unique_ptr<Component> uPtr{ c };
-		components.emplace_back(std::move(uPtr));
+	public:
 
-		componentArray[getComponentTypeID<T>()] = c;
-		componentBitSet[getComponentTypeID<T>()] = true;
+		static Entity* Instantiate(Scene* scene);
 
-		c->Init();
+		void Update(double& dt);
+		void Render();
 
-		return *c;
-	}
+		bool IsAlive() const;
+		void Destroy();
 
-	template<typename T>
-	T& GetComponent() const
-	{
-		assert(HasComponent<T>());
+		template<typename T>
+		bool HasComponent() const
+		{
+			return componentBitSet[getComponentTypeID<T>()];
+		}
 
-		auto ptr = componentArray[getComponentTypeID<T>()];
-		return *static_cast<T*>(ptr);
-	}
+		template<typename T, typename... TArgs>
+		T& AddComponent(TArgs&&... mArgs)
+		{
+			assert(!HasComponent<T>());
 
-	template<typename T>
-	T* TryGetComponent() const
-	{
-		if (!HasComponent<T>())
-			return nullptr;
+			T* c(new T(std::forward<TArgs>(mArgs)...));
+			c->entity = this;
 
-		auto ptr = componentArray[getComponentTypeID<T>()];
-		return static_cast<T*>(ptr);
-	}
+			std::unique_ptr<Component> uPtr{ c };
+			components.emplace_back(std::move(uPtr));
 
-	std::vector<std::unique_ptr<Component>>* GetComponents();
-};
+			componentArray[getComponentTypeID<T>()] = c;
+			componentBitSet[getComponentTypeID<T>()] = true;
+
+			c->Init();
+
+			return *c;
+		}
+
+		template<typename T>
+		T& GetComponent() const
+		{
+			assert(HasComponent<T>());
+
+			auto ptr = componentArray[getComponentTypeID<T>()];
+			return *static_cast<T*>(ptr);
+		}
+
+		template<typename T>
+		T* TryGetComponent() const
+		{
+			if (!HasComponent<T>())
+				return nullptr;
+
+			auto ptr = componentArray[getComponentTypeID<T>()];
+			return static_cast<T*>(ptr);
+		}
+
+		std::vector<std::unique_ptr<Component>>* GetComponents();
+	};
+}
+
+#endif

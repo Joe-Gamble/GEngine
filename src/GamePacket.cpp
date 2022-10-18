@@ -185,14 +185,12 @@ GamePacket& GamePacket::operator>>(ComponentType& componentType)
 GamePacket& GamePacket::operator<<(NetEntity& entity)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
-
-    /* short id = -1;
-    *packet << entity.netID;*/
+    *packet << entity.GetID();
 
     uint32_t componentCount = entity.GetComponents()->size();
     *packet << componentCount;
 
-    for (const auto& entry : *entity.GetComponents())
+    for (const auto& entry : *entity.GetNetComponents())
     {
         Component& component = *entry;
 
@@ -210,8 +208,11 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
     Packet* packet = reinterpret_cast<Packet*>(this);
     uint32_t componentCount = 0;
 
-    /* short id = -1;
-    *packet << entity.netID;*/
+    short id;
+    *this >> id;
+
+    if (entity.GetID() != id)
+        return *this;
 
     *packet >> componentCount;
 
@@ -237,23 +238,19 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
 
                 if (data != nullptr && sizeof(data) > 0)
                 {
-                    memcpy(data, &buffer[extractionOffset], componentSize);
-                    NetTransformMold* mold = reinterpret_cast<NetTransformMold*>(data);
-
-                    if (mold == nullptr)
-                        return *this;
-
                     NetTransform* transform = entity.TryGetComponent<NetTransform>();
 
                     if (transform == nullptr)
-                        transform = entity.AddComponent<NetTransform>();
+                        transform = entity.AddComponent<NetTransform>();;
 
-                    *transform = NetTransform(*mold);
+                    memcpy(data, &buffer[extractionOffset], componentSize);
+
+                    transform->ApplyData(data);
 
                     extractionOffset += componentSize;
-
-                    std::free(data);
                 }
+                std::free(data);
+
                 break;
             }
         }

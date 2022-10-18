@@ -1,0 +1,20 @@
+[
+  {
+    "MainMenu": {
+      "path": "MainMenu.json",
+      "isAddative": false,
+      "isInclusive": false,
+      "blockInput": false,
+      "SceneType": 0
+    }
+  },
+  {
+    "Options": {
+      "path": "Options.json",
+      "isAddative": true,
+      "isInclusive": false,
+      "blockInput": true,
+      "SceneType": 1
+    }
+  }
+]

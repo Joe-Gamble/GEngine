@@ -1,6 +1,8 @@
 #include "Transform.h"
 #include <iostream>
 
+using namespace GEngine;
+
 Transform::Transform()
 {
 	position = Vector2();

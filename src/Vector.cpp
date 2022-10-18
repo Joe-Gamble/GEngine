@@ -2,7 +2,7 @@
 #include <cmath>
 
 
-using namespace GUtility;
+using namespace GEngine::GUtility;
 
 Vector2::Vector2(const float& _x, const float& _y)
 {
@@ -16,7 +16,7 @@ Vector2::Vector2(const Vector2& rhs)
 	y = rhs.y;
 }
 
-GUtility::Vector2::Vector2(Vector2Mold& mold)
+Vector2::Vector2(Vector2Mold& mold)
 {
 	x = mold.x;
 	y = mold.y;

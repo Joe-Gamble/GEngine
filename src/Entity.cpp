@@ -1,9 +1,11 @@
 #include "Entity.h"
 #include "Transform.h"
 
-Entity* Entity::Instantiate()
+using namespace GEngine;
+
+Entity* Entity::Instantiate(Scene* _scene)
 {
-	Entity* go = new Entity();
+	Entity* go = new Entity(_scene);
 	return go;
 }
 

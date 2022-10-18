@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+using namespace GEngine;
+
 Scene::Scene()
 {
 }
@@ -23,6 +25,11 @@ void Scene::Update(double& dt)
 void Scene::Render()
 {
 	m_entityManager->Render();
+}
+
+void Scene::AddNetEntity(NetEntity* entity)
+{
+	m_entityManager->AddNetEntity(entity);
 }
 
 void Scene::PollEvents()
@@ -56,3 +63,6 @@ void Scene::PollEvents()
 	*/
 	}
 }
+
+
+

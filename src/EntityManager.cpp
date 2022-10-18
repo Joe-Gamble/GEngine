@@ -2,8 +2,8 @@
 #include "Transform.h"
 #include "NetworkManager.h"
 
+using namespace GEngine;
 using namespace GEngine::Networking;
-
 
 void EntityManager::Update(double& dt)
 {
@@ -40,7 +40,7 @@ void EntityManager::Refresh()
 
 Entity& EntityManager::AddEntity()
 {
-	Entity* e = Entity::Instantiate();
+	Entity* e = Entity::Instantiate(m_scene);
 	std::unique_ptr<Entity> uPtr{ e };
 	entities.emplace_back(std::move(uPtr));
 

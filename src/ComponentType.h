@@ -2,21 +2,27 @@
 
 #ifndef NET_COMPONENT_TYPE
 #define NET_COMPONENT_TYPE
-#endif // !NETCOMPONENTTYPE
 
 #include <stdint.h>
 
-enum class ComponentType : uint16_t // 2 bytes per type identifier
+namespace GEngine
 {
-	TYPE_UNDEFINED,
+	enum class ComponentType : uint16_t // 2 bytes per type identifier
+	{
+		TYPE_UNDEFINED,
 
-	TYPE_TRANSFORM,
-	TYPE_TEXT,
-	TYPE_RIGIDBODY,
-	TYPE_BACKGROUND_CHANGER,
+		TYPE_TRANSFORM,
+		TYPE_TEXT,
+		TYPE_RIGIDBODY,
+		TYPE_BACKGROUND_CHANGER,
 
-	TYPE_NET_TRANSFORM,
+		TYPE_NET_TRANSFORM,
 
-	MAX_DEFINE
-};
+		MAX_DEFINE
+	};
+
+}
+
+#endif // !NETCOMPONENTTYPE
+
 

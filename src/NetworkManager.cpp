@@ -271,6 +271,8 @@ namespace GEngine::Networking
         currentState = NetworkState::SESSION_END;
         SDL_DetachThread(networkThread);
         networkThread = nullptr;
+
+        netEntities.clear();
     }
 
     void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)

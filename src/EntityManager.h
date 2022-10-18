@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef ENTITY_MANAGER_H
+#define ENTITY_MANAGER_H
+
 #include <vector>
 #include <memory>
 #include "Entity.h"
@@ -7,24 +10,27 @@
 
 using namespace GEngine::Networking;
 
-class Scene;
-
-class EntityManager
+namespace GEngine
 {
-public:
-	EntityManager(Scene* scene) : m_scene(scene) {}
-private:
-	std::vector<std::unique_ptr<Entity>> entities;
-	std::vector<std::unique_ptr<NetEntity>> netEntities;
+	class EntityManager
+	{
+	public:
+		EntityManager(Scene* scene) : m_scene(scene) {}
+	private:
+		std::vector<std::unique_ptr<Entity>> entities;
+		std::vector<std::unique_ptr<NetEntity>> netEntities;
 
-	Scene* m_scene = nullptr;
+		Scene* m_scene = nullptr;
 
-public:
-	void Update(double& dt);
-	void Render();
+	public:
+		void Update(double& dt);
+		void Render();
 
-	void Refresh();
-	Entity& AddEntity();
-	NetEntity& AddNetEntity(NetEntity* entity);
-};
+		void Refresh();
+		Entity& AddEntity();
+		NetEntity& AddNetEntity(NetEntity* entity);
+	};
+}
+
+#endif
  

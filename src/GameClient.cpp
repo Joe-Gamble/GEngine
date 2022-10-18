@@ -63,7 +63,7 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 			break;
 		}
-		case PacketType::PT_SCENE_LOAD:
+		case PacketType::PT_SCENE_CHANGE:
 		{
 			// Load the scene
 			break;
@@ -72,12 +72,32 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		{
 			break;
 		}
-		case PacketType::PT_ENTITY_CHANGE:
+		case PacketType::PT_ENTITY_INSTANTIATE:
 		{
-			// Eventually will grab from entityManager using netID
+			short id = -1;
+			gamePacket >> id;
 
-			NetEntity entity = NetEntity();
-			gamePacket >> entity;
+			if (!NetworkManager::Instance().HasNetEntity(id))
+			{
+				NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+				gamePacket >> *entity;
+			}
+
+		}
+		case PacketType::PT_ENTITY_CHANGE: // Entity exists, and we ar emaking changes to new/preexisting components
+		{
+			short id = -1;
+			gamePacket >> id;
+
+			if (NetworkManager::Instance().HasNetEntity(id))
+			{
+				NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+				gamePacket >> *entity;
+			}
+
+			// if the networkManager doesn't have this
+			//Entity* entity = 
+			//gamePacket >> entity;
 
 			return true;
 			break;

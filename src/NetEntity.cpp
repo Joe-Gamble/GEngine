@@ -2,14 +2,14 @@
 
 using namespace GEngine::Networking;
 
-NetEntity::NetEntity(short& _netID) : netID(_netID)
+NetEntity::NetEntity(short& _netID, Scene* _scene) : netID(_netID), NetEntity::Entity(_scene)
 {
 
 }
 
-NetEntity* NetEntity::Instantiate(short& netID)
+NetEntity* NetEntity::Instantiate(short& netID, Scene* scene)
 {
-	NetEntity* go = new NetEntity(netID);
+	NetEntity* go = new NetEntity(netID, scene);
 	return go;
 }
 

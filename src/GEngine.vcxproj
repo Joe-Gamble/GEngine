@@ -153,7 +153,7 @@
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GamePacket.cpp" />
     <ClCompile Include="GameServer.cpp" />
-    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetEntity.cpp" />
     <ClCompile Include="NetTransform.cpp" />
@@ -175,7 +175,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="ComponentType.h" />
-    <ClInclude Include="Input.h" />
+    <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="NetComponent.h" />
     <ClInclude Include="NetEntity.h" />
     <ClInclude Include="NetTransform.h" />
@@ -194,6 +194,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="..\packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets" Condition="Exists('..\packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -201,5 +202,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('..\packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets'))" />
   </Target>
 </Project>

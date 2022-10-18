@@ -1,29 +1,33 @@
 #pragma once
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
-#endif
 
 #include "Vector.h"
 #include "Component.h"
 
-using namespace GUtility;
-
-struct Transform : public Component
+namespace GEngine
 {
+	using namespace GUtility;
 
-public:
-	Transform();
-	Transform(const Transform& transform);
+	struct Transform : public Component
+	{
 
-	void Update(double& dt) override;
+	public:
+		Transform();
+		Transform(const Transform& transform);
 
-	Vector2* const GetPosition() { return &position; }
-	void SetPosition(const Vector2& _position) { position = _position; }
-private:
-	Vector2 position;
-	Vector2 scale;
-	//Quaternion Rotaion
-};
+		void Update(double& dt) override;
+
+		inline const Vector2* GetPosition() { return &position; }
+		inline void SetPosition(const Vector2& _position) { position = _position; }
+	private:
+		Vector2 position;
+		Vector2 scale;
+		//Quaternion Rotaion
+	};
+}
+
+#endif
 
 
 

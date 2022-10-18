@@ -2,7 +2,6 @@
 
 #ifndef NET_ENTITY_H
 #define NET_ENTITY_H
-#endif // !NET_ENTITY_H
 
 #include "Entity.h"
 #include "NetComponent.h"
@@ -14,9 +13,8 @@ namespace GEngine
 		class NetEntity : public Entity
 		{
 		public:
-			NetEntity() {}
-			NetEntity(short& netID);
-			static NetEntity* Instantiate(short& netID);
+			NetEntity(short& netID, Scene* scene);
+			static NetEntity* Instantiate(short& netID, Scene* scene);
 
 			template<typename T, typename... TArgs>
 			T* AddComponent(TArgs&&... mArgs)
@@ -34,7 +32,8 @@ namespace GEngine
 					return component;
 			}
 
-			 //std::shared_ptr<Component> GetNetComponents;
+			const inline short GetID() { return netID; }
+			inline std::vector <std::shared_ptr<NetComponent>>* GetNetComponents() { return &netComponents; }
 
 		private:
 			const short netID = -1;
@@ -42,6 +41,8 @@ namespace GEngine
 		};
 	}
 }
+#endif // !NET_ENTITY_H
+
 
 
 

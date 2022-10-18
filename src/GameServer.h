@@ -2,13 +2,14 @@
 
 #ifndef GAME_SERVER_H
 #define GAME_SERVER_H
-#endif // !ENGINE_SERVER
 
 #include "IncludeMe.h"
 #include "NetEntity.h"
 #include "GamePacket.h"
+
 #include "SDL_thread.h"
 #include "SDL.h"
+
 #include <map>
 #include <chrono>
 
@@ -63,10 +64,8 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
-			NetEntity& MakeEntity();
+			NetEntity& MakeEntity(Scene* scene);
 			void SendEntityToClients(Entity& entity);
-
-			short entityID = 0;
 
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;
@@ -81,7 +80,10 @@ namespace GEngine
 			
 			std::map<TCPConnection*, std::string> connectionsToClose;
 			ServerType serverType = ServerType::UNKNOWN;
+			short entityID = 0;
 		};
 	}
 }
+
+#endif // !GAME_SERVER
 

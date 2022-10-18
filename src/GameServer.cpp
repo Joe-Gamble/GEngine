@@ -2,9 +2,9 @@
 #include "GamePacket.h"
 #include "EventDriver.h"
 #include "NetworkManager.h"
+#include "Scene.h"
 
 using namespace GEngine::Networking;
-using namespace GEngine::Callbacks;
 
 GameServer::GameServer(ServerType type) : serverType(type)
 {
@@ -83,9 +83,10 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 	}
 	case PacketType::PT_ENTITY_CHANGE:
 	{
-		// Entity entity = Entity();
-		// Send all clients an entity to spawn
+		// Entity entity = Entity()
 		// VALIDATE THESE CHANGES???
+		// Send all clients the changes?
+
 		break;
 	}
 	case PacketType::PT_ENTITY_INSTANTIATE:
@@ -187,16 +188,20 @@ void GameServer::Tick()
 	}
 }
 
-NetEntity& GameServer::MakeEntity()
+NetEntity& GameServer::MakeEntity(Scene* scene)
 {
 	short netID = entityID++;
-	NetEntity* entity = NetEntity::Instantiate(netID);
+	NetEntity* entity = NetEntity::Instantiate(netID, scene);
+
+
+	scene->AddNetEntity(entity);
 
 	return *entity;
 }
 
 void GameServer::SendEntityToClients(Entity& entity)
 {
+
 }
 
 void GameServer::EndSession()

@@ -1,39 +1,53 @@
 #pragma once
 #ifndef SCENE_H
 #define SCENE_H
-#endif // !SCENE_H
 
 #include <memory>
 #include "EntityManager.h"
-#include "SceneMold.h"
 #include "SDL.h"
 
-class Scene
+namespace GEngine
 {
-public:
-	Scene();
-	~Scene();
+	enum SceneType
+	{
+		UNKNOWN = -1,
+		GAME = 0,
+		UI = 1
+	};
 
-	void Init(std::unique_ptr<Scene>* ptr);
+	class Scene
+	{
+	public:
+		Scene();
+		~Scene();
 
-	void Update(double& dt);
-	void Render();
+		void Init(std::unique_ptr<Scene>* ptr);
 
-	void PollEvents();
+		void Update(double& dt);
+		void Render();
 
-	inline void SetActive(bool active) { m_isActive = active; }
-	inline bool IsActive() { return m_isActive; }
+		void AddNetEntity(NetEntity* entity);
 
-	inline std::unique_ptr<EntityManager>* GetEntityManager() { return &m_entityManager; }
-private:
-	std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>(this);
+		void PollEvents();
 
-	/*
-	Entity* entity = entityManager->AddEntity();
-	entity->AddComponent<NetTransform>();
-	entity->GetComponent<NetTransform>().SetPosition({ 1, 0 });
-	*/
+		inline void SetActive(bool active) { m_isActive = active; }
+		inline void SetBlocking(bool blocking) { m_blocking = blocking; }
+		inline bool IsActive() { return m_isActive; }
+		inline bool IsBlocking() { return m_blocking; }
 
-	bool m_isActive = false;
-	std::shared_ptr<Scene> m_previousScene = nullptr;
-};
+		inline bool IsType(SceneType _type) { return type == _type; }
+
+		inline std::unique_ptr<EntityManager>* GetEntityManager() { return &m_entityManager; }
+	private:
+		std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>(this);
+
+		bool m_isActive = false;
+		bool m_blocking = false;
+
+		std::shared_ptr<Scene> m_previousScene = nullptr;
+		SceneType type = SceneType::UNKNOWN;
+	};
+}
+
+#endif // !SCENE_H
+

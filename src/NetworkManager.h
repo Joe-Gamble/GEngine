@@ -2,7 +2,6 @@
 
 #ifndef NETWORK_MANAGER_H
 #define NETWORK_MANAGER_H
-#endif
 
 #include "GameServer.h"
 #include "GameClient.h"
@@ -13,6 +12,7 @@
 #include "EventDriver.h"
 
 #include <functional>
+#include <map>
 
 
 namespace GEngine
@@ -62,6 +62,9 @@ namespace GEngine
 			bool HasAuthority();
 			inline void SetState(NetworkState state) { currentState = state; }
 
+			inline bool HasNetEntity(short id) { return netEntities.count(id); }
+			inline NetEntity* GetNetEntity(short id) { return netEntities[id]->get(); }
+
 			void SendPacket(std::shared_ptr< GamePacket>& packet);
 
 			void ShutDown();
@@ -79,9 +82,13 @@ namespace GEngine
 			std::unique_ptr<GameServer> m_server = nullptr;
 			std::unique_ptr<GameClient> m_client = nullptr;
 			
+			// shutdown thread
 			SDL_Thread* networkThread = nullptr;
 
-			// shutdown thread
+			// netEntity instances
+			std::map<short, std::unique_ptr<NetEntity>*> netEntities;
+			std::map<short, std::unique_ptr<NetEntity>*> netScenes;
+			
 			bool m_shutdown = false;
 			bool m_initialised = false;
 			NetworkState currentState = NetworkState::UNINITIALIZED;
@@ -90,6 +97,8 @@ namespace GEngine
 		};
 	}
 }
+
+#endif
 
 
 

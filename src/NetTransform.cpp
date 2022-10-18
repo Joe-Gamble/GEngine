@@ -1,6 +1,8 @@
 #include "NetTransform.h"
 #include <iostream>
 
+using namespace GEngine;
+
 const void* NetTransform::Serialise()
 {
     NetTransformMold mold;
@@ -8,9 +10,9 @@ const void* NetTransform::Serialise()
     return reinterpret_cast<const void*>(&mold);
 }
 
-std::unique_ptr<Component> NetTransform::Deserialise()
+void NetTransform::Deserialise()
 {
-    return std::unique_ptr<NetTransform>();
+    
 }
 
 void NetTransform::Update(double& dt)
@@ -20,7 +22,6 @@ void NetTransform::Update(double& dt)
 
 void NetTransform::ApplyData(const void* data)
 {
-    
     NetTransformMold* netTransformMold = const_cast<NetTransformMold*>(reinterpret_cast<const NetTransformMold*>(data));
     if (netTransformMold != nullptr)
     {

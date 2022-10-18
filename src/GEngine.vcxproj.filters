@@ -105,7 +105,7 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Engine\Data</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="PlayerInput.cpp">
       <Filter>Source Files\Engine\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="NetEntity.cpp">
@@ -176,7 +176,7 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files\Engine\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="PlayerInput.h">
       <Filter>Header Files\Engine\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="NetEntity.h">

@@ -2,62 +2,68 @@
 
 #ifndef NET_TRANSFORM
 #define NET_TRANSFORM
-#endif // !NET_TRANSFORM
 
 #include "NetComponent.h"
 #include "Vector.h"
 #include "NetTransformMold.h"
 
-using namespace GUtility;
+using namespace GEngine::GUtility;
 
-struct NetTransform : NetComponent
+namespace GEngine
 {
-public:
-
-	const void* Serialise() override;
-	std::unique_ptr<Component> Deserialise() override;
-
-	void Update(double& dt) override;
-	void ApplyData(const void* data) override;
-	bool SendData();
-
-	inline ComponentType GetType() override
+	struct NetTransform : NetComponent
 	{
-		return ComponentType::TYPE_NET_TRANSFORM;
-	}
+	public:
 
-	inline const uint32_t GetMoldSize() override
-	{
-		return sizeof(NetTransformMold);
-	}
+		const void* Serialise() override;
+		void Deserialise() override;
 
-private:
+		void Update(double& dt) override;
+		void ApplyData(const void* data) override;
+		bool SendData();
+
+		inline ComponentType GetType() override
+		{
+			return ComponentType::TYPE_NET_TRANSFORM;
+		}
+
+		inline const uint32_t GetMoldSize() override
+		{
+			return sizeof(NetTransformMold);
+		}
+
+	private:
 
 
-public:
-	NetTransform();
-	NetTransform(const NetTransform& transform);
-	
-	NetTransform(NetTransformMold& mold);
+	public:
+		NetTransform();
+		NetTransform(const NetTransform& transform);
 
-	static inline NetTransformMold& CreateMold(const NetTransform& transform)
-	{
-		NetTransformMold mold;
+		NetTransform(NetTransformMold& mold);
 
-		mold.position = Vector2::CreateMold(transform.position);
-		mold.scale = Vector2::CreateMold(transform.scale);
+		static inline NetTransformMold& CreateMold(const NetTransform& transform)
+		{
+			NetTransformMold mold;
 
-		return mold;
-	}
+			mold.position = Vector2::CreateMold(transform.position);
+			mold.scale = Vector2::CreateMold(transform.scale);
 
-	inline Vector2& const GetPosition() { return position; }
-	inline void SetPosition(const Vector2& _position) { position = _position; }
+			return mold;
+		}
 
-	inline Vector2& GetScale() { return scale; }
-	inline void SetScale(const Vector2& scale) { position = scale; }
-private:
-	Vector2 position;
-	Vector2 scale;
-	//Quaternion Rotaion
-};
+		inline Vector2& const GetPosition() { return position; }
+		inline void SetPosition(const Vector2& _position) { position = _position; }
+
+		inline Vector2& GetScale() { return scale; }
+		inline void SetScale(const Vector2& scale) { position = scale; }
+	private:
+		Vector2 position;
+		Vector2 scale;
+		//Quaternion Rotaion
+	};
+}
+
+#endif // !NET_TRANSFORM
+
+
 

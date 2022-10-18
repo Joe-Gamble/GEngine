@@ -1,27 +1,39 @@
 #pragma once
 
+#ifndef COMPONENT_H
+#define COMPONENT_H
+
 #include "ComponentType.h"
 #include <memory>
 
-class Entity;
-
-struct Component
+namespace GEngine
 {
-	virtual ComponentType GetType() = 0;
-	virtual const void* Serialise() = 0;
-	virtual const uint32_t GetMoldSize() = 0;
+	class Entity;
 
-	virtual std::unique_ptr<Component> Deserialise() = 0;
+	struct Component
+	{
+		virtual ComponentType GetType() = 0;
+		virtual const void* Serialise() = 0;
+		virtual const uint32_t GetMoldSize() = 0;
 
-	Entity* entity = nullptr;
+		virtual void Deserialise() = 0;
 
-	virtual void Init() {}
-	virtual void Update(double& dt) {}
-	virtual void Render() {}
+		Entity* entity = nullptr;
 
-	virtual void ApplyData(const void* data) {};
-	virtual ~Component() {}
+		virtual void Init() {}
+		virtual void Update(double& dt) {}
+		virtual void Render() {}
 
-private:
-	bool hasDataToBeSent = false;
-};
+		virtual void ApplyData(const void* data) {};
+		virtual ~Component() {}
+
+	private:
+		bool hasDataToBeSent = false;
+	};
+}
+
+#endif
+
+
+
+

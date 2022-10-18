@@ -1,30 +1,50 @@
 #pragma once
 #ifndef SCENE_MANAGER_H
 #define SCENE_MANAGER_H
-#endif // !SCENE_MANAGER_H
 
 
 #include "Scene.h"
 #include "SceneMold.h"
 #include <vector>
 #include <memory>
+#include "nlohmann/json.hpp"
 
-class SceneManager
+using json = nlohmann::json;
+
+using namespace GEngine::Data;
+
+namespace GEngine
 {
-public:
-	static inline SceneManager& Instance()
+	class SceneManager
 	{
-		static SceneManager instance;
-		return instance;
-	}
+	public:
+		static inline SceneManager& Instance()
+		{
+			static SceneManager instance;
+			return instance;
+		}
 
-	void LoadScene(std::string& sceneName, bool isAddative, bool showPrevious);
-	void LoadScene(SceneMold& mold);
+		void LoadScene(SceneMold& mold);
+		void LoadScene(std::string& path);
 
-	void Back();
+		void ClearUIScenes();
+		void ClearScenes();
 
-	void Tick(double& dt);
+		void RemoveScene(Scene* scene);
 
-private:
-	std::vector<std::unique_ptr<Scene>> scenes;
-};
+		void Back();
+
+		void ProcessInput();
+		void Tick(double& dt);
+
+	private:
+		std::unique_ptr<Scene>* LoadUIScene(std::string& sceneName, bool isAddative, bool showPreviouse);
+		std::unique_ptr<Scene>* LoadGameScene(std::string& sceneName, bool isAddative, bool showPreviouse);
+
+		std::vector<std::unique_ptr<Scene>> gameScenes;
+		std::vector<std::unique_ptr<Scene>> uiScenes;
+	};
+}
+
+#endif // !SCENE_MANAGER_H
+

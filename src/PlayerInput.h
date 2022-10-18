@@ -1,12 +1,17 @@
 #pragma once
 #ifndef INPUT_COMPONENT_H
 #define INPUT_COMPONENT_H
-#endif
 
 #include "Component.h"
 #include "Entity.h"
 
-struct Input : public Component
+namespace GEngine
 {
-	void Update(double& dt) override;
-};
+	struct PlayerInput : public Component
+	{
+		void Update(double& dt) override;
+	};
+}
+
+#endif
+

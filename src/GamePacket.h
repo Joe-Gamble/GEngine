@@ -2,7 +2,6 @@
 
 #ifndef GAME_PACKET_H
 #define GAME_PACKET_H
-#endif // !GAME_PACKET
 
 #include "IncludeMe.h"
 #include "NetTransform.h"
@@ -38,6 +37,8 @@ namespace GEngine
 		};
 	}
 }
+
+#endif // !GAME_PACKET
 
 
 
