@@ -5,8 +5,7 @@
 
 #include "SDL.h"
 #include <stdio.h>
-#include "EntityManager.h"
-#include "NetworkManager.h"
+#include <string>
 
 namespace GEngine
 {

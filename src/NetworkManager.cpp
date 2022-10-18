@@ -104,6 +104,8 @@ namespace GEngine::Networking
         return m_client != nullptr;
     }
 
+    // I really really need a mutex here
+
     int NetworkManager::Tick(void* data)
     {
         unsigned int now = SDL_GetTicks();
@@ -268,11 +270,12 @@ namespace GEngine::Networking
 
     void NetworkManager::EndSession()
     {
+        // idk about this it throws a crash
+        // netEntities.clear();
+
         currentState = NetworkState::SESSION_END;
         SDL_DetachThread(networkThread);
         networkThread = nullptr;
-
-        netEntities.clear();
     }
 
     void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)

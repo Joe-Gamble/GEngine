@@ -1,12 +1,11 @@
 #include "Game.h"
+
+#include "EventDriver.h"
 #include <iostream>
-#include "Transform.h"
-#include "NetTransform.h"
+#include "SceneManager.h"
 #include "NetworkManager.h"
-#include "EventDriver.h";
 
 using namespace GEngine;
-using namespace Networking;
 using namespace GEngine::Callbacks;
 
 SDL_Texture* testTexture;
@@ -53,6 +52,10 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 		running = true;
 	}
 
+	std::string name = "MainMenu";
+
+	// SceneManager::Instance().LoadScene(name);
+
 	// if game host machine
 
 	EventDriver::Instance().RegisterCallback(std::bind(&Game::SetBackgroundToDefault, this, 32, 90, 48), Event::NETWORKING_SESSION_ENDED);
@@ -89,6 +92,7 @@ void Game::handleEvents()
 
 	switch (event.type)
 	{
+		
 		case SDL_QUIT:
 		{
 			EventDriver::Instance().CallEvent(Event::GAME_QUIT);
@@ -97,7 +101,7 @@ void Game::handleEvents()
 		}
 		case SDL_KEYDOWN:
 		{
-			/* Check the SDLKey values and move change the coords */
+			//Check the SDLKey values and move change the coords 
 			switch (event.key.keysym.sym) 
 			{
 				case SDLK_q:
@@ -130,6 +134,7 @@ void Game::handleEvents()
 		{
 			break;
 		}
+		
 	}
 }
 
@@ -151,7 +156,7 @@ void Game::Destroy()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
-	NetworkManager::Instance().ShutDown();
+	// NetworkManager::Instance().ShutDown();
 	
 	std::cout << "Game Destroyed" << std::endl;
 }

@@ -16,5 +16,14 @@
       "blockInput": true,
       "SceneType": 1
     }
+  },
+  {
+    "QuitScreen": {
+      "path": "Quit.json",
+      "isAddative": true,
+      "isInclusive": true,
+      "blockInput": true,
+      "SceneType": 1
+    }
   }
 ]

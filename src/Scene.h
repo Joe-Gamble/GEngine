@@ -32,10 +32,12 @@ namespace GEngine
 
 		inline void SetActive(bool active) { m_isActive = active; }
 		inline void SetBlocking(bool blocking) { m_blocking = blocking; }
+		inline void SetType(SceneType _type) { type = _type; }
+
 		inline bool IsActive() { return m_isActive; }
 		inline bool IsBlocking() { return m_blocking; }
-
 		inline bool IsType(SceneType _type) { return type == _type; }
+		
 
 		inline std::unique_ptr<EntityManager>* GetEntityManager() { return &m_entityManager; }
 	private:

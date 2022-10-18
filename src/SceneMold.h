@@ -5,7 +5,6 @@
 
 #include <string>
 #include "nlohmann/json.hpp"
-#include "Scene.h"
 
 namespace GEngine
 {
@@ -13,8 +12,6 @@ namespace GEngine
 	{
 		struct SceneMold
 		{
-			SceneMold() = default;
-
 			std::string path; // scene name for json loading
 			bool addative; // does the scene add to anything thats current present
 			bool inclusive; // does this scene include previous scene entities
@@ -23,7 +20,7 @@ namespace GEngine
 		};
 
 
-		void from_json(const nlohmann::json& j, SceneMold& s) {
+		inline void from_json(const nlohmann::json& j, SceneMold& s) {
 			j.at("path").get_to(s.path);
 			j.at("isAddative").get_to(s.addative);
 			j.at("isInclusive").get_to(s.inclusive);

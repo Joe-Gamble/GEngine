@@ -5,16 +5,16 @@
 
 #include "Scene.h"
 #include "SceneMold.h"
+
 #include <vector>
 #include <memory>
-#include "nlohmann/json.hpp"
-
-using json = nlohmann::json;
 
 using namespace GEngine::Data;
 
 namespace GEngine
 {
+	using json = nlohmann::json;
+
 	class SceneManager
 	{
 	public:
@@ -25,7 +25,7 @@ namespace GEngine
 		}
 
 		void LoadScene(SceneMold& mold);
-		void LoadScene(std::string& path);
+		void LoadScene(std::string& name);
 
 		void ClearUIScenes();
 		void ClearScenes();

@@ -1,15 +1,31 @@
 #include "SceneManager.h"
 #include <fstream>
+#include <iostream>
+#include "SDL.h"
+
+#include "nlohmann/json.hpp"
 
 namespace GEngine
 {
 	void SceneManager::LoadScene(std::string& name)
 	{
-		std::ifstream file("path");
-		json data = json::parse(file)[name];
+		std::string stream = SDL_GetBasePath();
+		stream += "Data\\Scenes\\SceneManifest.json";
 
-		SceneMold sceneMold = data.get<SceneMold>();
-		LoadScene(sceneMold);
+		std::ifstream file(stream);
+		json data;
+		file >> data;
+		try
+		{
+			SceneMold sceneMold = data[0][name].get<SceneMold>();
+			LoadScene(sceneMold);
+		}
+		catch (json::exception e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		
+		
 	}
 
 	void SceneManager::LoadScene(SceneMold& mold)
@@ -27,19 +43,19 @@ namespace GEngine
 		if (scene)
 		{
 			scene->get()->SetBlocking(mold.blockInput);
+			scene->get()->SetType(mold.type);
 		}
 	}
 
 	std::unique_ptr<Scene>* SceneManager::LoadUIScene(std::string& sceneName, bool isAddative, bool showPrevious)
 	{
-		if (!isAddative && uiScenes.size() > 0)
+		if (uiScenes.size() > 0)
 		{
 			// clean up existing scenes
-			uiScenes.clear();
-		}
-		else
-		{
-			uiScenes.front()->SetActive(showPrevious);
+			if (!isAddative)
+				uiScenes.clear();
+			else
+				uiScenes.front()->SetActive(showPrevious);
 		}
 
 		uiScenes.push_back(std::make_unique<Scene>());
@@ -48,14 +64,13 @@ namespace GEngine
 
 	std::unique_ptr<Scene>* SceneManager::LoadGameScene(std::string& sceneName, bool isAddative, bool showPrevious)
 	{
-		if (!isAddative && gameScenes.size() > 0)
+		if (gameScenes.size() > 0)
 		{
 			// clean up existing scenes
-			gameScenes.clear();
-		}
-		else
-		{
-			gameScenes.front()->SetActive(showPrevious);
+			if (!isAddative)
+				gameScenes.clear();
+			else
+				gameScenes.front()->SetActive(showPrevious);
 		}
 
 		gameScenes.push_back(std::make_unique<Scene>());
