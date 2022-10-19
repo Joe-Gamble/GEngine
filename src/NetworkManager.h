@@ -77,6 +77,7 @@ namespace GEngine
 
 			bool Initialise();
 			bool InitialiseThread();
+			bool InitialiseMutex();
 
 			static int Tick(void* data);
 
@@ -94,7 +95,7 @@ namespace GEngine
 			
 			std::string m_ipAddress;
 
-			SDL_mutex* networkStateMutex = SDL_CreateMutex();
+			SDL_mutex* networkStateMutex = nullptr;
 			NetworkState currentState = NetworkState::UNINITIALIZED;
 		};
 	}

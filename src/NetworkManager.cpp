@@ -14,17 +14,22 @@ bool NetworkManager::Initialise()
                 return false;
         }
 
-        if (InitialiseThread())
+        if (!InitialiseMutex() || !InitialiseThread())
         {
-            m_initialised = true;
-            m_shutdown = false;
+            if (networkStateMutex)
+                SDL_DestroyMutex(networkStateMutex);
 
-            currentState = NetworkState::INITIALIZED;
-            return true;
+            if (networkThread)
+                SDL_DetachThread(networkThread);
         }
 
-    }
+        m_initialised = true;
+        m_shutdown = false;
 
+        SetState(NetworkState::INITIALIZED);
+        return true;
+
+    }
     return false;
 }
 
@@ -37,6 +42,21 @@ bool NetworkManager::InitialiseThread()
 
     if (networkThread == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_CreateThread failed: %s\n", SDL_GetError());
+        return false;
+    }
+
+    return true;
+}
+
+bool NetworkManager::InitialiseMutex()
+{
+    if (networkStateMutex)
+        return true;
+
+    networkStateMutex = SDL_CreateMutex();
+
+    if (networkStateMutex == NULL) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_CreateMutex failed: %s\n", SDL_GetError());
         return false;
     }
 
@@ -63,13 +83,11 @@ bool NetworkManager::MakeServer(ServerType type)
                 std::cout << "Server machine client created" << std::endl;
             }
 
-            currentState = NetworkState::SESSION_ACTIVE;
+            SetState(NetworkState::SESSION_ACTIVE);
             EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_READY);
 
             return true;
         }
-
-        EndSession();
     }
     return false;
 }
@@ -86,7 +104,7 @@ bool NetworkManager::JoinServer(const std::string& ip)
         m_client = std::make_unique<GameClient>();
 
         m_ipAddress = ip;
-        currentState = NetworkState::CLIENT_CONNECTING;
+        SetState(NetworkState::CLIENT_CONNECTING);
 
         return true;
     }
@@ -217,8 +235,8 @@ int NetworkManager::Tick(void* data)
                         }
 
                         SDL_UnlockMutex(nm->networkStateMutex);
-
                         nm->SetState(NetworkState::INITIALIZED);
+
                         std::cout << "Session Ended." << std::endl << std::endl;
                         EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
 
@@ -293,8 +311,8 @@ void NetworkManager::EndSession()
 {
     // idk about this it throws a crash
     netEntities.clear();
+    SetState(NetworkState::SESSION_END);
 
-    currentState = NetworkState::SESSION_END;
     SDL_DetachThread(networkThread);
     networkThread = nullptr;
 }
