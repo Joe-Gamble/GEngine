@@ -88,7 +88,6 @@ namespace GEngine
 
 			// netEntity instances
 			std::map<short, std::unique_ptr<NetEntity>*> netEntities;
-			std::map<short, std::unique_ptr<NetEntity>*> netScenes;
 			
 			bool m_shutdown = false;
 			bool m_initialised = false;
@@ -96,7 +95,7 @@ namespace GEngine
 			std::string m_ipAddress;
 
 			SDL_mutex* networkStateMutex = SDL_CreateMutex();
-			std::atomic<int> currentState = NetworkState::UNINITIALIZED;
+			NetworkState currentState = NetworkState::UNINITIALIZED;
 		};
 	}
 }

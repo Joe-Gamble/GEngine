@@ -112,7 +112,7 @@ void Game::handleEvents()
 
 				case SDLK_w:
 				{
-					NetworkManager::Instance().JoinServer("192.168.0.203");
+					NetworkManager::Instance().JoinServer("192.168.0.23");
 					break;
 				}
 				case SDLK_e:
@@ -156,7 +156,7 @@ void Game::Destroy()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
-	// NetworkManager::Instance().ShutDown();
+	NetworkManager::Instance().ShutDown();
 	
 	std::cout << "Game Destroyed" << std::endl;
 }

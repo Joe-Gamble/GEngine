@@ -122,7 +122,7 @@ int NetworkManager::Tick(void* data)
 
         if (timeBetweenFrames > 1000 / 60.0)
         {
-            if (SDL_TryLockMutex(nm->networkStateMutex))
+            if (SDL_TryLockMutex(nm->networkStateMutex) == 0)
             {
                 if (nm->IsServer())
                 {
@@ -138,100 +138,109 @@ int NetworkManager::Tick(void* data)
 
                 switch (nm->currentState)
                 {
-                case NetworkState::UNINITIALIZED:
-                case NetworkState::INITIALIZED:
-                    break;
+                    case NetworkState::UNINITIALIZED:
+                    case NetworkState::INITIALIZED:
+                        break;
 
-                case NetworkState::CLIENT_CONNECTING:
-                {
-                    const std::string& ip = nm->m_ipAddress;
-
-                    if (nm->m_client->ConnectToIP(ip))
+                    case NetworkState::CLIENT_CONNECTING:
                     {
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-                        std::cout << "Connected to the server" << std::endl;
-                        nm->SetState(NetworkState::SESSION_ACTIVE);
-                    }
-                    else
-                    {
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
-                        std::cout << "Couldn't connect to the server" << std::endl;
-                        nm->SetState(NetworkState::SESSION_END);
+                        const std::string& ip = nm->m_ipAddress;
 
-                        nm->EndSession();
-                    }
-                    break;
-                }
-
-                case NetworkState::SESSION_ACTIVE:
-                {
-
-                    if (nm->m_server != nullptr && nm->m_server->IsRunning())
-                    {
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
-                        nm->m_server->Tick();
-                    }
-
-                    if (nm->m_client != nullptr)
-                    {
-                        if (nm->m_client->IsClientConnected())
-                            nm->m_client->Tick();
-                    }
-
-                    break;
-                }
-
-                case NetworkState::SESSION_END:
-                {
-                    if (nm->m_client != nullptr)
-                    {
-                        if (!nm->HasAuthority() && nm->GetClient().IsConnected())
-                            nm->m_client->LeaveSession();
-
-                        nm->m_client.reset();
-                    }
-
-                    if (nm->m_server != nullptr)
-                    {
-                        if (nm->m_server->InSession())
+                        if (nm->m_client->ConnectToIP(ip))
                         {
-                            nm->m_server->EndSession();
-                            break;
+                            EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
+                            std::cout << "Connected to the server" << std::endl;
+
+                            SDL_UnlockMutex(nm->networkStateMutex);
+                            nm->SetState(NetworkState::SESSION_ACTIVE);
                         }
                         else
                         {
-                            if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
+                            EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
+                            std::cout << "Couldn't connect to the server" << std::endl;
+
+                            SDL_UnlockMutex(nm->networkStateMutex);
+                            nm->SetState(NetworkState::SESSION_END);
+
+                            nm->EndSession();
+                        }
+                        break;
+                    }
+
+                    case NetworkState::SESSION_ACTIVE:
+                    {
+
+                        if (nm->m_server != nullptr && nm->m_server->IsRunning())
+                        {
+                            EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
+                            nm->m_server->Tick();
+                        }
+
+                        if (nm->m_client != nullptr)
+                        {
+                            if (nm->m_client->IsClientConnected())
+                                nm->m_client->Tick();
+                        }
+
+                        break;
+                    }
+
+                    case NetworkState::SESSION_END:
+                    {
+                        if (nm->m_client != nullptr)
+                        {
+                            if (!nm->HasAuthority() && nm->GetClient().IsConnected())
+                                nm->m_client->LeaveSession();
+
+                            nm->m_client.reset();
+                        }
+
+                        if (nm->m_server != nullptr)
+                        {
+                            if (nm->m_server->InSession())
                             {
-                                nm->m_server->Tick();
+                                nm->m_server->EndSession();
                                 break;
                             }
                             else
                             {
-                                nm->m_server.reset();
+                                if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
+                                {
+                                    nm->m_server->Tick();
+                                    break;
+                                }
+                                else
+                                {
+                                    nm->m_server.reset();
+                                }
                             }
                         }
+
+                        SDL_UnlockMutex(nm->networkStateMutex);
+
+                        nm->SetState(NetworkState::INITIALIZED);
+                        std::cout << "Session Ended." << std::endl << std::endl;
+                        EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
+
+                        return 0;
                     }
 
-                    nm->SetState(NetworkState::INITIALIZED);
-                    std::cout << "Session Ended." << std::endl << std::endl;
-                    EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
+                    case NetworkState::SHUTDOWN:
+                    {
+                        nm->m_shutdown = true;
+                        nm->m_initialised = false;
 
-                    return 0;
-                }
+                        SDL_UnlockMutex(nm->networkStateMutex);
+                        nm->SetState(NetworkState::UNINITIALIZED);
 
-                case NetworkState::SHUTDOWN:
-                {
-                    nm->m_shutdown = true;
-                    nm->m_initialised = false;
+                        SDL_DestroyMutex(nm->networkStateMutex);
 
-                    nm->SetState(NetworkState::UNINITIALIZED);
+                        Network::Shutdown();
+                        return 0;
+                    }
 
-                    Network::Shutdown();
-                    return 0;
-                }
-
-                default:
-                    break;
+                    default:
+                        break;
                 }
                 SDL_UnlockMutex(nm->networkStateMutex);
             }
@@ -275,7 +284,7 @@ bool NetworkManager::HasAuthority()
 void NetworkManager::SetState(NetworkState state)
 {
     SDL_LockMutex(networkStateMutex);
-    currentState.operator&=((int)state);
+    currentState = state;
 
     SDL_UnlockMutex(networkStateMutex);
 }
@@ -283,7 +292,7 @@ void NetworkManager::SetState(NetworkState state)
 void NetworkManager::EndSession()
 {
     // idk about this it throws a crash
-    // netEntities.clear();
+    netEntities.clear();
 
     currentState = NetworkState::SESSION_END;
     SDL_DetachThread(networkThread);
