@@ -22,7 +22,7 @@ namespace GEngine
 	{
 		enum NetworkState
 		{
-			UNINITIALIZED,
+			UNINITIALIZED = 0,
 			INITIALIZED,
 			CLIENT_CONNECTING,
 			SESSION_ACTIVE,
