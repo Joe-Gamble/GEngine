@@ -13,6 +13,7 @@
 
 #include <functional>
 #include <map>
+#include <mutex>
 
 
 namespace GEngine
@@ -60,7 +61,7 @@ namespace GEngine
 
 			inline bool IsInitialised() { return m_initialised; }
 			bool HasAuthority();
-			inline void SetState(NetworkState state) { currentState = state; }
+			void SetState(NetworkState state);
 
 			inline bool HasNetEntity(short id) { return netEntities.count(id); }
 			inline NetEntity* GetNetEntity(short id) { return netEntities[id]->get(); }
@@ -91,9 +92,11 @@ namespace GEngine
 			
 			bool m_shutdown = false;
 			bool m_initialised = false;
-			NetworkState currentState = NetworkState::UNINITIALIZED;
-
+			
 			std::string m_ipAddress;
+
+			SDL_mutex* networkStateMutex = SDL_CreateMutex();
+			std::atomic<int> currentState = NetworkState::UNINITIALIZED;
 		};
 	}
 }
