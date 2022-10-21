@@ -8,8 +8,6 @@
 using namespace GEngine;
 using namespace GEngine::Callbacks;
 
-SDL_Texture* testTexture;
-
 Game::Game()
 {
 	name = "My Game Window!";
@@ -32,7 +30,7 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 		flags = SDL_WINDOW_FULLSCREEN;
 	}
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS) == 0)
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
@@ -64,12 +62,6 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 
 	EventDriver::Instance().RegisterCallback(std::bind(&Game::SetBackgroundToDefault, this, 48, 32, 90), Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
 
-	EventDriver::Instance().RegisterCallback([]()
-		{
-			std::cout << "Client couldn't connect." << std::endl;
-		},
-		Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL
-			);
 
 	// if joining session
 	// 
@@ -84,6 +76,16 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 
 	//SDL_FreeSurface(tmpSurface);
 }
+
+//GEngine-- > Library
+//
+//GameModeSettings
+//- MaxPlayers
+//- IsDedicated
+//
+//GameSettings
+//- Starting Scene name ?
+//-isMultiplayer
 	
 void Game::handleEvents()
 {
@@ -104,6 +106,7 @@ void Game::handleEvents()
 			//Check the SDLKey values and move change the coords 
 			switch (event.key.keysym.sym) 
 			{
+				// These calls are tests, 
 				case SDLK_q:
 				{
 					NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
@@ -146,7 +149,6 @@ void Game::Update(double& dt)
 void Game::Render()
 {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, testTexture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 }
 
@@ -156,6 +158,7 @@ void Game::Destroy()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
+	// This needs to be called from GameManager as part of the Game deconstruction
 	NetworkManager::Instance().ShutDown();
 	
 	std::cout << "Game Destroyed" << std::endl;

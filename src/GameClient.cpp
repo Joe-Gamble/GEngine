@@ -63,11 +63,11 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 			break;
 		}
-		case PacketType::PT_SCENE_CHANGE:
-		{
-			// Load the scene
-			break;
-		}
+		//case PacketType::PT_SCENE_CHANGE:
+		//{
+		//	// Load the scene
+		//	break;
+		//}
 		case PacketType::PT_INVALID:
 		{
 			break;

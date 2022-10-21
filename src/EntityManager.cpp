@@ -49,14 +49,8 @@ Entity& EntityManager::AddEntity()
 
 NetEntity& EntityManager::AddNetEntity(NetEntity* entity)
 {
-	// this should go in GameManager
-	NetworkManager& networkManager = NetworkManager::Instance();
-	
-	if (networkManager.HasAuthority())
-	{
-		std::unique_ptr<NetEntity> uPtr{ entity };
+	std::unique_ptr<NetEntity> uPtr{ entity };
 
-		netEntities.emplace_back(std::move(uPtr));
-		return *entity;
-	}
+	netEntities.emplace_back(std::move(uPtr));
+	return *entity;
 }
