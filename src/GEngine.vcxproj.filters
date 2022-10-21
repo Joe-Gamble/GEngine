@@ -64,6 +64,9 @@
     <Filter Include="Header Files\Engine\ECS\Components\NetComponents">
       <UniqueIdentifier>{3b8b5e0a-4bb6-4261-903a-8f6f42bc7ca6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Data\Scenes">
+      <UniqueIdentifier>{f3365c78-054b-4ce5-b435-b3f0b00818fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -111,6 +114,12 @@
     <ClCompile Include="NetEntity.cpp">
       <Filter>Source Files\Engine\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -152,9 +161,6 @@
     <ClInclude Include="Vector2Mold.h">
       <Filter>Header Files\Engine\ECS\Components\ComponentMolds</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files\Engine\Data</Filter>
-    </ClInclude>
     <ClInclude Include="Vector.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
@@ -170,12 +176,6 @@
     <ClInclude Include="NetComponent.h">
       <Filter>Header Files\Engine\ECS\Components\NetComponents</Filter>
     </ClInclude>
-    <ClInclude Include="SceneMold.h">
-      <Filter>Header Files\Engine\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files\Engine\Data</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInput.h">
       <Filter>Header Files\Engine\ECS\Components</Filter>
     </ClInclude>
@@ -187,6 +187,18 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Engine\Data\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Engine\Data\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneMold.h">
+      <Filter>Header Files\Engine\Data\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSettings.h">
+      <Filter>Header Files\Engine\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

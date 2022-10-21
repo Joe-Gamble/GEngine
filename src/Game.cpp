@@ -107,22 +107,7 @@ void Game::handleEvents()
 			switch (event.key.keysym.sym)
 			{
 				// These calls are tests, 
-			case SDLK_q:
-			{
-				NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
-				break;
-			}
-
-			case SDLK_w:
-			{
-				NetworkManager::Instance().JoinServer("192.168.0.23");
-				break;
-			}
-			case SDLK_e:
-			{
-				NetworkManager::Instance().EndSession();
-				break;
-			}
+			
 			case SDLK_r:
 			{
 				break;

@@ -8,7 +8,8 @@ using namespace GEngine::Networking;
 
 GameServer::GameServer(ServerType type) : serverType(type)
 {
-	NetworkManager::Instance().EndSession();
+	if (NetworkManager::Instance().IsServer())
+		NetworkManager::Instance().EndSession();
 }
 
 GameServer::~GameServer()

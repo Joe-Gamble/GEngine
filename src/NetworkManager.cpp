@@ -310,11 +310,12 @@ void NetworkManager::SetState(NetworkState state)
 void NetworkManager::EndSession()
 {
     // idk about this it throws a crash
-    netEntities.clear();
-    SetState(NetworkState::SESSION_END);
+    //netEntities.clear();
 
     SDL_DetachThread(networkThread);
     networkThread = nullptr;
+
+    SetState(NetworkState::SESSION_END);
 }
 
 void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)

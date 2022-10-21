@@ -5,25 +5,28 @@
 
 #include "SDL.h"
 
-class Input
+namespace GEngine
 {
-public:
-	static inline Input& Instance()
+	class Input
 	{
-		static Input instance;
-		return instance;
-	}
+	public:
+		static inline Input& Instance()
+		{
+			static Input instance;
+			return instance;
+		}
 
-	void Listen();
-	bool GetKeyDown(SDL_Scancode key);
-	bool GetKeyUp(SDL_Scancode key);
+		void Listen();
+		bool GetKeyDown(SDL_Scancode key);
+		bool GetKeyUp(SDL_Scancode key);
 
-private:
-	Input();
-	void KeyUp();
-	void KeyDown();
+	private:
+		Input();
+		void KeyUp();
+		void KeyDown();
 
-	const Uint8* m_KeyStates;
-};
+		const Uint8* m_KeyStates;
+	};
+}
 
 #endif
