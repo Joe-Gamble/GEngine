@@ -90,11 +90,11 @@ void Game::Init(int xpos, int ypos, int width, int height, bool fullscreen)
 void Game::handleEvents()
 {
 	SDL_Event event;
-	SDL_PollEvent(&event);
-
-	switch (event.type)
+	while (SDL_PollEvent(&event))
 	{
-		
+		switch (event.type)
+		{
+
 		case SDL_QUIT:
 		{
 			EventDriver::Instance().CallEvent(Event::GAME_QUIT);
@@ -104,32 +104,32 @@ void Game::handleEvents()
 		case SDL_KEYDOWN:
 		{
 			//Check the SDLKey values and move change the coords 
-			switch (event.key.keysym.sym) 
+			switch (event.key.keysym.sym)
 			{
 				// These calls are tests, 
-				case SDLK_q:
-				{
-					NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
-					break;
-				}
+			case SDLK_q:
+			{
+				NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
+				break;
+			}
 
-				case SDLK_w:
-				{
-					NetworkManager::Instance().JoinServer("192.168.0.23");
-					break;
-				}
-				case SDLK_e:
-				{
-					NetworkManager::Instance().EndSession();
-					break;
-				}
-				case SDLK_r:
-				{
-					break;
-				}
+			case SDLK_w:
+			{
+				NetworkManager::Instance().JoinServer("192.168.0.23");
+				break;
+			}
+			case SDLK_e:
+			{
+				NetworkManager::Instance().EndSession();
+				break;
+			}
+			case SDLK_r:
+			{
+				break;
+			}
 
-				default:
-					break;
+			default:
+				break;
 			}
 			break;
 		}
@@ -137,7 +137,8 @@ void Game::handleEvents()
 		{
 			break;
 		}
-		
+
+		}
 	}
 }
 
