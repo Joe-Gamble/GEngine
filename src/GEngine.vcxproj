@@ -164,6 +164,7 @@
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
     <ClInclude Include="EventDriver.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="ComponentType.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="NetComponent.h" />
     <ClInclude Include="NetEntity.h" />

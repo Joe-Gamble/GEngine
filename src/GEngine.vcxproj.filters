@@ -182,6 +182,12 @@
     <ClInclude Include="NetEntity.h">
       <Filter>Header Files\Engine\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
