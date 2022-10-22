@@ -9,17 +9,17 @@ using namespace GEngine;
 using namespace GEngine::Networking;
 using namespace GEngine::Callbacks;
 
-Application::Application(GameSettings& settings)
+Application::Application(AppSettings& settings)
 {
 	Init(settings);
 }
 
-void Application::Init(GameSettings& settings)
+void Application::Init(AppSettings& settings)
 {
 	int flags = 0;
 	name = settings.name;
 
-	if (settings.fullscreen)
+	if (settings.FullScreen)
 	{
 		flags = SDL_WINDOW_FULLSCREEN;
 	}
@@ -28,7 +28,7 @@ void Application::Init(GameSettings& settings)
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
-		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, settings.screenWidth, settings.screenHeight, flags);
+		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, settings.ScreenWidth, settings.ScreenHeight, flags);
 		if (window)
 		{
 			std::cout << "Window created" << std::endl;

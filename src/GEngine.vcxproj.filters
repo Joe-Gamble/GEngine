@@ -67,13 +67,25 @@
     <Filter Include="Header Files\Engine\Data\Scenes">
       <UniqueIdentifier>{f3365c78-054b-4ce5-b435-b3f0b00818fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Data\Settings">
+      <UniqueIdentifier>{e4e7a163-4ddb-4b29-9d74-9d1a19c3e363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Data\Game">
+      <UniqueIdentifier>{0c6e79a4-a767-4cd2-9947-4f07b4f717a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Data\Scenes">
+      <UniqueIdentifier>{4cae2f94-29c0-4158-bb8a-a1c2c0392c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Data\Game">
+      <UniqueIdentifier>{29d91e14-fe51-41ca-a549-eb022150158b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Data\GameMode">
+      <UniqueIdentifier>{129e485b-5e60-4901-b9d6-e1af8d6f3c33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Engine\ECS</Filter>
@@ -102,12 +114,6 @@
     <ClCompile Include="GamePacket.cpp">
       <Filter>Source Files\Engine\Network</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Source Files\Engine\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Engine\Data</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Source Files\Engine\ECS\Components</Filter>
     </ClCompile>
@@ -118,13 +124,25 @@
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Engine\Data\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Engine\Data\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTeam.cpp">
+      <Filter>Source Files\Engine\Data\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayer.cpp">
+      <Filter>Source Files\Engine\Data\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="ECS.h">
       <Filter>Header Files\Engine\ECS</Filter>
     </ClInclude>
@@ -197,8 +215,29 @@
     <ClInclude Include="SceneMold.h">
       <Filter>Header Files\Engine\Data\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="GameSettings.h">
-      <Filter>Header Files\Engine\Data</Filter>
+    <ClInclude Include="AppSettings.h">
+      <Filter>Header Files\Engine\Data\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModeTeam.h">
+      <Filter>Header Files\Engine\Data\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModeSettings.h">
+      <Filter>Header Files\Engine\Data\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModeRules.h">
+      <Filter>Header Files\Engine\Data\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTeam.h">
+      <Filter>Header Files\Engine\Data\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayer.h">
+      <Filter>Header Files\Engine\Data\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamIDDefaults.h">
+      <Filter>Header Files\Engine\Data\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModeOutcome.h">
+      <Filter>Header Files\Engine\Data\GameMode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

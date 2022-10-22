@@ -123,31 +123,8 @@ namespace GEngine
 		}
 	}
 
-	void SceneManager::ProcessInput()
-	{
-		for (int i = uiScenes.size() - 1; i >= 0; i--)
-		{
-			Scene* scene = uiScenes[i].get();
-			scene->PollEvents();
-
-			if (scene->IsBlocking())
-				return;
-		}
-
-		for (int i = gameScenes.size() - 1; i >= 0; i--)
-		{
-			Scene* scene = gameScenes[i].get();
-			scene->PollEvents();
-
-			if (scene->IsBlocking())
-				return;
-		}
-	}
-
 	void SceneManager::Tick(double& dt)
 	{
-		ProcessInput();
-
 		for (const auto& scene : gameScenes)
 		{
 			scene->Update(dt);

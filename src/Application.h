@@ -2,7 +2,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "GameSettings.h"
+#include "AppSettings.h"
 #include "SDL.h"
 
 namespace GEngine
@@ -10,13 +10,13 @@ namespace GEngine
 	static class Application
 	{
 	public:
-		explicit Application(GameSettings& settings);
+		explicit Application(AppSettings& settings);
 
 		static void Run();
 		static void Quit();
 
 	private:
-		static void Init(GameSettings& settings);
+		static void Init(AppSettings& settings);
 
 		static void HandleEvents();
 		static void Tick();

@@ -6,6 +6,12 @@
 #include "Entity.h"
 #include "NetComponent.h"
 
+/// <summary>
+/// Net Entity
+/// Intended to be a networked object that can be updated between client instances
+/// Mainly designed for player controlled objects
+/// </summary>
+
 namespace GEngine
 {
 	namespace Networking

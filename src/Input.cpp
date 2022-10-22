@@ -10,6 +10,8 @@ Input::Input()
 
 void Input::Listen()
 {
+	m_KeyStates = SDL_GetKeyboardState(nullptr);
+
 	SDL_Event event;
 
 	while (SDL_PollEvent(&event))

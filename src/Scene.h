@@ -21,14 +21,10 @@ namespace GEngine
 		Scene();
 		~Scene();
 
-		void Init(std::unique_ptr<Scene>* ptr);
-
 		void Update(double& dt);
 		void Render();
 
 		void AddNetEntity(NetEntity* entity);
-
-		void PollEvents();
 
 		inline void SetActive(bool active) { m_isActive = active; }
 		inline void SetBlocking(bool blocking) { m_blocking = blocking; }
@@ -46,7 +42,6 @@ namespace GEngine
 		bool m_isActive = false;
 		bool m_blocking = false;
 
-		std::shared_ptr<Scene> m_previousScene = nullptr;
 		SceneType type = SceneType::UNKNOWN;
 	};
 }

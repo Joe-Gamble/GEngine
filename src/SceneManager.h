@@ -33,8 +33,6 @@ namespace GEngine
 		void RemoveScene(Scene* scene);
 
 		void Back();
-
-		void ProcessInput();
 		void Tick(double& dt);
 
 	private:
