@@ -36,7 +36,7 @@ bool NetworkManager::Initialise()
 bool NetworkManager::InitialiseThread()
 {
     if (networkThread)
-        return true;
+        SDL_DetachThread(networkThread);
 
     networkThread = SDL_CreateThread(Tick, "Network Thread", (void*)NULL);
 
@@ -51,7 +51,7 @@ bool NetworkManager::InitialiseThread()
 bool NetworkManager::InitialiseMutex()
 {
     if (networkStateMutex)
-        return true;
+        SDL_DestroyMutex(networkStateMutex);
 
     networkStateMutex = SDL_CreateMutex();
 
@@ -311,11 +311,9 @@ void NetworkManager::EndSession()
 {
     // idk about this it throws a crash
     //netEntities.clear();
-
-    SDL_DetachThread(networkThread);
-    networkThread = nullptr;
-
     SetState(NetworkState::SESSION_END);
+    SDL_DetachThread(networkThread);
+    
 }
 
 void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)
