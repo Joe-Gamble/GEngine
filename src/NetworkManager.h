@@ -15,7 +15,6 @@
 #include <map>
 #include <mutex>
 
-
 namespace GEngine
 {
 	namespace Networking
@@ -80,6 +79,7 @@ namespace GEngine
 			bool InitialiseMutex();
 
 			static int Tick(void* data);
+			static int SetEndSessionState(void* data);
 
 			std::unique_ptr<GameServer> m_server = nullptr;
 			std::unique_ptr<GameClient> m_client = nullptr;

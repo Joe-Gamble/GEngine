@@ -215,22 +215,19 @@ int NetworkManager::Tick(void* data)
 
                         if (nm->m_server != nullptr)
                         {
-                            if (nm->m_server->InSession())
+                            if (nm->GetServer().InSession())
                             {
                                 nm->m_server->EndSession();
+                            }
+
+                            if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
+                            {
+                                nm->m_server->Tick();
                                 break;
                             }
                             else
                             {
-                                if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
-                                {
-                                    nm->m_server->Tick();
-                                    break;
-                                }
-                                else
-                                {
-                                    nm->m_server.reset();
-                                }
+                                nm->m_server.reset();
                             }
                         }
 
@@ -264,6 +261,12 @@ int NetworkManager::Tick(void* data)
             }
         }
     }
+    return 0;
+}
+
+int GEngine::Networking::NetworkManager::SetEndSessionState(void* data)
+{
+    NetworkManager::Instance().SetState(NetworkState::SESSION_END);
     return 0;
 }
 
@@ -311,9 +314,14 @@ void NetworkManager::EndSession()
 {
     // idk about this it throws a crash
     //netEntities.clear();
-    SetState(NetworkState::SESSION_END);
-    SDL_DetachThread(networkThread);
-    
+    if (networkThread)
+    {
+        SDL_DetachThread(networkThread);
+        networkThread = nullptr;
+
+        SDL_Thread* endSessionThread = SDL_CreateThread(SetEndSessionState, "End Network Session Thread", (void*)NULL);
+        SDL_DetachThread(endSessionThread);
+    }
 }
 
 void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)
@@ -329,6 +337,3 @@ void NetworkManager::ShutDown()
     EndSession();
     SetState(NetworkState::SHUTDOWN);
 }
-
-
-
