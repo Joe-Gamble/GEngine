@@ -192,7 +192,7 @@ GamePacket& GamePacket::operator<<(NetEntity& entity)
 
     for (const auto& entry : *entity.GetNetComponents())
     {
-        Component& component = *entry;
+        NetComponent& component = *entry;
 
         *this << component.GetType();
 

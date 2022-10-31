@@ -3,8 +3,10 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <iostream>  
 #include "ComponentType.h"
 #include <memory>
+
 
 namespace GEngine
 {
@@ -12,9 +14,16 @@ namespace GEngine
 
 	struct Component
 	{
+		virtual ~Component() {}
+
+		inline bool IsEnabled() { return m_isEnabled; }
+		void SetEnabled(bool _enabled) { m_isEnabled = _enabled; }
+
 		virtual ComponentType GetType() = 0;
-		virtual const void* Serialise() = 0;
-		virtual const uint32_t GetMoldSize() = 0;
+		virtual const void* Serialise() {
+			std::cout << "ERROR: virtual const void* Serialise(): no implementation found. " << std::endl;
+			return nullptr;
+		}
 
 		virtual void Deserialise() = 0;
 
@@ -25,10 +34,9 @@ namespace GEngine
 		virtual void Render() {}
 
 		virtual void ApplyData(const void* data) {};
-		virtual ~Component() {}
-
+		
 	private:
-		bool hasDataToBeSent = false;
+		bool m_isEnabled = true;
 	};
 }
 

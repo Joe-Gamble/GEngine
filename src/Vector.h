@@ -71,8 +71,10 @@ namespace GEngine
 			float& X() { return x; }
 			float& Y() { return y; }
 
-			void SetX(float& newX) { x = newX; }
-			void SetY(float& newY) { y = newY; }
+			inline void SetX(float& newX) { x = newX; }
+			inline void SetX(int& newX) { x = newX; }
+			inline void SetY(float& newY) { y = newY; }
+			inline void SetY(int& newY) { y = newY; }
 
 		private:
 			float x = 0;

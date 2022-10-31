@@ -208,6 +208,7 @@ void GameServer::SendEntityToClients(Entity& entity)
 void GameServer::EndSession()
 { 
 	inSession = false;
+	serverType = ServerType::UNKNOWN;
 
 	for (TCPConnection& connection : connections)
 	{

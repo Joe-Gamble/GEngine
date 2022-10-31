@@ -86,6 +86,10 @@ void Application::HandleEvents()
 
 void Application::Tick()
 {
+	Vector2 pos = Input::Instance().GetMousePosition();
+
+	std::cout << pos.X() << " " << pos.Y() << std::endl;
+
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
 		NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
@@ -116,6 +120,7 @@ void Application::Quit()
 
 	// This needs to be called from GameManager as part of the Game deconstruction
 	NetworkManager::Instance().ShutDown();
+	SDL_Delay(100);
 
 	std::cout << "Game Destroyed" << std::endl;
 }

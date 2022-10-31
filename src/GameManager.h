@@ -16,7 +16,7 @@ class GameManager
 public:
 	void LoadGame(GameMode& gameSettings);
 	void StartGame();
-	bool ValidateGame();
+	void ValidateGame();
 
 	GameTeam* GetTeam(uint16_t teamID);
 

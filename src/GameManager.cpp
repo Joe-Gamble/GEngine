@@ -17,7 +17,7 @@ void GameManager::StartGame()
 	
 }
 
-bool GameManager::ValidateGame()
+void GameManager::ValidateGame()
 {
 	for (const auto& team : teams)
 	{
@@ -25,10 +25,8 @@ bool GameManager::ValidateGame()
 		if (outcome != GameModeOutcome::GAME_IN_PLAY)
 		{
 			EndGame(outcome, team.get());
-			return true;
 		}
 	}
-	return false;
 }
 
 GameTeam* GameManager::GetTeam(uint16_t teamID)
@@ -43,6 +41,9 @@ GameTeam* GameManager::GetTeam(uint16_t teamID)
 
 void GameManager::AddPlayer(uint16_t teamID = TeamIDDefaults::INVALID)
 {
+	if (gamemode.IsMultiplayer && !NetworkManager::Instance().HasAuthority())
+		return;
+
 	GameTeam* teamToAdd = nullptr;
 
 	// we have no preference for team, so lets get the best team to add a player to
