@@ -122,8 +122,6 @@ bool NetworkManager::IsClient()
     return m_client != nullptr;
 }
 
-// I really really need a mutex here
-
 int NetworkManager::Tick(void* data)
 {
     unsigned int now = SDL_GetTicks();
@@ -138,7 +136,7 @@ int NetworkManager::Tick(void* data)
         now = SDL_GetTicks();
         timeBetweenFrames = now - last;
 
-        if (timeBetweenFrames > 1000 / 60.0)
+        if (timeBetweenFrames > 1000.f / 60.0f)
         {
             if (SDL_TryLockMutex(nm->networkStateMutex) == 0)
             {
@@ -182,7 +180,6 @@ int NetworkManager::Tick(void* data)
 
                             nm->EndSession();
                         }
-                        break;
                     }
 
                     case NetworkState::SESSION_ACTIVE:
@@ -259,6 +256,7 @@ int NetworkManager::Tick(void* data)
                 }
                 SDL_UnlockMutex(nm->networkStateMutex);
             }
+            last = now;
         }
     }
     return 0;
