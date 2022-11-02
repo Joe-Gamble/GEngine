@@ -70,18 +70,20 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		//}
 		case PacketType::PT_INVALID:
 		{
-			break;
+			return false;
 		}
 		case PacketType::PT_ENTITY_INSTANTIATE:
 		{
 			short id = -1;
 			gamePacket >> id;
 
-			if (!NetworkManager::Instance().HasNetEntity(id))
+			NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+
+			if (entity != nullptr)
 			{
-				NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
 				gamePacket >> *entity;
 			}
+			break;
 
 		}
 		case PacketType::PT_ENTITY_CHANGE: // Entity exists, and we ar emaking changes to new/preexisting components
@@ -89,17 +91,13 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			short id = -1;
 			gamePacket >> id;
 
-			if (NetworkManager::Instance().HasNetEntity(id))
+			NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+
+			if (entity != nullptr)
 			{
-				NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
 				gamePacket >> *entity;
 			}
 
-			// if the networkManager doesn't have this
-			//Entity* entity = 
-			//gamePacket >> entity;
-
-			return true;
 			break;
 		}
 		default:

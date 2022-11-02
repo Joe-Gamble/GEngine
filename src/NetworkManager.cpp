@@ -138,6 +138,8 @@ int NetworkManager::Tick(void* data)
 
         if (timeBetweenFrames > 1000.f / 60.0f)
         {
+            std::cout << "Network" << std::endl;
+
             if (SDL_TryLockMutex(nm->networkStateMutex) == 0)
             {
                 if (nm->IsServer())
@@ -310,8 +312,6 @@ void NetworkManager::SetState(NetworkState state)
 
 void NetworkManager::EndSession()
 {
-    // idk about this it throws a crash
-    //netEntities.clear();
     if (networkThread)
     {
         SDL_DetachThread(networkThread);
@@ -320,6 +320,18 @@ void NetworkManager::EndSession()
         SDL_Thread* endSessionThread = SDL_CreateThread(SetEndSessionState, "End Network Session Thread", (void*)NULL);
         SDL_DetachThread(endSessionThread);
     }
+}
+
+NetEntity* NetworkManager::GetNetEntity(short id)
+{
+    auto it = netEntities.find(id); 
+    
+    if (it != netEntities.end())
+    {
+        return it->second->get();
+    }
+    
+    return nullptr;
 }
 
 void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)

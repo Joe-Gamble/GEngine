@@ -41,7 +41,7 @@ namespace GEngine
 
 		NetTransform(NetTransformMold& mold);
 
-		static inline NetTransformMold& CreateMold(const NetTransform& transform)
+		static inline NetTransformMold CreateMold(const NetTransform& transform)
 		{
 			NetTransformMold mold;
 

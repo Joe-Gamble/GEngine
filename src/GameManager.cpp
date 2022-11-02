@@ -1,8 +1,11 @@
 #include "GameManager.h"
 
-void GameManager::LoadGame(GameMode& _gamemode)
+void GameManager::LoadGame(GameMode& gamemode)
 {
-	gamemode = _gamemode;
+	if (this->gamemode != nullptr)
+		EndGame(GameModeOutcome::GAME_SHUTDOWN, nullptr);
+
+	this->gamemode = &gamemode;
 
 	for (const auto& teamSettings : gamemode.Teams)
 	{
@@ -12,17 +15,20 @@ void GameManager::LoadGame(GameMode& _gamemode)
 
 void GameManager::StartGame()
 {
-	inGame = true;
-
-	
+	m_inGame = true;
 }
 
 void GameManager::ValidateGame()
 {
+	if (m_inGame && gamemode != nullptr)
+		gamemode->OnValidate();
+
+	int winCounter = 0;
+
 	for (const auto& team : teams)
 	{
 		GameModeOutcome outcome = team->Validate();
-		if (outcome != GameModeOutcome::GAME_IN_PLAY)
+		if (outcome != GAME_IN_PLAY)
 		{
 			EndGame(outcome, team.get());
 		}
@@ -41,7 +47,7 @@ GameTeam* GameManager::GetTeam(uint16_t teamID)
 
 void GameManager::AddPlayer(uint16_t teamID = TeamIDDefaults::INVALID)
 {
-	if (gamemode.IsMultiplayer && !NetworkManager::Instance().HasAuthority())
+	if (gamemode->IsMultiplayer && !NetworkManager::Instance().HasAuthority())
 		return;
 
 	GameTeam* teamToAdd = nullptr;
@@ -75,6 +81,19 @@ void GameManager::AddPlayer(uint16_t teamID = TeamIDDefaults::INVALID)
 	}
 }
 
+void GameManager::AddPointsToTeam(uint16_t teamID, int points)
+{
+	GameTeam* team = GetTeam(teamID);
+
+	if (team != nullptr)
+	{
+		team->AddPoints(points);
+		gamemode->OnPointsAdjusted(team);
+
+		ValidateGame();
+	}
+}
+
 void GameManager::EndGame(GameModeOutcome outcome, GameTeam* team = nullptr)
 {
 	switch (outcome)
@@ -97,4 +116,6 @@ void GameManager::EndGame(GameModeOutcome outcome, GameTeam* team = nullptr)
 		default:
 			return;
 	}
+
+	gamemode = nullptr;
 }

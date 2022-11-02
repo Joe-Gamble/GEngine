@@ -66,11 +66,13 @@ void Application::Run()
 		if (timeBetweenFrames > 1000 / 60.0)
 		{
 			double delta = timeBetweenFrames / 1000.0f;
-			// std::cout << "FPS: " << delta << std::endl;
+			//std::cout << "FPS: " << delta << std::endl;
+
+			//std::cout << pos.X() << " " << pos.Y() << std::endl;
 
 			HandleEvents();
 
-			Tick();
+			Tick(delta);
 
 			Draw();
 
@@ -84,15 +86,13 @@ void Application::HandleEvents()
 	Input::Instance().Listen();
 }
 
-void Application::Tick()
+void Application::Tick(double& dt)
 {
-	Vector2 pos = Input::Instance().GetMousePosition();
-
-	std::cout << pos.X() << " " << pos.Y() << std::endl;
+	std::cout << "App" << std::endl;
 
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
-		NetworkManager::Instance().MakeServer(ServerType::DEDICATED);
+		NetworkManager::Instance().MakeServer(ServerType::HOSTED);
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_W))
 	{

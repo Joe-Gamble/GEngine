@@ -19,7 +19,7 @@ namespace GEngine
 
 			// static const void* Serialise(const Vector2& transform);
 
-			static inline Vector2Mold& CreateMold(const Vector2& transform)
+			static inline Vector2Mold CreateMold(const Vector2& transform)
 			{
 				Vector2Mold mold;
 

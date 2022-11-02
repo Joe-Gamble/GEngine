@@ -177,7 +177,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameModeOutcome.h" />
     <ClInclude Include="GameModeRules.h" />
-    <ClInclude Include="GameModeSettings.h" />
+    <ClInclude Include="GameMode.h" />
     <ClInclude Include="GameModeTeam.h" />
     <ClInclude Include="GamePacket.h" />
     <ClInclude Include="GamePlayer.h" />

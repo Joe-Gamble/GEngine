@@ -224,7 +224,7 @@
     <ClInclude Include="GameModeTeam.h">
       <Filter>Header Files\Engine\Data\GameMode</Filter>
     </ClInclude>
-    <ClInclude Include="GameModeSettings.h">
+    <ClInclude Include="GameMode.h">
       <Filter>Header Files\Engine\Data\GameMode</Filter>
     </ClInclude>
     <ClInclude Include="GameModeRules.h">
