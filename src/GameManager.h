@@ -10,29 +10,31 @@
 #include "GameTeam.h"
 // SceneManager
 
-
-class GameManager
+namespace GEngine
 {
-public:
-	void LoadGame(GameMode& gameSettings);
-	void StartGame();
-	void ValidateGame();
+	class GameManager
+	{
+	public:
+		void LoadGame(GameMode& gameSettings);
+		void StartGame();
+		void ValidateGame();
 
-	GameTeam* GetTeam(uint16_t teamID);
+		GameTeam* GetTeam(uint16_t teamID);
 
-	void AddPlayer(uint16_t teamID);
-	void AddPointsToTeam(uint16_t teamID, int points);
+		void AddPlayer(uint16_t teamID);
+		void AddPointsToTeam(uint16_t teamID, int points);
 
-	inline bool InGame() { return m_inGame; }
-	inline std::vector<std::unique_ptr<GameTeam>>* GetTeams() { return &teams; }
+		inline bool InGame() { return m_inGame; }
+		inline std::vector<std::unique_ptr<GameTeam>>* GetTeams() { return &teams; }
 
-	void EndGame(GameModeOutcome outcome, GameTeam* team);
+		void EndGame(GameModeOutcome outcome, GameTeam* team);
 
-private:
-	GameMode* gamemode = nullptr;
-	bool m_inGame = false;
+	private:
+		GameMode* gamemode = nullptr;
+		bool m_inGame = false;
 
-	std::vector<std::unique_ptr<GameTeam>> teams;
-};
+		std::vector<std::unique_ptr<GameTeam>> teams;
+	};
+}
 
 #endif

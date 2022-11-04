@@ -1,5 +1,7 @@
 #include "GameManager.h"
 
+using namespace GEngine;
+
 void GameManager::LoadGame(GameMode& gamemode)
 {
 	if (this->gamemode != nullptr)

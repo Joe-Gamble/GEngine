@@ -19,8 +19,8 @@ namespace GEngine
 		class NetEntity : public Entity
 		{
 		public:
-			NetEntity(short& netID, Scene* scene);
-			static NetEntity* Instantiate(short& netID, Scene* scene);
+			NetEntity(short& netID, std::shared_ptr<Scene> scene);
+			static NetEntity* Instantiate(short& netID, std::shared_ptr<Scene> scene);
 
 			template<typename T, typename... TArgs>
 			T* AddComponent(TArgs&&... mArgs)

@@ -2,12 +2,12 @@
 
 using namespace GEngine::Networking;
 
-NetEntity::NetEntity(short& _netID, Scene* _scene) : netID(_netID), NetEntity::Entity(_scene)
+NetEntity::NetEntity(short& _netID, std::shared_ptr<Scene> _scene) : netID(_netID), NetEntity::Entity(_scene)
 {
 
 }
 
-NetEntity* NetEntity::Instantiate(short& netID, Scene* scene)
+NetEntity* NetEntity::Instantiate(short& netID, std::shared_ptr<Scene> scene)
 {
 	NetEntity* go = new NetEntity(netID, scene);
 	return go;

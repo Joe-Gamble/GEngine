@@ -21,8 +21,12 @@ namespace GEngine
 		Scene();
 		~Scene();
 
-		void Update(double& dt);
-		void Render();
+		virtual void Update(double& dt);
+		virtual void Render();
+
+		virtual void OnSceneLoad() {};
+		virtual void OnSceneDestroy() {};
+
 
 		void AddNetEntity(NetEntity* entity);
 
@@ -33,6 +37,7 @@ namespace GEngine
 		inline bool IsActive() { return m_isActive; }
 		inline bool IsBlocking() { return m_blocking; }
 		inline bool IsType(SceneType _type) { return type == _type; }
+		inline SceneType GetType() { return type; }
 		
 
 		inline std::unique_ptr<EntityManager>* GetEntityManager() { return &m_entityManager; }

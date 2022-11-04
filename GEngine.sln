@@ -5,11 +5,6 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GEngine", "src\GEngine.vcxproj", "{DEE1F933-F8E8-4936-9C87-7E036906F9A1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TicTacToe", "Games\TicTacToe\TicTacToe.vcxproj", "{A679F8C6-989A-44BA-9D59-CF29A7B9F197}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DEE1F933-F8E8-4936-9C87-7E036906F9A1} = {DEE1F933-F8E8-4936-9C87-7E036906F9A1}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -26,14 +21,6 @@ Global
 		{DEE1F933-F8E8-4936-9C87-7E036906F9A1}.Release|x64.Build.0 = Release|x64
 		{DEE1F933-F8E8-4936-9C87-7E036906F9A1}.Release|x86.ActiveCfg = Release|Win32
 		{DEE1F933-F8E8-4936-9C87-7E036906F9A1}.Release|x86.Build.0 = Release|Win32
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Debug|x64.ActiveCfg = Debug|x64
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Debug|x64.Build.0 = Debug|x64
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Debug|x86.ActiveCfg = Debug|Win32
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Debug|x86.Build.0 = Debug|Win32
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Release|x64.ActiveCfg = Release|x64
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Release|x64.Build.0 = Release|x64
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Release|x86.ActiveCfg = Release|Win32
-		{A679F8C6-989A-44BA-9D59-CF29A7B9F197}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

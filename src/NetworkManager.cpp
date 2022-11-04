@@ -138,8 +138,6 @@ int NetworkManager::Tick(void* data)
 
         if (timeBetweenFrames > 1000.f / 60.0f)
         {
-            std::cout << "Network" << std::endl;
-
             if (SDL_TryLockMutex(nm->networkStateMutex) == 0)
             {
                 if (nm->IsServer())
@@ -182,6 +180,7 @@ int NetworkManager::Tick(void* data)
 
                             nm->EndSession();
                         }
+                        break;
                     }
 
                     case NetworkState::SESSION_ACTIVE:

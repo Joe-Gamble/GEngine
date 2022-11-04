@@ -34,6 +34,8 @@ void Application::Init(AppSettings& settings)
 			std::cout << "Window created" << std::endl;
 		}
 
+		settings.sceneBundle->RegisterScenes();
+
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 		if (renderer)
 		{
@@ -88,7 +90,7 @@ void Application::HandleEvents()
 
 void Application::Tick(double& dt)
 {
-	std::cout << "App" << std::endl;
+	// std::cout << "App" << std::endl;
 
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
@@ -96,7 +98,10 @@ void Application::Tick(double& dt)
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_W))
 	{
-		NetworkManager::Instance().JoinServer("192.168.0.203");
+		// home 192.168.0.203
+		// work 192.168.0.203
+		// bnb 192.168.1.222
+		NetworkManager::Instance().JoinServer("192.168.1.222");
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_E))
 	{

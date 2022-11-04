@@ -3,7 +3,7 @@
 
 using namespace GEngine;
 
-Entity* Entity::Instantiate(Scene* _scene)
+Entity* Entity::Instantiate(std::shared_ptr<Scene> _scene)
 {
 	Entity* go = new Entity(_scene);
 	return go;

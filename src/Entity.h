@@ -23,17 +23,17 @@ namespace GEngine
 	private:
 		bool alive = true;
 		std::vector<std::unique_ptr<Component>> components;
-		Scene* scene = nullptr;
+		std::shared_ptr<Scene> scene = nullptr;
 
 		ComponentArray componentArray = {};
 		ComponentBitSet componentBitSet = {};
 
 	protected:
-		Entity(Scene* _scene) : scene(_scene) {}
+		Entity(std::shared_ptr<Scene> _scene) : scene(_scene) {}
 
 	public:
 
-		static Entity* Instantiate(Scene* scene);
+		static Entity* Instantiate(std::shared_ptr<Scene> scene);
 
 		void Update(double& dt);
 		void Render();

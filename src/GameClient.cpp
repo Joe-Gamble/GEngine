@@ -2,6 +2,8 @@
 #include "NetTransform.h"
 #include "GamePacket.h"
 #include "NetworkManager.h"
+#include "SceneFactory.h"
+#include "SceneManager.h"
 
 using namespace GEngine::Networking;
 
@@ -63,6 +65,7 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 			break;
 		}
+
 		//case PacketType::PT_SCENE_CHANGE:
 		//{
 		//	// Load the scene
@@ -77,11 +80,20 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			short id = -1;
 			gamePacket >> id;
 
-			NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+			std::string sceneName;
+			Packet& packet = static_cast<Packet&>(gamePacket);
 
-			if (entity != nullptr)
+			packet >> sceneName;
+
+			if (!NetworkManager::Instance().HasNetEntity(id))
 			{
-				gamePacket >> *entity;
+				std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
+
+				if (scene != nullptr && SceneManager::Instance().HasScene(scene))
+				{
+					// Make an entity here
+					NetEntity* netEntity = NetEntity::Instantiate(id, scene);
+				}
 			}
 			break;
 

@@ -4,6 +4,8 @@
 #include "SDL.h"
 
 #include "nlohmann/json.hpp"
+#include "Application.h"
+#include "SceneFactory.h"
 
 namespace GEngine
 {
@@ -33,7 +35,7 @@ namespace GEngine
 		if (mold.type == SceneType::UNKNOWN)
 			return;
 
-		std::unique_ptr<Scene>* scene = nullptr;
+		std::shared_ptr<Scene>* scene = nullptr;
 
 		if (mold.type == SceneType::GAME)
 			scene = LoadGameScene(mold.path, mold.addative, mold.inclusive);
@@ -42,12 +44,14 @@ namespace GEngine
 
 		if (scene)
 		{
+			scene->get()->OnSceneLoad();
+
 			scene->get()->SetBlocking(mold.blockInput);
 			scene->get()->SetType(mold.type);
 		}
 	}
 
-	std::unique_ptr<Scene>* SceneManager::LoadUIScene(std::string& sceneName, bool isAddative, bool showPrevious)
+	std::shared_ptr<Scene>* SceneManager::LoadUIScene(std::string& sceneName, bool isAddative, bool showPrevious)
 	{
 		if (uiScenes.size() > 0)
 		{
@@ -58,11 +62,11 @@ namespace GEngine
 				uiScenes.front()->SetActive(showPrevious);
 		}
 
-		uiScenes.push_back(std::make_unique<Scene>());
+		uiScenes.push_back(SceneFactory::Instance().GetScene(sceneName));
 		return &uiScenes.front();
 	}
 
-	std::unique_ptr<Scene>* SceneManager::LoadGameScene(std::string& sceneName, bool isAddative, bool showPrevious)
+	std::shared_ptr<Scene>* SceneManager::LoadGameScene(std::string& sceneName, bool isAddative, bool showPrevious)
 	{
 		if (gameScenes.size() > 0)
 		{
@@ -73,7 +77,9 @@ namespace GEngine
 				gameScenes.front()->SetActive(showPrevious);
 		}
 
-		gameScenes.push_back(std::make_unique<Scene>());
+		Scene* scene = nullptr;
+
+		gameScenes.push_back(SceneFactory::Instance().GetScene(sceneName));
 		return &gameScenes.front();
 	}
 
@@ -88,6 +94,32 @@ namespace GEngine
 		gameScenes.clear();
 	}
 
+	bool SceneManager::HasScene(std::shared_ptr<Scene> scene)
+	{
+		if (scene->GetType() == SceneType::GAME)
+		{
+			for (const auto& gameScene : gameScenes)
+			{
+				if (scene == gameScene)
+				{
+					return true;
+				}
+			}
+		}
+		else if (scene->GetType() == SceneType::UI)
+		{
+			for (const auto& uiScene : uiScenes)
+			{
+				if (scene == uiScene)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	void SceneManager::RemoveScene(Scene* scene)
 	{
 		if (scene)
@@ -95,12 +127,12 @@ namespace GEngine
 			if (scene->IsType(SceneType::UNKNOWN))
 				return;
 
-			std::vector<std::unique_ptr<Scene>>* scenes = nullptr;
+			std::vector<std::shared_ptr<Scene>>* scenes = nullptr;
 
 
 			if (scene->IsType(SceneType::GAME))
 				scenes = &gameScenes;
-			else if (scene->IsType(SceneType::GAME))
+			else if (scene->IsType(SceneType::UI))
 				scenes = &uiScenes;
 
 			if (scenes)
@@ -108,7 +140,10 @@ namespace GEngine
 				for (int i = scenes->size() - 1; i >= 0; i--)
 				{
 					if (scene == scenes->at(i).get())
+					{
+						scene->OnSceneDestroy();
 						scenes->erase(scenes->begin() + i);
+					}
 				}
 			}
 		}

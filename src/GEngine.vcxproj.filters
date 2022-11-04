@@ -245,6 +245,15 @@
     <ClInclude Include="ButtonComponent.h">
       <Filter>Header Files\Engine\ECS\Components</Filter>
     </ClInclude>
+    <ClInclude Include="SceneFactory.h">
+      <Filter>Header Files\Engine\Data\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TestGameMode.h">
+      <Filter>Header Files\Engine\Data\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBundle.h">
+      <Filter>Header Files\Engine\Data\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

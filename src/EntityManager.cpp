@@ -38,13 +38,12 @@ void EntityManager::Refresh()
 		std::end(netEntities));
 }
 
-Entity& EntityManager::AddEntity()
+Entity& EntityManager::AddEntity(Entity* entity)
 {
-	Entity* e = Entity::Instantiate(m_scene);
-	std::unique_ptr<Entity> uPtr{ e };
+	std::unique_ptr<Entity> uPtr{ entity };
 	entities.emplace_back(std::move(uPtr));
 
-	return *e;
+	return *entity;
 }	
 
 NetEntity& EntityManager::AddNetEntity(NetEntity* entity)

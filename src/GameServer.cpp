@@ -189,7 +189,7 @@ void GameServer::Tick()
 	}
 }
 
-NetEntity& GameServer::MakeEntity(Scene* scene)
+NetEntity& GameServer::MakeEntity(std::shared_ptr<Scene> scene)
 {
 	short netID = entityID++;
 	NetEntity* entity = NetEntity::Instantiate(netID, scene);

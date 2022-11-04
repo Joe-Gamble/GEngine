@@ -11,16 +11,26 @@
 #include "GameModeTeam.h"
 #include "GameModeRules.h"
 
-struct GameMode
+#include "SceneFactory.h"
+
+namespace GEngine
 {
-	std::vector<GameModeTeam> Teams;
-	GameModeRules Rules;
-	std::string SceneName;
+	struct GameMode
+	{
+		GameMode() = default;
+		~GameMode() = default;
 
-	bool IsMultiplayer;
-	bool EndSessionOnPlayerDisconnect;
+		std::vector<GameModeTeam> Teams;
+		GameModeRules Rules;
+		std::string SceneName;
 
-	virtual void OnValidate() = 0;
-	virtual void OnPointsAdjusted(GameTeam* team) = 0;
-};
+		bool IsMultiplayer;
+		bool EndSessionOnPlayerDisconnect;
+
+		inline virtual void RegisterScenes() = 0;
+		inline virtual void OnValidate() = 0;
+		inline virtual void OnPointsAdjusted(GameTeam* team) = 0;
+	};
+}
+
 #endif

@@ -188,6 +188,8 @@
     <ClInclude Include="ComponentType.h" />
     <ClInclude Include="AppSettings.h" />
     <ClInclude Include="GameTeam.h" />
+    <ClInclude Include="SceneBundle.h" />
+    <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="TeamIDDefaults.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="PlayerInput.h" />
@@ -199,6 +201,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneMold.h" />
+    <ClInclude Include="TestGameMode.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2Mold.h" />

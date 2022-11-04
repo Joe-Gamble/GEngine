@@ -30,17 +30,21 @@ namespace GEngine
 		void ClearUIScenes();
 		void ClearScenes();
 
+		bool HasScene(std::shared_ptr<Scene> scene);
+
 		void RemoveScene(Scene* scene);
 
 		void Back();
 		void Tick(double& dt);
 
 	private:
-		std::unique_ptr<Scene>* LoadUIScene(std::string& sceneName, bool isAddative, bool showPreviouse);
-		std::unique_ptr<Scene>* LoadGameScene(std::string& sceneName, bool isAddative, bool showPreviouse);
+		std::shared_ptr<Scene>* LoadUIScene(std::string& sceneName, bool isAddative, bool showPreviouse);
+		std::shared_ptr<Scene>* LoadGameScene(std::string& sceneName, bool isAddative, bool showPreviouse);
 
-		std::vector<std::unique_ptr<Scene>> gameScenes;
-		std::vector<std::unique_ptr<Scene>> uiScenes;
+		std::vector<std::shared_ptr<Scene>> gameScenes;
+		std::vector<std::shared_ptr<Scene>> uiScenes;
+
+
 	};
 }
 

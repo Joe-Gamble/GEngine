@@ -3,17 +3,30 @@
 #define APP_SETTINGS_H
 
 #include <string>
+#include "SceneBundle.h"
 
-struct AppSettings
+namespace GEngine
 {
-	std::string name;
+	struct AppSettings
+	{
+		AppSettings(std::string _name, SceneBundle* bundle, int width, int height, bool fullscreen)
+		{
+			sceneBundle = bundle;
+			name = _name;
 
-	int ScreenWidth;
-	int ScreenHeight;
-	bool FullScreen = false;
+			FullScreen = fullscreen;
+			ScreenWidth = width;
+			ScreenHeight = height;
+		}
 
-	std::string StartingSceneName;
-};
+		SceneBundle* sceneBundle;
+		std::string name;
+
+		int ScreenWidth;
+		int ScreenHeight;
+		bool FullScreen = false;
+	};
+}
 
 #endif // !GAME_SETTINGS_H
 

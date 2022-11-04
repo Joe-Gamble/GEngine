@@ -17,6 +17,8 @@ namespace GEngine
 		static void Run();
 		static void Quit();
 
+		inline static SDL_Renderer* GetRenderer() { return renderer; }
+
 	private:
 		static void Init(AppSettings& settings);
 

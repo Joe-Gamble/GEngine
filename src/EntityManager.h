@@ -27,7 +27,8 @@ namespace GEngine
 		void Render();
 
 		void Refresh();
-		Entity& AddEntity();
+
+		Entity& AddEntity(Entity* entity);
 		NetEntity& AddNetEntity(NetEntity* entity);
 	};
 }
