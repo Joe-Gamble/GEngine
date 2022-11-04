@@ -29,8 +29,14 @@ namespace GEngine
 				if (component == nullptr)
 				{
 					Entity* e = (Entity*)this;
-					T* t = &e->AddComponent<T, mArgs...>();
-					netComponents.emplace_back(t);
+					T* t = &e->AddComponent<T>(mArgs...);
+
+					if (std::is_base_of<NetComponent, T>())
+					{
+						NetComponent* netComponent = static_cast<NetComponent*>(t);
+						std::shared_ptr<NetComponent> ptr{ std::move(netComponent) };
+						netComponents.emplace_back(ptr);
+					}
 
 					return t;
 				}

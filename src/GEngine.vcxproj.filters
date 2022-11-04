@@ -254,6 +254,9 @@
     <ClInclude Include="SceneBundle.h">
       <Filter>Header Files\Engine\Data\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentFactory.h">
+      <Filter>Header Files\Engine\ECS\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

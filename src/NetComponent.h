@@ -9,7 +9,6 @@ namespace GEngine
 	struct NetComponent : Component
 	{
 	public:
-		virtual const uint32_t GetMoldSize() = 0;
 		inline bool HasPendingData() { return m_hasDataToBeSent; }
 	private:
 		bool m_hasDataToBeSent = false;

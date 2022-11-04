@@ -3,8 +3,6 @@
 #ifndef ECS_H
 #define ECS_H
 
-
-
 #include <array>
 #include <bitset>
 #include <iostream>
@@ -12,7 +10,7 @@
 namespace GEngine
 {
 	class Entity;
-	constexpr std::size_t MAX_COMPONENTS = 10;
+	constexpr std::size_t MAX_COMPONENTS = 100;
 
 	using ComponentID = std::size_t;
 

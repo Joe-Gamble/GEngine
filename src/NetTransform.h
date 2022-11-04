@@ -14,7 +14,6 @@ namespace GEngine
 	struct NetTransform : NetComponent
 	{
 	public:
-
 		const void* Serialise() override;
 		void Deserialise() override;
 

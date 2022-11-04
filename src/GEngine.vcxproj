@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="ButtonComponent.h" />
+    <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="EventDriver.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />

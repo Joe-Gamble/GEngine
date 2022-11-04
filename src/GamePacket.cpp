@@ -1,5 +1,6 @@
 #include "GamePacket.h"
 #include "NetworkManager.h"
+#include "ComponentFactory.h"
 
 using namespace GEngine::Networking;
 
@@ -230,29 +231,33 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
         if (extractionOffset + componentSize > buffer.size())
             throw PacketException("[GamePacket::operator>>(NetEntity& entity)] - Extraction offset exceeded buffer size.");
 
-        switch (componentType)
+
+        std::unique_ptr<Component>* componentInfo = ComponentFactory::Instance().GetComponent(componentType);
+
+        if (componentInfo != nullptr)
         {
-            case ComponentType::TYPE_NET_TRANSFORM:
+            Component* component = componentInfo->get();
+
+           
+            
+            
+            void* data = malloc(component->GetMoldSize());
+
+            if (data != nullptr && sizeof(data) > 0)
             {
-                void* data = malloc(sizeof(NetTransformMold));
+                using T = std::remove_reference_t<decltype(*component)>;
+                Component* componentInstance = entity.AddComponent<T>();
 
-                if (data != nullptr && sizeof(data) > 0)
+                if (componentInstance != nullptr)
                 {
-                    NetTransform* transform = entity.TryGetComponent<NetTransform>();
-
-                    if (transform == nullptr)
-                        transform = entity.AddComponent<NetTransform>();;
-
                     memcpy(data, &buffer[extractionOffset], componentSize);
-
-                    transform->ApplyData(data);
-
-                    extractionOffset += componentSize;
+                    componentInstance->ApplyData(data);
                 }
-                std::free(data);
+                
 
-                break;
+                extractionOffset += componentSize;
             }
+            std::free(data);
         }
     }
 
