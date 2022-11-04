@@ -1,4 +1,6 @@
 [
+  // 0 = GameSecen
+  // 1 = UI Scene 
   {
     "MainMenu": {
       "path": "MainMenu.json",
@@ -14,7 +16,7 @@
       "isAddative": true,
       "isInclusive": false,
       "blockInput": true,
-      "SceneType": 1
+      "SceneType": 0
     }
   },
   {
