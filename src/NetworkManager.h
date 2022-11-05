@@ -64,6 +64,7 @@ namespace GEngine
 
 			inline bool HasNetEntity(short id) { return netEntities.count(id); }
 			NetEntity* GetNetEntity(short id);
+			void AddEntity(std::unique_ptr<NetEntity>* entityPtr);
 
 			void SendPacket(std::shared_ptr< GamePacket>& packet);
 

@@ -20,9 +20,9 @@ void Scene::Render()
 	m_entityManager->Render();
 }
 
-void Scene::AddNetEntity(NetEntity* entity)
+std::unique_ptr<NetEntity>* Scene::AddNetEntity(NetEntity* entity)
 {
-	m_entityManager->AddNetEntity(entity);
+	return &m_entityManager->AddNetEntity(entity);
 }
 
 

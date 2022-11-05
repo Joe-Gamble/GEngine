@@ -29,7 +29,7 @@ namespace GEngine
 		void Refresh();
 
 		Entity& AddEntity(Entity* entity);
-		NetEntity& AddNetEntity(NetEntity* entity);
+		std::unique_ptr<NetEntity>& AddNetEntity(NetEntity* entity);
 	};
 }
 

@@ -46,10 +46,10 @@ Entity& EntityManager::AddEntity(Entity* entity)
 	return *entity;
 }	
 
-NetEntity& EntityManager::AddNetEntity(NetEntity* entity)
+std::unique_ptr<NetEntity>& EntityManager::AddNetEntity(NetEntity* entity)
 {
 	std::unique_ptr<NetEntity> uPtr{ entity };
 
 	netEntities.emplace_back(std::move(uPtr));
-	return *entity;
+	return uPtr;
 }

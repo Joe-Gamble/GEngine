@@ -64,8 +64,9 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
-			NetEntity& MakeEntity(std::shared_ptr<Scene> scene);
-			void SendEntityToClients(Entity& entity);
+			std::unique_ptr<NetEntity>* MakeEntity(std::shared_ptr<Scene> scene);
+			void SendEntityToClients(std::unique_ptr<NetEntity>* entity, bool isNew);
+			void SendClientstoNewScene(std::string& scene);
 
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;

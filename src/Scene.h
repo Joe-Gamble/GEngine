@@ -28,7 +28,7 @@ namespace GEngine
 		virtual void OnSceneDestroy() {};
 
 
-		void AddNetEntity(NetEntity* entity);
+		std::unique_ptr<NetEntity>* AddNetEntity(NetEntity* entity);
 
 		inline void SetActive(bool active) { m_isActive = active; }
 		inline void SetBlocking(bool blocking) { m_blocking = blocking; }

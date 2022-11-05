@@ -10,6 +10,7 @@ namespace GEngine
 	{
 	public:
 		inline bool HasPendingData() { return m_hasDataToBeSent; }
+		virtual bool ForcePacketOnChange() { return false; }
 	private:
 		bool m_hasDataToBeSent = false;
 	};

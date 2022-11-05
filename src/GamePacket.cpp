@@ -237,9 +237,6 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
         if (componentInfo != nullptr)
         {
             Component* component = componentInfo->get();
-
-           
-            
             
             void* data = malloc(component->GetMoldSize());
 
@@ -254,7 +251,6 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
                     componentInstance->ApplyData(data);
                 }
                 
-
                 extractionOffset += componentSize;
             }
             std::free(data);

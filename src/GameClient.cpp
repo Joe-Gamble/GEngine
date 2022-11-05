@@ -5,6 +5,12 @@
 #include "SceneFactory.h"
 #include "SceneManager.h"
 
+// How do I register components for being sent over the network?
+// Will this be on a per/component basis?
+// Does a component need a "force update" feature?
+// Otherwise I'm thinking it needs to be on a certain total
+// Also need a way to wrap all entities being changed in packet to avoid sending N entities of data over the network
+
 using namespace GEngine::Networking;
 
 GameClient::GameClient()
@@ -39,6 +45,11 @@ GameClient::~GameClient()
 		NetworkManager::Instance().EndSession();
 }
 
+/// <summary>
+/// Process the packet on the client
+/// </summary>
+/// <param name="packet"> The packet being processed. </param>
+/// <returns> True if the packet was processed successfully. </returns>
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 {
 	GamePacket& gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
@@ -75,6 +86,8 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		{
 			return false;
 		}
+
+		// Instantiate an entity in a particular scene
 		case PacketType::PT_ENTITY_INSTANTIATE:
 		{
 			short id = -1;
@@ -93,6 +106,10 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 				{
 					// Make an entity here
 					NetEntity* netEntity = NetEntity::Instantiate(id, scene);
+					if (netEntity)
+					{
+						gamePacket >> *netEntity;
+					}
 				}
 			}
 			break;

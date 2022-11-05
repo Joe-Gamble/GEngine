@@ -333,6 +333,11 @@ NetEntity* NetworkManager::GetNetEntity(short id)
     return nullptr;
 }
 
+void NetworkManager::AddEntity(std::unique_ptr<NetEntity>* entityPtr)
+{
+    netEntities.emplace(entityPtr->get()->GetID(), entityPtr);
+}
+
 void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)
 {
     if (IsServer())
