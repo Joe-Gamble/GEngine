@@ -50,9 +50,9 @@ namespace GEngine
 
 			struct CloseConnectionDelayedData
 			{
-				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, long long _timeout) : connection(_connection), reason(_reason), timeout(_timeout)
-				{
-				}
+				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, long long _timeout) 
+					: connection(_connection), reason(_reason), timeout(_timeout)
+				{}
 
 				TCPConnection* connection;
 				std::string reason;

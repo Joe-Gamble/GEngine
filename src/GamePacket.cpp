@@ -143,6 +143,22 @@ GamePacket& GamePacket::operator>>(short& newShort)
     return *this;
 }
 
+GamePacket& GamePacket::operator<<(const std::string& string)
+{
+    Packet* packet = static_cast<Packet*>(this);
+    *packet << string;
+
+    return *this;
+}
+
+GamePacket& GamePacket::operator>>(std::string& string)
+{
+    Packet* packet = static_cast<Packet*>(this);
+    *packet >> string;
+
+    return *this;
+}
+
 GamePacket& GamePacket::operator<<(ComponentType componentType)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);

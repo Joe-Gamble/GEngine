@@ -18,12 +18,6 @@ namespace GEngine
 	class SceneManager
 	{
 	public:
-		static inline SceneManager& Instance()
-		{
-			static SceneManager instance;
-			return instance;
-		}
-
 		void LoadScene(SceneMold& mold);
 		void LoadScene(std::string& name);
 
@@ -38,13 +32,11 @@ namespace GEngine
 		void Tick(double& dt);
 
 	private:
-		std::shared_ptr<Scene>* LoadUIScene(std::string& sceneName, bool isAddative, bool showPreviouse);
-		std::shared_ptr<Scene>* LoadGameScene(std::string& sceneName, bool isAddative, bool showPreviouse);
+		SceneMold GetSceneData(std::string& sceneName);
+		std::shared_ptr<Scene>* AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer);
 
 		std::vector<std::shared_ptr<Scene>> gameScenes;
 		std::vector<std::shared_ptr<Scene>> uiScenes;
-
-
 	};
 }
 

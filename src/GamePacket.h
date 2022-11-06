@@ -28,6 +28,9 @@ namespace GEngine
 			GamePacket& operator << (const short& shortData);
 			GamePacket& operator >> (short& newShort);
 
+			GamePacket& operator << (const std::string& string);
+			GamePacket& operator >> (std::string& string);
+
 			GamePacket& operator << (ComponentType componentType);
 			GamePacket& operator >> (ComponentType& componentType);
 

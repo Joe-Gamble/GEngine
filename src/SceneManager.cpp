@@ -4,30 +4,14 @@
 #include "SDL.h"
 
 #include "nlohmann/json.hpp"
-#include "Application.h"
 #include "SceneFactory.h"
 
 namespace GEngine
 {
 	void SceneManager::LoadScene(std::string& name)
 	{
-		std::string stream = SDL_GetBasePath();
-		stream += "Data\\Scenes\\SceneManifest.json";
-
-		std::ifstream file(stream);
-		json data;
-		file >> data;
-		try
-		{
-			SceneMold sceneMold = data[0][name].get<SceneMold>();
-			LoadScene(sceneMold);
-		}
-		catch (json::exception e)
-		{
-			std::cout << e.what() << std::endl;
-		}
-		
-		
+		SceneMold mold = GetSceneData(name);
+		LoadScene(mold);
 	}
 
 	void SceneManager::LoadScene(SceneMold& mold)
@@ -38,9 +22,9 @@ namespace GEngine
 		std::shared_ptr<Scene>* scene = nullptr;
 
 		if (mold.type == SceneType::GAME)
-			scene = LoadGameScene(mold.path, mold.addative, mold.inclusive);
+			scene = AddScene(mold, gameScenes);
 		else if (mold.type == SceneType::UI)
-			scene = LoadUIScene(mold.path, mold.addative, mold.inclusive);
+			scene = AddScene(mold, uiScenes);
 
 		if (scene)
 		{
@@ -51,36 +35,46 @@ namespace GEngine
 		}
 	}
 
-	std::shared_ptr<Scene>* SceneManager::LoadUIScene(std::string& sceneName, bool isAddative, bool showPrevious)
+	SceneMold SceneManager::GetSceneData(std::string& sceneName)
 	{
-		if (uiScenes.size() > 0)
+		std::string stream = SDL_GetBasePath();
+		stream += "Data\\Scenes\\SceneManifest.json";
+
+		std::ifstream file(stream);
+		json data;
+		file >> data;
+		try
 		{
-			// clean up existing scenes
-			if (!isAddative)
-				uiScenes.clear();
-			else
-				uiScenes.front()->SetActive(showPrevious);
+			SceneMold sceneMold = data[0][sceneName].get<SceneMold>();
+			return sceneMold;
+		}
+		catch (json::exception e)
+		{
+			std::cout << e.what() << std::endl;
 		}
 
-		uiScenes.push_back(SceneFactory::Instance().GetScene(sceneName));
-		return &uiScenes.front();
+		return SceneMold();
 	}
 
-	std::shared_ptr<Scene>* SceneManager::LoadGameScene(std::string& sceneName, bool isAddative, bool showPrevious)
+	std::shared_ptr<Scene>* SceneManager::AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer)
 	{
-		if (gameScenes.size() > 0)
+		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(mold.path);
+
+		if (scene && !HasScene(scene))
 		{
-			// clean up existing scenes
-			if (!isAddative)
-				gameScenes.clear();
-			else
-				gameScenes.front()->SetActive(showPrevious);
+			if (sceneContainer.size() > 0)
+			{
+				// clean up existing scenes
+				if (!mold.addative)
+					sceneContainer.clear();
+				else
+					sceneContainer.front()->SetActive(mold.inclusive);
+			}
+
+			sceneContainer.push_back(SceneFactory::Instance().GetScene(mold.path));
+			return &sceneContainer.front();
 		}
-
-		Scene* scene = nullptr;
-
-		gameScenes.push_back(SceneFactory::Instance().GetScene(sceneName));
-		return &gameScenes.front();
+		return nullptr;
 	}
 
 	void SceneManager::ClearUIScenes()

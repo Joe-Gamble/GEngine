@@ -3,7 +3,7 @@
 #include "GamePacket.h"
 #include "NetworkManager.h"
 #include "SceneFactory.h"
-#include "SceneManager.h"
+#include "Application.h"
 
 // How do I register components for being sent over the network?
 // Will this be on a per/component basis?
@@ -102,7 +102,7 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			{
 				std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
 
-				if (scene != nullptr && SceneManager::Instance().HasScene(scene))
+				if (scene != nullptr && Application::HasScene(scene))
 				{
 					// Make an entity here
 					NetEntity* netEntity = NetEntity::Instantiate(id, scene);

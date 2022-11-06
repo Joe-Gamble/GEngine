@@ -74,7 +74,7 @@ void Application::Run()
 
 			HandleEvents();
 
-			Tick(delta);
+			Update(delta);
 
 			Draw();
 
@@ -88,9 +88,9 @@ void Application::HandleEvents()
 	Input::Instance().Listen();
 }
 
-void Application::Tick(double& dt)
+void Application::Update(double& dt)
 {
-	// std::cout << "App" << std::endl;
+	//m_sceneManager.Tick(dt);
 
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
@@ -128,4 +128,9 @@ void Application::Quit()
 	SDL_Delay(100);
 
 	std::cout << "Game Destroyed" << std::endl;
+}
+
+void GEngine::Application::OpenScene(std::string& sceneName)
+{
+	//m_sceneManager.LoadScene(sceneName);
 }
