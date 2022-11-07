@@ -28,13 +28,14 @@ void Application::Init(AppSettings& settings)
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
+		settings.sceneBundle->RegisterScenes();
+		settings.sceneBundle->RegisterComponents();
+
 		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, settings.ScreenWidth, settings.ScreenHeight, flags);
 		if (window)
 		{
 			std::cout << "Window created" << std::endl;
 		}
-
-		settings.sceneBundle->RegisterScenes();
 
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 		if (renderer)
@@ -48,6 +49,8 @@ void Application::Init(AppSettings& settings)
 		EventDriver::Instance().RegisterCallback(std::bind((void(*)(Uint8, Uint8, Uint8)) & Application::SetBackgroundToDefault, 90, 32, 48), Event::NETWORKING_SERVER_READY);
 
 		EventDriver::Instance().RegisterCallback(std::bind((void(*)(Uint8, Uint8, Uint8)) & Application::SetBackgroundToDefault, 48, 32, 90), Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
+
+		OpenScene("Test Scene");
 
 		isRunning = true;
 	}
@@ -90,7 +93,7 @@ void Application::HandleEvents()
 
 void Application::Update(double& dt)
 {
-	//m_sceneManager.Tick(dt);
+	m_sceneManager.Tick(dt);
 
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
@@ -130,7 +133,7 @@ void Application::Quit()
 	std::cout << "Game Destroyed" << std::endl;
 }
 
-void GEngine::Application::OpenScene(std::string& sceneName)
+void GEngine::Application::OpenScene(const std::string& sceneName)
 {
-	//m_sceneManager.LoadScene(sceneName);
+	m_sceneManager.LoadScene(sceneName);
 }

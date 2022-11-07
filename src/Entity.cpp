@@ -3,9 +3,15 @@
 
 using namespace GEngine;
 
-Entity* Entity::Instantiate(std::shared_ptr<Scene> _scene)
+Entity* Entity::Instantiate(std::shared_ptr<Scene> scene)
 {
-	Entity* go = new Entity(_scene);
+	Entity* go = new Entity(scene.get());
+	return go;
+}
+
+Entity* GEngine::Entity::Instantiate(Scene* scene)
+{
+	Entity* go = new Entity(scene);
 	return go;
 }
 

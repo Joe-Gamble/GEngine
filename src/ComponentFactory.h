@@ -7,6 +7,7 @@
 #include <functional>
 #include "Component.h"
 #include <memory>
+#include "ECS.h"
 
 namespace GEngine
 {
@@ -19,15 +20,22 @@ namespace GEngine
 			return factoy;
 		}
 
-		inline bool HasComponent(ComponentType type) { return components.count(type) > 0; }
+		inline bool HasComponent(ComponentID type) { return components.count(type) > 0; }
 
-		inline void AddComponent(ComponentType type, Component* component)
+		inline void AddComponent(Component* component)
 		{
 			std::unique_ptr<Component> uPtr{ component };
-			components.emplace(type, std::move(uPtr));
+
+			ComponentID id = getComponentTypeID<std::remove_reference_t<decltype(*component)>>();
+			components.emplace(id, std::move(uPtr));
 		}
 
-		inline std::unique_ptr<Component>* GetComponent(ComponentType type)
+		inline ComponentID GetComponentID(Component* component )
+		{
+			return getComponentTypeID<std::remove_reference_t<decltype(*component)>>();
+		}
+
+		inline std::unique_ptr<Component>* GetComponent(ComponentID type)
 		{
 			auto it = components.find(type);
 			if (it != components.end())
@@ -39,7 +47,7 @@ namespace GEngine
 		}
 
 	private:
-		std::unordered_map<ComponentType, std::unique_ptr<Component>> components;
+		std::unordered_map<ComponentID, std::unique_ptr<Component>> components;
 	};
 }
 #endif

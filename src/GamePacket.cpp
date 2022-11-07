@@ -159,7 +159,7 @@ GamePacket& GamePacket::operator>>(std::string& string)
     return *this;
 }
 
-GamePacket& GamePacket::operator<<(ComponentType componentType)
+GamePacket& GamePacket::operator<<(ComponentID componentType)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
 
@@ -170,7 +170,7 @@ GamePacket& GamePacket::operator<<(ComponentType componentType)
     return *this;
 }
 
-GamePacket& GamePacket::operator>>(ComponentType& componentType)
+GamePacket& GamePacket::operator>>(ComponentID& componentType)
 {
     uint32_t componentTypeSize = 0;
 
@@ -180,17 +180,17 @@ GamePacket& GamePacket::operator>>(ComponentType& componentType)
     if (extractionOffset + componentTypeSize > buffer.size())
         throw PacketException("[Packet::operator>>(Short& data)] - Extraction offset exceeded buffer size.");
 
-    void* data = malloc(sizeof(uint32_t));
+    void* data = malloc(sizeof(size_t));
 
     if (data != nullptr && sizeof(data) > 0)
     {
         memcpy(data, &buffer[extractionOffset], sizeof(short));
-        uint32_t* shortData = reinterpret_cast<uint32_t*>(data);
+        size_t* shortData = reinterpret_cast<size_t*>(data);
 
         if (shortData == nullptr)
             return *this;
 
-        componentType = ComponentType(*shortData);
+        componentType = ComponentID(*shortData);
 
         extractionOffset += componentTypeSize;
         std::free(data);
@@ -211,7 +211,7 @@ GamePacket& GamePacket::operator<<(NetEntity& entity)
     {
         NetComponent& component = *entry;
 
-        *this << component.GetType();
+        *this << ComponentFactory::Instance().GetComponentID(&component);
 
         *packet << component.GetMoldSize();
         packet->Append(component.Serialise(), component.GetMoldSize());
@@ -238,8 +238,8 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
 
     for (int i = 0; i < componentCount; i++)
     {
-        ComponentType componentType;
-        *this >> componentType;
+        ComponentID componentID;
+        *this >> componentID;
 
         uint32_t componentSize = 0;
         *packet >> componentSize;
@@ -248,7 +248,7 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
             throw PacketException("[GamePacket::operator>>(NetEntity& entity)] - Extraction offset exceeded buffer size.");
 
 
-        std::unique_ptr<Component>* componentInfo = ComponentFactory::Instance().GetComponent(componentType);
+        std::unique_ptr<Component>* componentInfo = ComponentFactory::Instance().GetComponent(componentID);
 
         if (componentInfo != nullptr)
         {

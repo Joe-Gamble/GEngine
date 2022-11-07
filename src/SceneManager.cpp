@@ -8,7 +8,7 @@
 
 namespace GEngine
 {
-	void SceneManager::LoadScene(std::string& name)
+	void SceneManager::LoadScene(const std::string& name)
 	{
 		std::unique_ptr<SceneMold> mold = GetSceneData(name);
 
@@ -18,7 +18,7 @@ namespace GEngine
 
 	void SceneManager::LoadScene(SceneMold& mold)
 	{
-		std::shared_ptr<Scene>* scene = nullptr;
+		std::shared_ptr<Scene> scene = nullptr;
 
 		if (mold.type == SceneType::GAME)
 			scene = AddScene(mold, gameScenes);
@@ -27,25 +27,31 @@ namespace GEngine
 
 		if (scene)
 		{
-			scene->get()->OnSceneLoad();
+			scene->OnSceneLoad();
 
-			scene->get()->SetBlocking(mold.blockInput);
-			scene->get()->SetType(mold.type);
+			scene->SetBlocking(mold.blockInput);
+			scene->SetType(mold.type);
 		}
 	}
 
-	std::unique_ptr<SceneMold> SceneManager::GetSceneData(std::string& sceneName)
+	std::unique_ptr<SceneMold> SceneManager::GetSceneData(const std::string& sceneName)
 	{
 		std::string stream = SDL_GetBasePath(); // this needs to be moved to init
 		stream += "Data\\Scenes\\SceneManifest.json";
 
 		std::ifstream file(stream);
 		json data;
-		file >> data;
 		try
 		{
+			file >> data;
 			std::unique_ptr<SceneMold> sceneMold = std::make_unique<SceneMold>(data[0][sceneName].get<SceneMold>());
-			return sceneMold;
+
+			if (sceneMold)
+			{
+				sceneMold->name = sceneName;
+				return sceneMold;
+			}
+			
 		}
 		catch (json::exception e)
 		{
@@ -55,9 +61,9 @@ namespace GEngine
 		return nullptr;
 	}
 
-	std::shared_ptr<Scene>* SceneManager::AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer)
+	std::shared_ptr<Scene> SceneManager::AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer)
 	{
-		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(mold.path);
+		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(mold.name);
 
 		if (scene && !HasScene(scene))
 		{
@@ -70,8 +76,8 @@ namespace GEngine
 					sceneContainer.front()->SetActive(mold.inclusive);
 			}
 
-			sceneContainer.push_back(SceneFactory::Instance().GetScene(mold.path));
-			return &sceneContainer.front();
+			sceneContainer.push_back(scene);
+			return sceneContainer.front();
 		}
 		return nullptr;
 	}

@@ -230,7 +230,7 @@ void GameServer::SendEntityToClients(std::unique_ptr<NetEntity>* entityPtr, bool
 
 void GEngine::Networking::GameServer::SendClientstoNewScene(std::string& scene)
 {
-	std::shared_ptr<GamePacket> scenePacket = std::make_shared<GamePacket>(PacketType::PT_SCENE_CHANGE);
+	std::shared_ptr<GamePacket> scenePacket = std::make_shared<GamePacket>(PacketType::PT_SCENE_LOAD);
 	*scenePacket << scene;
 
 	SendPacket(scenePacket);

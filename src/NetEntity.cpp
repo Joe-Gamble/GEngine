@@ -2,7 +2,7 @@
 
 using namespace GEngine::Networking;
 
-NetEntity::NetEntity(short& _netID, std::shared_ptr<Scene> _scene) : netID(_netID), NetEntity::Entity(_scene)
+NetEntity::NetEntity(short& _netID, std::shared_ptr<Scene> _scene) : netID(_netID), NetEntity::Entity(_scene.get())
 {
 
 }

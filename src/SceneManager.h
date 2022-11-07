@@ -19,7 +19,7 @@ namespace GEngine
 	{
 	public:
 		void LoadScene(SceneMold& mold);
-		void LoadScene(std::string& name);
+		void LoadScene(const std::string& name);
 
 		void ClearUIScenes();
 		void ClearScenes();
@@ -32,8 +32,8 @@ namespace GEngine
 		void Tick(double& dt);
 
 	private:
-		std::unique_ptr<SceneMold> GetSceneData(std::string& sceneName);
-		std::shared_ptr<Scene>* AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer);
+		std::unique_ptr<SceneMold> GetSceneData(const std::string& sceneName);
+		std::shared_ptr<Scene> AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer);
 
 		std::vector<std::shared_ptr<Scene>> gameScenes;
 		std::vector<std::shared_ptr<Scene>> uiScenes;

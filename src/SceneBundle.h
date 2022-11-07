@@ -9,6 +9,8 @@
 #include "Component.h"
 #include "NetTransform.h"
 
+#include "TestScene.h"
+
 namespace GEngine
 {
 	struct SceneBundle
@@ -16,13 +18,13 @@ namespace GEngine
 		// Register scenes of the application
 		virtual void RegisterScenes() 
 		{
-			SceneFactory::Instance().AddScene("Default Scene", new Scene());
+			SceneFactory::Instance().AddScene("Test Scene", std::make_unique<TestScene>());
 		}
 
 		// Register componnets for the application 
 		virtual void RegisterComponents()
 		{
-			ComponentFactory::Instance().AddComponent(ComponentType::TYPE_NET_TRANSFORM, new NetTransform());
+			ComponentFactory::Instance().AddComponent(new NetTransform());
 		}
 	};
 }

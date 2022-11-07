@@ -21,11 +21,6 @@ namespace GEngine
 		void ApplyData(const void* data) override;
 		bool SendData();
 
-		inline ComponentType GetType() override
-		{
-			return ComponentType::TYPE_NET_TRANSFORM;
-		}
-
 		inline const uint32_t GetMoldSize() override
 		{
 			return sizeof(NetTransformMold);

@@ -12,7 +12,7 @@ namespace GEngine
 	{
 		struct SceneMold
 		{
-			std::string path; // scene name for json loading
+			std::string name; // scene name for scene factory // set after json is loaded
 			bool addative; // does the scene add to anything thats current present
 			bool inclusive; // does this scene include previous scene entities
 			bool blockInput; // block input to any previous panels
@@ -21,7 +21,6 @@ namespace GEngine
 
 
 		inline void from_json(const nlohmann::json& j, SceneMold& s) {
-			j.at("path").get_to(s.path);
 			j.at("isAddative").get_to(s.addative);
 			j.at("isInclusive").get_to(s.inclusive);
 			j.at("blockInput").get_to(s.blockInput);

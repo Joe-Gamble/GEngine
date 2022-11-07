@@ -21,7 +21,7 @@ namespace GEngine
 		inline static SDL_Renderer* GetRenderer() { return renderer; }		
 
 		inline static bool HasScene(std::shared_ptr<Scene> scene) { return m_sceneManager.HasScene(scene); }
-		static void OpenScene(std::string& sceneName);
+		static void OpenScene(const std::string& sceneName);
 	private:
 		static void Init(AppSettings& settings);
 

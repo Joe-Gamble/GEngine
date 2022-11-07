@@ -165,6 +165,7 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -203,6 +204,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneMold.h" />
     <ClInclude Include="TestGameMode.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2Mold.h" />

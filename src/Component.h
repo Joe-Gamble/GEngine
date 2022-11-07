@@ -4,9 +4,7 @@
 #define COMPONENT_H
 
 #include <iostream>  
-#include "ComponentType.h"
 #include <memory>
-
 
 namespace GEngine
 {
@@ -17,11 +15,11 @@ namespace GEngine
 		virtual ~Component() {}
 
 		inline bool IsEnabled() { return m_isEnabled; }
+		virtual void ApplyData(const void* data) {};
 		void SetEnabled(bool _enabled) { m_isEnabled = _enabled; }
 
 		virtual const uint32_t GetMoldSize() { return 0; }
 
-		virtual ComponentType GetType() { return ComponentType::TYPE_UNDEFINED; };
 		virtual const void* Serialise() {
 			std::cout << "ERROR: virtual const void* Serialise(): no implementation found. " << std::endl;
 			return nullptr;
@@ -34,8 +32,6 @@ namespace GEngine
 		virtual void Init() {};
 		virtual void Update(double& dt) {}
 		virtual void Render() {}
-
-		virtual void ApplyData(const void* data) {};
 		
 	private:
 		bool m_isEnabled = true;

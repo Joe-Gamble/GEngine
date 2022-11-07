@@ -8,7 +8,7 @@
 
 namespace GEngine
 {
-	enum SceneType
+	enum SceneType :uint16_t
 	{
 		UNKNOWN = -1,
 		GAME = 0,
@@ -38,15 +38,14 @@ namespace GEngine
 		inline bool IsBlocking() { return m_blocking; }
 		inline bool IsType(SceneType _type) { return type == _type; }
 		inline SceneType GetType() { return type; }
-		
 
-		inline std::unique_ptr<EntityManager>* GetEntityManager() { return &m_entityManager; }
-	private:
+		inline EntityManager* GetEntityManager() { return m_entityManager.get(); }
+
+	protected:
 		std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>(this);
 
 		bool m_isActive = false;
 		bool m_blocking = false;
-
 		SceneType type = SceneType::UNKNOWN;
 	};
 }
