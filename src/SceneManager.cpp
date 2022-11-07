@@ -10,15 +10,14 @@ namespace GEngine
 {
 	void SceneManager::LoadScene(std::string& name)
 	{
-		SceneMold mold = GetSceneData(name);
-		LoadScene(mold);
+		std::unique_ptr<SceneMold> mold = GetSceneData(name);
+
+		if (mold)
+			LoadScene(*mold.get());
 	}
 
 	void SceneManager::LoadScene(SceneMold& mold)
 	{
-		if (mold.type == SceneType::UNKNOWN)
-			return;
-
 		std::shared_ptr<Scene>* scene = nullptr;
 
 		if (mold.type == SceneType::GAME)
@@ -35,9 +34,9 @@ namespace GEngine
 		}
 	}
 
-	SceneMold SceneManager::GetSceneData(std::string& sceneName)
+	std::unique_ptr<SceneMold> SceneManager::GetSceneData(std::string& sceneName)
 	{
-		std::string stream = SDL_GetBasePath();
+		std::string stream = SDL_GetBasePath(); // this needs to be moved to init
 		stream += "Data\\Scenes\\SceneManifest.json";
 
 		std::ifstream file(stream);
@@ -45,7 +44,7 @@ namespace GEngine
 		file >> data;
 		try
 		{
-			SceneMold sceneMold = data[0][sceneName].get<SceneMold>();
+			std::unique_ptr<SceneMold> sceneMold = std::make_unique<SceneMold>(data[0][sceneName].get<SceneMold>());
 			return sceneMold;
 		}
 		catch (json::exception e)
@@ -53,7 +52,7 @@ namespace GEngine
 			std::cout << e.what() << std::endl;
 		}
 
-		return SceneMold();
+		return nullptr;
 	}
 
 	std::shared_ptr<Scene>* SceneManager::AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer)

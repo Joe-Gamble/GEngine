@@ -32,7 +32,7 @@ namespace GEngine
 		void Tick(double& dt);
 
 	private:
-		SceneMold GetSceneData(std::string& sceneName);
+		std::unique_ptr<SceneMold> GetSceneData(std::string& sceneName);
 		std::shared_ptr<Scene>* AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer);
 
 		std::vector<std::shared_ptr<Scene>> gameScenes;
