@@ -16,6 +16,11 @@ namespace GEngine
 			LoadScene(*mold.get());
 	}
 
+	void SceneManager::Init()
+	{
+		path = SDL_GetBasePath();
+	}
+
 	void SceneManager::LoadScene(SceneMold& mold)
 	{
 		std::shared_ptr<Scene> scene = nullptr;
@@ -27,6 +32,7 @@ namespace GEngine
 
 		if (scene)
 		{
+			std::cout << "Scene loaded successfully: " << mold.name << std::endl;
 			scene->OnSceneLoad();
 
 			scene->SetBlocking(mold.blockInput);
@@ -36,8 +42,7 @@ namespace GEngine
 
 	std::unique_ptr<SceneMold> SceneManager::GetSceneData(const std::string& sceneName)
 	{
-		std::string stream = SDL_GetBasePath(); // this needs to be moved to init
-		stream += "Data\\Scenes\\SceneManifest.json";
+		std::string stream = path += "Data\\Scenes\\SceneManifest.json";
 
 		std::ifstream file(stream);
 		json data;
