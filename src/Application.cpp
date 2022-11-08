@@ -28,6 +28,8 @@ void Application::Init(AppSettings& settings)
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
+		m_sceneManager.Init();
+
 		settings.sceneBundle->RegisterScenes();
 		settings.sceneBundle->RegisterComponents();
 
@@ -49,8 +51,6 @@ void Application::Init(AppSettings& settings)
 		EventDriver::Instance().RegisterCallback(std::bind((void(*)(Uint8, Uint8, Uint8)) & Application::SetBackgroundToDefault, 90, 32, 48), Event::NETWORKING_SERVER_READY);
 
 		EventDriver::Instance().RegisterCallback(std::bind((void(*)(Uint8, Uint8, Uint8)) & Application::SetBackgroundToDefault, 48, 32, 90), Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-
-		OpenScene("Test Scene");
 
 		isRunning = true;
 	}
@@ -104,7 +104,7 @@ void Application::Update(double& dt)
 		// home 192.168.0.203
 		// work 192.168.0.203
 		// bnb 192.168.1.222
-		NetworkManager::Instance().JoinServer("192.168.1.222");
+		NetworkManager::Instance().JoinServer("192.168.0.203");
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_E))
 	{
@@ -135,5 +135,6 @@ void Application::Quit()
 
 void GEngine::Application::OpenScene(const std::string& sceneName)
 {
+	std::cout << "Opening Scene: " << sceneName << std::endl;
 	m_sceneManager.LoadScene(sceneName);
 }

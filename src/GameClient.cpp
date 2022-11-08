@@ -77,11 +77,14 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			break;
 		}
 
-		//case PacketType::PT_SCENE_CHANGE:
-		//{
-		//	// Load the scene
-		//	break;
-		//}
+		case PacketType::PT_SCENE_LOAD:
+		{
+			std::string sceneName;
+			gamePacket >> sceneName;
+
+			Application::OpenScene(sceneName);
+			break;
+		}
 		case PacketType::PT_INVALID:
 		{
 			return false;

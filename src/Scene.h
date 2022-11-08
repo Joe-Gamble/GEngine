@@ -21,13 +21,16 @@ namespace GEngine
 		Scene();
 		~Scene();
 
-		virtual void Update(double& dt);
-		virtual void Render();
-
+		void Update(double& dt);
+		void Render();
 		virtual void OnSceneLoad() {};
 		virtual void OnSceneDestroy() {};
 
+	protected:		
+		virtual void OnUpdate(double& dt) {}
+		virtual void OnRender() {}
 
+	public:
 		std::unique_ptr<NetEntity>* AddNetEntity(NetEntity* entity);
 
 		inline void SetActive(bool active) { m_isActive = active; }

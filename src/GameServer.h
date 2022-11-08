@@ -66,7 +66,7 @@ namespace GEngine
 
 			std::unique_ptr<NetEntity>* MakeEntity(std::shared_ptr<Scene> scene);
 			void SendEntityToClients(std::unique_ptr<NetEntity>* entity, bool isNew);
-			void SendClientstoNewScene(std::string& scene);
+			void SendClientstoNewScene(const std::string& scene);
 
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;

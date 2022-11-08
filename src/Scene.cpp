@@ -12,12 +12,17 @@ Scene::~Scene()
 
 void Scene::Update(double& dt)
 {
+	m_entityManager->Refresh();
 	m_entityManager->Update(dt);
+
+	OnUpdate(dt);
 }
 
 void Scene::Render()
 {
 	m_entityManager->Render();
+
+	OnRender();
 }
 
 std::unique_ptr<NetEntity>* Scene::AddNetEntity(NetEntity* entity)

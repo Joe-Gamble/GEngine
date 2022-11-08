@@ -35,13 +35,7 @@ bool GameServer::InitialiseServer()
 
 void GameServer::OnConnect(TCPConnection& newConnection) noexcept
 {
-	//NetTransform transform = NetTransform();
-	//transform.SetPosition(Vector2(0, 12));
-
-	//std::shared_ptr<GamePacket> transformPacket = std::make_shared<GamePacket>(PacketType::PT_TRANSFORM);
-	//*transformPacket << transform;
-
-	//newConnection.pm_outgoing.Append(transformPacket);
+	SendClientstoNewScene("Test Scene");
 }
 
 void GameServer::OnDisconnect(TCPConnection& lostConnection, const std::string& reason)
@@ -228,7 +222,7 @@ void GameServer::SendEntityToClients(std::unique_ptr<NetEntity>* entityPtr, bool
 	SendPacket(entityPacket);
 }
 
-void GEngine::Networking::GameServer::SendClientstoNewScene(std::string& scene)
+void GEngine::Networking::GameServer::SendClientstoNewScene(const std::string& scene)
 {
 	std::shared_ptr<GamePacket> scenePacket = std::make_shared<GamePacket>(PacketType::PT_SCENE_LOAD);
 	*scenePacket << scene;
