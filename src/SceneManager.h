@@ -18,6 +18,8 @@ namespace GEngine
 	class SceneManager
 	{
 	public:
+		void Init();
+
 		void LoadScene(SceneMold& mold);
 		void LoadScene(const std::string& name);
 
@@ -37,6 +39,8 @@ namespace GEngine
 
 		std::vector<std::shared_ptr<Scene>> gameScenes;
 		std::vector<std::shared_ptr<Scene>> uiScenes;
+
+		std::string path;
 	};
 }
 
