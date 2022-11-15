@@ -16,7 +16,7 @@ namespace GEngine
 		Transform();
 		Transform(const Transform& transform);
 
-		void Update(double& dt) override;
+		void OnUpdate(double& dt) override;
 
 		inline const Vector2* GetPosition() { return &position; }
 		inline void SetPosition(const Vector2& _position) { position = _position; }

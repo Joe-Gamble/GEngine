@@ -50,9 +50,9 @@ namespace GEngine
 
 			struct CloseConnectionDelayedData
 			{
-				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, long long _timeout) : connection(_connection), reason(_reason), timeout(_timeout)
-				{
-				}
+				CloseConnectionDelayedData(TCPConnection* _connection, std::string& _reason, long long _timeout) 
+					: connection(_connection), reason(_reason), timeout(_timeout)
+				{}
 
 				TCPConnection* connection;
 				std::string reason;
@@ -64,8 +64,9 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
-			NetEntity& MakeEntity(std::shared_ptr<Scene> scene);
-			void SendEntityToClients(Entity& entity);
+			std::unique_ptr<NetEntity>* MakeEntity(std::shared_ptr<Scene> scene);
+			void SendEntityToClients(std::unique_ptr<NetEntity>* entity, bool isNew);
+			void SendClientstoNewScene(const std::string& scene);
 
 		protected:
 			virtual void OnConnect(TCPConnection& newConnection) noexcept override;

@@ -8,7 +8,6 @@
 #include "GameMode.h";
 #include "TeamIDDefaults.h"
 #include "GameTeam.h"
-// SceneManager
 
 namespace GEngine
 {

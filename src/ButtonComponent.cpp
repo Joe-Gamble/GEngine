@@ -7,7 +7,7 @@ GEngine::Button::Button(int x, int y, void(*callback)())
 {
 }
 
-void GEngine::Button::Update(double& dt)
+void GEngine::Button::OnUpdate(double& dt)
 {
 	if (IsEnabled())
 	{

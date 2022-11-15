@@ -158,6 +158,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameTeam.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="NetComponent.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetEntity.cpp" />
@@ -165,12 +166,14 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="ButtonComponent.h" />
+    <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="EventDriver.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
@@ -202,6 +205,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneMold.h" />
     <ClInclude Include="TestGameMode.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2Mold.h" />

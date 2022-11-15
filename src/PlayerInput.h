@@ -9,7 +9,7 @@ namespace GEngine
 {
 	struct PlayerInput : public Component
 	{
-		void Update(double& dt) override;
+		void OnUpdate(double& dt) override;
 	};
 }
 

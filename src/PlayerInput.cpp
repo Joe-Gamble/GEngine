@@ -3,7 +3,7 @@
 
 using namespace GEngine;
 
-void PlayerInput::Update(double& dt)
+void PlayerInput::OnUpdate(double& dt)
 {
 
 }

@@ -3,7 +3,13 @@
 #include "GamePacket.h"
 #include "NetworkManager.h"
 #include "SceneFactory.h"
-#include "SceneManager.h"
+#include "Application.h"
+
+// How do I register components for being sent over the network?
+// Will this be on a per/component basis?
+// Does a component need a "force update" feature?
+// Otherwise I'm thinking it needs to be on a certain total
+// Also need a way to wrap all entities being changed in packet to avoid sending N entities of data over the network
 
 using namespace GEngine::Networking;
 
@@ -39,22 +45,16 @@ GameClient::~GameClient()
 		NetworkManager::Instance().EndSession();
 }
 
+/// <summary>
+/// Process the packet on the client
+/// </summary>
+/// <param name="packet"> The packet being processed. </param>
+/// <returns> True if the packet was processed successfully. </returns>
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 {
 	GamePacket& gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
 	switch (packet->GetPacketType())
 	{
-		/*case PacketType::PT_TRANSFORM:
-		{
-			NetTransform transform = NetTransform();
-			gamePacket >> transform;
-
-			int x = transform.GetPosition().X();
-			int y = transform.GetPosition().Y();
-
-			std::cout << "Recieved Transform: " << x << " " << y << std::endl;
-			break;
-		}*/
 		case PacketType::PT_KICK:
 		{
 			std::string reason;
@@ -66,15 +66,16 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			break;
 		}
 
-		//case PacketType::PT_SCENE_CHANGE:
-		//{
-		//	// Load the scene
-		//	break;
-		//}
-		case PacketType::PT_INVALID:
+		case PacketType::PT_SCENE_LOAD:
 		{
-			return false;
+			std::string sceneName;
+			gamePacket >> sceneName;
+
+			Application::OpenScene(sceneName);
+			break;
 		}
+
+		// Instantiate an entity in a particular scene
 		case PacketType::PT_ENTITY_INSTANTIATE:
 		{
 			short id = -1;
@@ -89,28 +90,38 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			{
 				std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
 
-				if (scene != nullptr && SceneManager::Instance().HasScene(scene))
+				if (scene != nullptr && Application::HasScene(scene))
 				{
 					// Make an entity here
 					NetEntity* netEntity = NetEntity::Instantiate(id, scene);
+					if (netEntity)
+					{
+						gamePacket >> *netEntity;
+					}
 				}
 			}
 			break;
 
 		}
+
 		case PacketType::PT_ENTITY_CHANGE: // Entity exists, and we ar emaking changes to new/preexisting components
 		{
 			short id = -1;
 			gamePacket >> id;
 
-			NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+			std::unique_ptr<NetEntity>* entity = NetworkManager::Instance().GetNetEntity(id);
 
 			if (entity != nullptr)
 			{
-				gamePacket >> *entity;
+				gamePacket >> **entity;
 			}
 
 			break;
+		}
+
+		case PacketType::PT_INVALID:
+		{
+			return false;
 		}
 		default:
 			return false;

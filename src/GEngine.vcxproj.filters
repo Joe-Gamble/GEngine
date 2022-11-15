@@ -82,6 +82,9 @@
     <Filter Include="Header Files\Engine\Data\GameMode">
       <UniqueIdentifier>{129e485b-5e60-4901-b9d6-e1af8d6f3c33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Data\Scenes\Generic">
+      <UniqueIdentifier>{245acde9-13a5-4919-ba70-2a9431af2ba7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -143,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="ButtonComponent.cpp">
       <Filter>Source Files\Engine\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Source Files\Engine\Data\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="NetComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,13 +218,7 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files\Engine\Data\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Header Files\Engine\Data\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneMold.h">
       <Filter>Header Files\Engine\Data\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="AppSettings.h">
@@ -251,7 +254,19 @@
     <ClInclude Include="TestGameMode.h">
       <Filter>Header Files\Engine\Data\GameMode</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentFactory.h">
+      <Filter>Header Files\Engine\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Engine\Data\Scenes\Generic</Filter>
+    </ClInclude>
     <ClInclude Include="SceneBundle.h">
+      <Filter>Header Files\Engine\Data\Scenes\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneMold.h">
+      <Filter>Header Files\Engine\Data\Scenes\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
       <Filter>Header Files\Engine\Data\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

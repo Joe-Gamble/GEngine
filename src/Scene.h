@@ -8,7 +8,7 @@
 
 namespace GEngine
 {
-	enum SceneType
+	enum SceneType :uint16_t
 	{
 		UNKNOWN = -1,
 		GAME = 0,
@@ -21,14 +21,18 @@ namespace GEngine
 		Scene();
 		~Scene();
 
-		virtual void Update(double& dt);
-		virtual void Render();
-
+		void Update(double& dt);
+		void Render();
 		virtual void OnSceneLoad() {};
 		virtual void OnSceneDestroy() {};
 
+	protected:		
+		virtual void OnUpdate(double& dt) {}
+		virtual void OnRender() {}
 
-		void AddNetEntity(NetEntity* entity);
+	public:
+		std::unique_ptr<NetEntity>* AddNetEntity(NetEntity* entity);
+		std::unique_ptr<Entity>* AddEntity(Entity* entity);
 
 		inline void SetActive(bool active) { m_isActive = active; }
 		inline void SetBlocking(bool blocking) { m_blocking = blocking; }
@@ -38,15 +42,14 @@ namespace GEngine
 		inline bool IsBlocking() { return m_blocking; }
 		inline bool IsType(SceneType _type) { return type == _type; }
 		inline SceneType GetType() { return type; }
-		
 
-		inline std::unique_ptr<EntityManager>* GetEntityManager() { return &m_entityManager; }
+		inline EntityManager& GetEntityManager() { return *m_entityManager.get(); }
+
 	private:
-		std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>(this);
+		std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>();
 
 		bool m_isActive = false;
 		bool m_blocking = false;
-
 		SceneType type = SceneType::UNKNOWN;
 	};
 }

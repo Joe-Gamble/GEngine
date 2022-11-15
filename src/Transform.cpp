@@ -15,7 +15,7 @@ Transform::Transform(const Transform& transform)
 	scale = transform.scale;
 }
 
-void Transform::Update(double& dt)
+void Transform::OnUpdate(double& dt)
 {
 	std::cout << position.X() << std::endl;
 }

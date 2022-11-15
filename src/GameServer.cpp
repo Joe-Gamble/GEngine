@@ -3,6 +3,7 @@
 #include "EventDriver.h"
 #include "NetworkManager.h"
 #include "Scene.h"
+#include "SceneFactory.h"
 
 using namespace GEngine::Networking;
 
@@ -34,13 +35,7 @@ bool GameServer::InitialiseServer()
 
 void GameServer::OnConnect(TCPConnection& newConnection) noexcept
 {
-	//NetTransform transform = NetTransform();
-	//transform.SetPosition(Vector2(0, 12));
-
-	//std::shared_ptr<GamePacket> transformPacket = std::make_shared<GamePacket>(PacketType::PT_TRANSFORM);
-	//*transformPacket << transform;
-
-	//newConnection.pm_outgoing.Append(transformPacket);
+	SendClientstoNewScene("Test Scene");
 }
 
 void GameServer::OnDisconnect(TCPConnection& lostConnection, const std::string& reason)
@@ -77,9 +72,15 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 	}
 	case PacketType::PT_SCENE_LOAD:
 	{
-		// send all clients to new scene?
-		// or
-		// is this a confirmation that a client has loaded a scene?
+		// Send all clients an entity to spawn
+		std::string sceneName;
+		*packet >> sceneName;
+
+		if (SceneFactory::Instance().HasScene(sceneName))
+		{
+			SendClientstoNewScene(sceneName);
+		}
+
 		break;
 	}
 	case PacketType::PT_ENTITY_CHANGE:
@@ -93,11 +94,20 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 	case PacketType::PT_ENTITY_INSTANTIATE:
 	{
 		// Send all clients an entity to spawn
+		std::string sceneName;
+		Packet& packet = static_cast<Packet&>(gamePacket);
+
+		packet >> sceneName;
+
+		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
+		std::unique_ptr<NetEntity>* entityPtr = MakeEntity(scene);
+
+		SendEntityToClients(entityPtr, true);
 		break;
 	}
 	case PacketType::PT_INVALID:
 	{
-		break;
+		return false;
 	}
 	default:
 		return false;
@@ -189,20 +199,35 @@ void GameServer::Tick()
 	}
 }
 
-NetEntity& GameServer::MakeEntity(std::shared_ptr<Scene> scene)
+std::unique_ptr<NetEntity>* GameServer::MakeEntity(std::shared_ptr<Scene> scene)
 {
 	short netID = entityID++;
 	NetEntity* entity = NetEntity::Instantiate(netID, scene);
 
+	std::unique_ptr<NetEntity>* entityPtr = scene->AddNetEntity(entity);
+	NetworkManager::Instance().AddEntity(entityPtr);
 
-	scene->AddNetEntity(entity);
-
-	return *entity;
+	return entityPtr;
 }
 
-void GameServer::SendEntityToClients(Entity& entity)
+void GameServer::SendEntityToClients(std::unique_ptr<NetEntity>* entityPtr, bool isNew)
 {
+	PacketType type = isNew ? PacketType::PT_ENTITY_INSTANTIATE : PacketType::PT_ENTITY_CHANGE;
 
+	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(type);
+
+	NetEntity& entity = *entityPtr->get();
+	*entityPacket << entity;
+
+	SendPacket(entityPacket);
+}
+
+void GEngine::Networking::GameServer::SendClientstoNewScene(const std::string& scene)
+{
+	std::shared_ptr<GamePacket> scenePacket = std::make_shared<GamePacket>(PacketType::PT_SCENE_LOAD);
+	*scenePacket << scene;
+
+	SendPacket(scenePacket);
 }
 
 void GameServer::EndSession()

@@ -28,13 +28,16 @@ void Application::Init(AppSettings& settings)
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
+		m_sceneManager.Init();
+
+		settings.sceneBundle->RegisterScenes();
+		settings.sceneBundle->RegisterComponents();
+
 		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, settings.ScreenWidth, settings.ScreenHeight, flags);
 		if (window)
 		{
 			std::cout << "Window created" << std::endl;
 		}
-
-		settings.sceneBundle->RegisterScenes();
 
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 		if (renderer)
@@ -74,7 +77,7 @@ void Application::Run()
 
 			HandleEvents();
 
-			Tick(delta);
+			Update(delta);
 
 			Draw();
 
@@ -88,9 +91,9 @@ void Application::HandleEvents()
 	Input::Instance().Listen();
 }
 
-void Application::Tick(double& dt)
+void Application::Update(double& dt)
 {
-	// std::cout << "App" << std::endl;
+	m_sceneManager.Tick(dt);
 
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
@@ -101,7 +104,8 @@ void Application::Tick(double& dt)
 		// home 192.168.0.203
 		// work 192.168.0.203
 		// bnb 192.168.1.222
-		NetworkManager::Instance().JoinServer("192.168.1.222");
+		// bnb2 169.254.160.172
+		NetworkManager::Instance().JoinServer("127.0.0.1");
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_E))
 	{
@@ -128,4 +132,10 @@ void Application::Quit()
 	SDL_Delay(100);
 
 	std::cout << "Game Destroyed" << std::endl;
+}
+
+void GEngine::Application::OpenScene(const std::string& sceneName)
+{
+	std::cout << "Opening Scene: " << sceneName << std::endl;
+	m_sceneManager.LoadScene(sceneName);
 }
