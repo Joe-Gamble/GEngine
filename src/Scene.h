@@ -32,6 +32,7 @@ namespace GEngine
 
 	public:
 		std::unique_ptr<NetEntity>* AddNetEntity(NetEntity* entity);
+		std::unique_ptr<Entity>* AddEntity(Entity* entity);
 
 		inline void SetActive(bool active) { m_isActive = active; }
 		inline void SetBlocking(bool blocking) { m_blocking = blocking; }
@@ -42,10 +43,10 @@ namespace GEngine
 		inline bool IsType(SceneType _type) { return type == _type; }
 		inline SceneType GetType() { return type; }
 
-		inline EntityManager* GetEntityManager() { return m_entityManager.get(); }
+		inline EntityManager& GetEntityManager() { return *m_entityManager.get(); }
 
-	protected:
-		std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>(this);
+	private:
+		std::unique_ptr<EntityManager> m_entityManager = std::make_unique<EntityManager>();
 
 		bool m_isActive = false;
 		bool m_blocking = false;

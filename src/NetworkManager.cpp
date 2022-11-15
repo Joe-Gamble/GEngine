@@ -108,7 +108,7 @@ bool NetworkManager::JoinServer(const std::string& ip)
 
         return true;
     }
-    std::cout << "Client already exists or this was called on a dedicated server. " << std::endl;
+
     return false;
 }
 
@@ -321,13 +321,13 @@ void NetworkManager::EndSession()
     }
 }
 
-NetEntity* NetworkManager::GetNetEntity(short id)
+std::unique_ptr<NetEntity>* NetworkManager::GetNetEntity(short id)
 {
     auto it = netEntities.find(id); 
     
     if (it != netEntities.end())
     {
-        return it->second->get();
+        return it->second;
     }
     
     return nullptr;
@@ -336,6 +336,28 @@ NetEntity* NetworkManager::GetNetEntity(short id)
 void NetworkManager::AddEntity(std::unique_ptr<NetEntity>* entityPtr)
 {
     netEntities.emplace(entityPtr->get()->GetID(), entityPtr);
+}
+
+/// <summary>
+/// Send entity data through the network
+/// </summary>
+/// <param name="id"> The id of the Entity. </param>
+void NetworkManager::SendNetEntity(short id)
+{
+    std::unique_ptr<NetEntity>* entity = GetNetEntity(id);
+
+    if (entity == nullptr)
+        return;
+
+    if (HasAuthority())
+    {
+        GetServer().SendEntityToClients(entity, false);
+    }
+    else
+    {
+        GetClient();
+        // Client Send Entity here
+    }
 }
 
 void NetworkManager::SendPacket(std::shared_ptr<GamePacket>& packet)

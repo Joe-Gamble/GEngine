@@ -11,13 +11,14 @@ using namespace GEngine::GUtility;
 
 namespace GEngine
 {
+
 	struct NetTransform : NetComponent
 	{
 	public:
 		const void* Serialise() override;
 		void Deserialise() override;
 
-		void Update(double& dt) override;
+		void OnUpdate(double& dt) override;
 		void ApplyData(const void* data) override;
 		bool SendData();
 

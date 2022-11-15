@@ -158,6 +158,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameTeam.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="NetComponent.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetEntity.cpp" />

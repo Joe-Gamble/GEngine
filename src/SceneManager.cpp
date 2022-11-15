@@ -33,7 +33,7 @@ namespace GEngine
 		if (scene)
 		{
 			std::cout << "Scene loaded successfully: " << mold.name << std::endl;
-			scene->OnSceneLoad();
+			scene.get()->OnSceneLoad();
 
 			scene->SetBlocking(mold.blockInput);
 			scene->SetType(mold.type);
@@ -49,14 +49,10 @@ namespace GEngine
 		try
 		{
 			file >> data;
-			std::unique_ptr<SceneMold> sceneMold = std::make_unique<SceneMold>(data[0][sceneName].get<SceneMold>());
+			SceneMold sceneMold =  data[0][sceneName].get<SceneMold>();
 
-			if (sceneMold)
-			{
-				sceneMold->name = sceneName;
-				return sceneMold;
-			}
-			
+			sceneMold.name = sceneName;
+			return std::make_unique<SceneMold>(sceneMold);
 		}
 		catch (json::exception e)
 		{

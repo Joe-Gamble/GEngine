@@ -32,7 +32,6 @@ namespace GEngine
 			void OnDisconnect(std::string reason) override;
 
 			//void OnConnectFail() override;
-			
 		};
 	}
 }

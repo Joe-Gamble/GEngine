@@ -14,13 +14,9 @@ namespace GEngine
 {
 	class EntityManager
 	{
-	public:
-		EntityManager(Scene* scene) : m_scene(scene) {}
 	private:
 		std::vector<std::unique_ptr<Entity>> entities;
 		std::vector<std::unique_ptr<NetEntity>> netEntities;
-
-		Scene* m_scene = nullptr;
 
 	public:
 		void Update(double& dt);
@@ -28,7 +24,7 @@ namespace GEngine
 
 		void Refresh();
 
-		Entity& AddEntity(Entity* entity);
+		std::unique_ptr<Entity>& AddEntity(Entity* entity);
 		std::unique_ptr<NetEntity>& AddNetEntity(NetEntity* entity);
 	};
 }

@@ -55,17 +55,6 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 	GamePacket& gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
 	switch (packet->GetPacketType())
 	{
-		/*case PacketType::PT_TRANSFORM:
-		{
-			NetTransform transform = NetTransform();
-			gamePacket >> transform;
-
-			int x = transform.GetPosition().X();
-			int y = transform.GetPosition().Y();
-
-			std::cout << "Recieved Transform: " << x << " " << y << std::endl;
-			break;
-		}*/
 		case PacketType::PT_KICK:
 		{
 			std::string reason;
@@ -84,10 +73,6 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 			Application::OpenScene(sceneName);
 			break;
-		}
-		case PacketType::PT_INVALID:
-		{
-			return false;
 		}
 
 		// Instantiate an entity in a particular scene
@@ -118,19 +103,25 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			break;
 
 		}
+
 		case PacketType::PT_ENTITY_CHANGE: // Entity exists, and we ar emaking changes to new/preexisting components
 		{
 			short id = -1;
 			gamePacket >> id;
 
-			NetEntity* entity = NetworkManager::Instance().GetNetEntity(id);
+			std::unique_ptr<NetEntity>* entity = NetworkManager::Instance().GetNetEntity(id);
 
 			if (entity != nullptr)
 			{
-				gamePacket >> *entity;
+				gamePacket >> **entity;
 			}
 
 			break;
+		}
+
+		case PacketType::PT_INVALID:
+		{
+			return false;
 		}
 		default:
 			return false;

@@ -20,7 +20,7 @@ namespace GEngine
 	{
 	public:
 		Button(int x, int y, void (*callback)());
-		void Update(double& dt) override;
+		void OnUpdate(double& dt) override;
 		void Render() override;
 	private:
 		SDL_Rect m_Rect;

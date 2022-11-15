@@ -9,7 +9,7 @@
 /// <summary>
 /// Net Entity
 /// Intended to be a networked object that can be updated between client instances
-/// Mainly designed for player controlled objects
+/// Mainly designed for player controlled objects, or maybe UI features like score?
 /// </summary>
 
 namespace GEngine

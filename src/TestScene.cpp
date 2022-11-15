@@ -3,13 +3,14 @@
 
 using namespace GEngine;
 
+
+// Check if using scene factory helps
 void GEngine::TestScene::OnSceneLoad()
 {
-	Entity& testEntity = *Entity::Instantiate(this);
-	testEntity.AddComponent<Transform>();
+	Entity* testEntity = Entity::Instantiate(this);
+	testEntity->AddComponent<Transform>();
 
-	GetEntityManager()->AddEntity(&testEntity);
-}
+	AddEntity(testEntity);}
 
 void GEngine::TestScene::OnSceneDestroy()
 {

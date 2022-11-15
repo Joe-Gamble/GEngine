@@ -30,7 +30,9 @@ namespace GEngine
 		Entity* entity = nullptr;
 
 		virtual void Init() {};
-		virtual void Update(double& dt) {}
+		virtual void Update(double& dt) { OnUpdate(dt); }
+
+		virtual void OnUpdate(double& dt) {}
 		virtual void Render() {}
 		
 	private:

@@ -104,7 +104,8 @@ void Application::Update(double& dt)
 		// home 192.168.0.203
 		// work 192.168.0.203
 		// bnb 192.168.1.222
-		NetworkManager::Instance().JoinServer("192.168.0.203");
+		// bnb2 169.254.160.172
+		NetworkManager::Instance().JoinServer("127.0.0.1");
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_E))
 	{

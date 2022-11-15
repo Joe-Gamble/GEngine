@@ -4,6 +4,7 @@ using namespace GEngine;
 
 Scene::Scene()
 {
+	
 }
 
 Scene::~Scene()
@@ -28,6 +29,11 @@ void Scene::Render()
 std::unique_ptr<NetEntity>* Scene::AddNetEntity(NetEntity* entity)
 {
 	return &m_entityManager->AddNetEntity(entity);
+}
+
+std::unique_ptr<Entity>* Scene::AddEntity(Entity* entity)
+{
+	return &m_entityManager->AddEntity(entity);
 }
 
 
