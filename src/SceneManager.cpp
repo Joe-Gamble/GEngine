@@ -23,7 +23,7 @@ namespace GEngine
 
 	void SceneManager::LoadScene(SceneMold& mold)
 	{
-		std::shared_ptr<Scene> scene = nullptr;
+		std::shared_ptr<Scene>* scene = nullptr;
 
 		if (mold.type == SceneType::GAME)
 			scene = AddScene(mold, gameScenes);
@@ -33,10 +33,10 @@ namespace GEngine
 		if (scene)
 		{
 			std::cout << "Scene loaded successfully: " << mold.name << std::endl;
-			scene.get()->OnSceneLoad();
+			scene->get()->OnSceneLoad();
 
-			scene->SetBlocking(mold.blockInput);
-			scene->SetType(mold.type);
+			scene->get()->SetBlocking(mold.blockInput);
+			scene->get()->SetType(mold.type);
 		}
 	}
 
@@ -62,7 +62,7 @@ namespace GEngine
 		return nullptr;
 	}
 
-	std::shared_ptr<Scene> SceneManager::AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer)
+	std::shared_ptr<Scene>* SceneManager::AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer)
 	{
 		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(mold.name);
 
@@ -78,7 +78,7 @@ namespace GEngine
 			}
 
 			sceneContainer.push_back(scene);
-			return sceneContainer.front();
+			return &sceneContainer.front();
 		}
 		return nullptr;
 	}

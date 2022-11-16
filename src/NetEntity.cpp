@@ -2,6 +2,11 @@
 
 using namespace GEngine::Networking;
 
+NetEntity::NetEntity() : NetEntity::Entity(nullptr)
+{
+
+}
+
 NetEntity::NetEntity(short& _netID, std::shared_ptr<Scene> _scene) : netID(_netID), NetEntity::Entity(_scene.get())
 {
 
@@ -10,6 +15,13 @@ NetEntity::NetEntity(short& _netID, std::shared_ptr<Scene> _scene) : netID(_netI
 NetEntity* NetEntity::Instantiate(short& netID, std::shared_ptr<Scene> scene)
 {
 	NetEntity* go = new NetEntity(netID, scene);
+	return go;
+}
+
+NetEntity* NetEntity::Instantiate(std::shared_ptr<Scene> scene)
+{
+	short tempID = 0;
+	NetEntity* go = new NetEntity(tempID, scene);
 	return go;
 }
 

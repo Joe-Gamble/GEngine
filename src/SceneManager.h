@@ -35,7 +35,7 @@ namespace GEngine
 
 	private:
 		std::unique_ptr<SceneMold> GetSceneData(const std::string& sceneName);
-		std::shared_ptr<Scene> AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer);
+		std::shared_ptr<Scene>* AddScene(SceneMold& mold, std::vector<std::shared_ptr<Scene>>& sceneContainer);
 
 		std::vector<std::shared_ptr<Scene>> gameScenes;
 		std::vector<std::shared_ptr<Scene>> uiScenes;

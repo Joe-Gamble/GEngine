@@ -205,7 +205,7 @@ std::unique_ptr<NetEntity>* GameServer::MakeEntity(std::shared_ptr<Scene> scene)
 	NetEntity* entity = NetEntity::Instantiate(netID, scene);
 
 	std::unique_ptr<NetEntity>* entityPtr = scene->AddNetEntity(entity);
-	NetworkManager::Instance().AddEntity(entityPtr);
+	NetworkManager::Instance().AddNetEntity(entityPtr);
 
 	return entityPtr;
 }

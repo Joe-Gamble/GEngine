@@ -41,15 +41,15 @@ void EntityManager::Refresh()
 std::unique_ptr<Entity>& EntityManager::AddEntity(Entity* entity)
 {
 	std::unique_ptr<Entity> uPtr{ entity };
-	entities.emplace_back(std::move(uPtr));
+	entities.push_back(std::move(uPtr));
 
-	return uPtr;
+	return entities.front();
 }	
 
 std::unique_ptr<NetEntity>& EntityManager::AddNetEntity(NetEntity* entity)
 {
 	std::unique_ptr<NetEntity> uPtr{ entity };
 
-	netEntities.emplace_back(std::move(uPtr));
-	return uPtr;
+	netEntities.push_back(std::move(uPtr));
+	return netEntities.front();
 }

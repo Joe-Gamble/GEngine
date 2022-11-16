@@ -35,5 +35,3 @@ std::unique_ptr<Entity>* Scene::AddEntity(Entity* entity)
 {
 	return &m_entityManager->AddEntity(entity);
 }
-
-

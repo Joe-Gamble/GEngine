@@ -24,7 +24,7 @@ void NetComponent::Update(double& dt)
 
 		if (netEntity != nullptr)
 		{
-			NetworkManager::Instance().SendNetEntity(netEntity->GetID());
+			NetworkManager::Instance().SendNetEntityChanges(netEntity->GetID());
 		}
 	}
 }

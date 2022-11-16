@@ -333,7 +333,20 @@ std::unique_ptr<NetEntity>* NetworkManager::GetNetEntity(short id)
     return nullptr;
 }
 
-void NetworkManager::AddEntity(std::unique_ptr<NetEntity>* entityPtr)
+std::unique_ptr<NetEntity>* NetworkManager::CreateNewNetEntity(Scene* scene)
+{
+    if (scene)
+    {
+        std::shared_ptr<Scene> scenePtr{ scene };
+
+        if (HasAuthority())
+            return GetServer().MakeEntity(scenePtr);
+        else if (IsClient())
+            return GetClient().MakeEntity(scenePtr);
+    }
+}
+
+void NetworkManager::AddNetEntity(std::unique_ptr<NetEntity>* entityPtr)
 {
     netEntities.emplace(entityPtr->get()->GetID(), entityPtr);
 }
@@ -342,7 +355,7 @@ void NetworkManager::AddEntity(std::unique_ptr<NetEntity>* entityPtr)
 /// Send entity data through the network
 /// </summary>
 /// <param name="id"> The id of the Entity. </param>
-void NetworkManager::SendNetEntity(short id)
+void NetworkManager::SendNetEntityChanges(short id)
 {
     std::unique_ptr<NetEntity>* entity = GetNetEntity(id);
 
@@ -355,8 +368,10 @@ void NetworkManager::SendNetEntity(short id)
     }
     else
     {
-        GetClient();
+        // Need to be able to send client data without the full netentity?
         // Client Send Entity here
+
+        GetClient();
     }
 }
 
