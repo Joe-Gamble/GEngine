@@ -1,9 +1,6 @@
 [
-  // 0 = GameSecen
-  // 1 = UI Scene 
   {
-    "MainMenu": {
-      "path": "MainMenu.json",
+    "Test Scene": {
       "isAddative": false,
       "isInclusive": false,
       "blockInput": false,
@@ -12,7 +9,6 @@
   },
   {
     "Options": {
-      "path": "Options.json",
       "isAddative": true,
       "isInclusive": false,
       "blockInput": true,
@@ -21,7 +17,6 @@
   },
   {
     "QuitScreen": {
-      "path": "Quit.json",
       "isAddative": true,
       "isInclusive": true,
       "blockInput": true,
