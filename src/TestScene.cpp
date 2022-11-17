@@ -11,10 +11,8 @@ void GEngine::TestScene::OnSceneLoad()
 	if (NetworkManager::Instance().HasAuthority())
 	{
 		std::unique_ptr<NetEntity>* testEntity = NetworkManager::Instance().CreateNewNetEntity( this );
-		//NetTransform& transform = *testEntity->AddComponent<NetTransform>();
-		//transform.SetPosition({ 1, 1 });
-
-		AddNetEntity(testEntity->get());
+		NetTransform& transform = *testEntity->get()->AddComponent<NetTransform>();
+		transform.SetPosition({ 1, 1 });
 	}
 	else if (NetworkManager::Instance().IsClient())
 	{

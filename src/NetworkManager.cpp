@@ -337,6 +337,7 @@ std::unique_ptr<NetEntity>* NetworkManager::CreateNewNetEntity(Scene* scene)
 {
     if (scene)
     {
+        // this is the issue
         std::shared_ptr<Scene> scenePtr{ scene };
 
         if (HasAuthority())
