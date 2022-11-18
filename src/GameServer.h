@@ -31,7 +31,6 @@ namespace GEngine
 
 			bool InitialiseServer();
 
-			void ChangeScene(const std::string& filepath);
 			void Tick();
 			void EndSession();
 
@@ -80,8 +79,10 @@ namespace GEngine
 			bool inSession = false;
 			
 			std::map<TCPConnection*, std::string> connectionsToClose;
+
 			ServerType serverType = ServerType::UNKNOWN;
 			short entityID = 0;
+			short clientID = 0;
 		};
 	}
 }

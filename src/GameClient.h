@@ -6,6 +6,8 @@
 #include "NetEntity.h"
 #include "GamePacket.h"
 
+#include <unordered_map>
+
 
 namespace GEngine
 {
@@ -34,7 +36,7 @@ namespace GEngine
 			void OnConnect() override;
 			void OnDisconnect(std::string reason) override;
 		private:
-			std::vector<std::unique_ptr<NetEntity>> pendingEntities;
+			std::unordered_map<std::shared_ptr<Scene>*, std::vector<std::unique_ptr<NetEntity>>> pendingEntities;
 		};
 	}
 }

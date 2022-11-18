@@ -76,6 +76,9 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 		}
 
 		// Instantiate an entity in a particular scene
+		// we are sending packets before we load the scene on the client
+		// above is probably the solution to this
+
 		case PacketType::PT_ENTITY_INSTANTIATE:
 		{
 			short id = -1;
@@ -90,13 +93,23 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 			{
 				std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
 
-				if (scene != nullptr && Application::HasScene(scene))
+				if (scene != nullptr)
 				{
 					// Make an entity here
-					NetEntity* netEntity = NetEntity::Instantiate(id, scene);
+					std::unique_ptr<NetEntity>* netEntity = MakeEntity(scene);
+
 					if (netEntity)
 					{
-						gamePacket >> *netEntity;
+						gamePacket >> *netEntity->get();
+
+						if (Application::HasScene(scene))
+						{
+							for (const std::unique_ptr<NetEntity>& entity : pendingEntities[&scene])
+							{
+								scene->AddNetEntity(std::move(entity.get()));
+							}
+							pendingEntities.erase(&scene);
+						}
 					}
 				}
 			}
@@ -157,9 +170,32 @@ void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)
 std::unique_ptr<NetEntity>* GameClient::MakeEntity(std::shared_ptr<Scene> scene)
 {
 	std::unique_ptr<NetEntity> entityPtr { NetEntity::Instantiate(scene) };
-	pendingEntities.emplace_back(std::move(entityPtr));
 
-	return &pendingEntities.front();
+	if (pendingEntities.count(&scene) > 0)
+		pendingEntities[&scene].push_back(std::move(entityPtr));
+
+	else
+	{
+		std::vector<std::unique_ptr<NetEntity>> entities = {};
+		pendingEntities.emplace(&scene, std::move(entities));
+
+		pendingEntities[&scene].push_back(std::move(entityPtr));
+	}
+		
+
+	return &pendingEntities[&scene].front();
+}
+
+void GameClient::RequestEntityInstatiate(std::unique_ptr<NetEntity>* entityPtr)
+{
+	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(PacketType::PT_ENTITY_INSTANTIATE);
+
+	NetEntity& entity = *entityPtr->get();
+
+	*entityPacket << entity.GetScene()->GetName();
+	*entityPacket << entity;
+
+	SendPacket(entityPacket);
 }
 
 bool GameClient::ProcessLocalPacket(std::shared_ptr<Packet> packet)

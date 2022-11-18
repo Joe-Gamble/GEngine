@@ -17,7 +17,7 @@ void NetTransform::Deserialise()
 
 void NetTransform::OnUpdate(double& dt)
 {
-    // std::cout << "NET: " << position.X() << std::endl;
+    std::cout << "NET: " << position.X() << std::endl;
 }
 
 void NetTransform::ApplyData(const void* data)

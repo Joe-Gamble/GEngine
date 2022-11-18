@@ -100,9 +100,15 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 		packet >> sceneName;
 
 		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
-		std::unique_ptr<NetEntity>* entityPtr = MakeEntity(scene);
 
-		SendEntityToClients(entityPtr, true);
+		if (scene)
+		{
+			std::unique_ptr<NetEntity>* entityPtr = MakeEntity(scene);
+			gamePacket >> *entityPtr->get();
+
+			SendEntityToClients(entityPtr, true);
+		}
+		
 		break;
 	}
 	case PacketType::PT_INVALID:
@@ -180,12 +186,6 @@ int GameServer::CloseConnectionDelayed(void* data)
 	return 0;
 }
 
-void GameServer::ChangeScene(const std::string& filepath)
-{
-	// Load the scene from disk
-	// Send this instruction to all connected clients
-}
-
 bool GameServer::ValidateComponent(Component* component)
 {
 	return true;
@@ -217,6 +217,9 @@ void GameServer::SendEntityToClients(std::unique_ptr<NetEntity>* entityPtr, bool
 	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(type);
 
 	NetEntity& entity = *entityPtr->get();
+
+	*entityPacket << entity.GetID();
+	*entityPacket << entity.GetScene()->GetName();
 	*entityPacket << entity;
 
 	SendPacket(entityPacket);

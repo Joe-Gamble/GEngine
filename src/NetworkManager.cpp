@@ -339,13 +339,21 @@ std::unique_ptr<NetEntity>* NetworkManager::CreateNewNetEntity(std::shared_ptr<S
     }
 }
 
+void NetworkManager::SendNewEntity(std::unique_ptr<NetEntity>* entityPtr)
+{
+    if (HasAuthority())
+        GetServer().SendEntityToClients(entityPtr, true);
+    else if (IsClient())
+        GetClient().RequestEntityInstatiate(entityPtr);
+}
+
 void NetworkManager::AddNetEntity(std::unique_ptr<NetEntity>* entityPtr)
 {
     netEntities.emplace(entityPtr->get()->GetID(), entityPtr);
 }
 
 /// <summary>
-/// Send entity data through the network
+/// Send existing entity data through the network
 /// </summary>
 /// <param name="id"> The id of the Entity. </param>
 void NetworkManager::SendNetEntityChanges(short id)

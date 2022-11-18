@@ -33,8 +33,9 @@ namespace GEngine
 		if (scene)
 		{
 			std::cout << "Scene loaded successfully: " << mold.name << std::endl;
-			scene->get()->OnSceneLoad(scene);
 
+			scene->get()->SetName(mold.name);
+			scene->get()->OnSceneLoad(scene);
 			scene->get()->SetBlocking(mold.blockInput);
 			scene->get()->SetType(mold.type);
 		}
@@ -96,24 +97,19 @@ namespace GEngine
 
 	bool SceneManager::HasScene(std::shared_ptr<Scene> scene)
 	{
-		if (scene->GetType() == SceneType::GAME)
+		for (const auto& gameScene : gameScenes)
 		{
-			for (const auto& gameScene : gameScenes)
+			if (scene == gameScene)
 			{
-				if (scene == gameScene)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
-		else if (scene->GetType() == SceneType::UI)
+
+		for (const auto& uiScene : uiScenes)
 		{
-			for (const auto& uiScene : uiScenes)
+			if (scene == uiScene)
 			{
-				if (scene == uiScene)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 

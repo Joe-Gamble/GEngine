@@ -39,6 +39,8 @@ namespace GEngine
 		void Update(double& dt);
 		void Render();
 
+		Scene* GetScene() { return scene; };
+
 		bool IsAlive() const;
 		void Destroy();
 
