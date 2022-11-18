@@ -9,7 +9,7 @@ namespace GEngine
 	class TestScene : public Scene
 	{
 	public:
-		void OnSceneLoad() override;
+		void OnSceneLoad(std::shared_ptr<Scene>* scene) override;
 		void OnSceneDestroy() override;
 	private:
 

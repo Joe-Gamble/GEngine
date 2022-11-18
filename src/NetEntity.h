@@ -35,9 +35,12 @@ namespace GEngine
 
 					if (std::is_base_of<NetComponent, T>())
 					{
-						NetComponent* netComponent = static_cast<NetComponent*>(t);
-						std::shared_ptr<NetComponent> ptr{ std::move(netComponent) };
-						netComponents.emplace_back(ptr);
+						NetComponent* netComponent = reinterpret_cast<NetComponent*>(t);
+
+						if (netComponent)
+						{
+							netComponents.emplace_back(netComponent);
+						}
 					}
 
 					return t;
@@ -47,11 +50,11 @@ namespace GEngine
 			}
 
 			const inline short GetID() { return netID; }
-			inline std::vector <std::shared_ptr<NetComponent>>* GetNetComponents() { return &netComponents; }
+			inline std::vector <NetComponent*>* GetNetComponents() { return &netComponents; }
 
 		private:
 			const short netID = -1;
-			std::vector<std::shared_ptr<NetComponent>> netComponents;
+			std::vector<NetComponent*> netComponents;
 		};
 	}
 }

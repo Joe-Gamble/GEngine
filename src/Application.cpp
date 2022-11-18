@@ -28,7 +28,7 @@ void Application::Init(AppSettings& settings)
 	{
 		std::cout << "Subsystems Initialised!..." << std::endl;
 
-		m_sceneManager.Init();
+		m_sceneManager->Init();
 
 		settings.sceneBundle->RegisterScenes();
 		settings.sceneBundle->RegisterComponents();
@@ -77,9 +77,12 @@ void Application::Run()
 
 			HandleEvents();
 
-			Update(delta);
+			if (isRunning)
+			{
+				Update(delta);
 
-			Draw();
+				Draw();
+			}
 
 			last = now;
 		}
@@ -93,7 +96,7 @@ void Application::HandleEvents()
 
 void Application::Update(double& dt)
 {
-	m_sceneManager.Tick(dt);
+	m_sceneManager->Tick(dt);
 
 	if (Input::Instance().GetKeyDown(SDL_SCANCODE_Q))
 	{
@@ -101,11 +104,11 @@ void Application::Update(double& dt)
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_W))
 	{
-		// home 192.168.0.203
+		// home 192.168.0.23
 		// work 192.168.0.203
 		// bnb 192.168.1.222
 		// bnb2 169.254.160.172
-		NetworkManager::Instance().JoinServer("127.0.0.1");
+		NetworkManager::Instance().JoinServer("192.168.0.23");
 	}
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_E))
 	{
@@ -122,6 +125,7 @@ void Application::Draw()
 void Application::Quit()
 {
 	isRunning = false;
+	m_sceneManager.reset();
 
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
@@ -137,5 +141,5 @@ void Application::Quit()
 void GEngine::Application::OpenScene(const std::string& sceneName)
 {
 	std::cout << "Opening Scene: " << sceneName << std::endl;
-	m_sceneManager.LoadScene(sceneName);
+	m_sceneManager->LoadScene(sceneName);
 }

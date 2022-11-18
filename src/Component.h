@@ -12,8 +12,6 @@ namespace GEngine
 
 	struct Component
 	{
-		virtual ~Component() {}
-
 		inline bool IsEnabled() { return m_isEnabled; }
 		virtual void ApplyData(const void* data) {};
 		void SetEnabled(bool _enabled) { m_isEnabled = _enabled; }

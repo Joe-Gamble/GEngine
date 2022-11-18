@@ -133,131 +133,126 @@ int NetworkManager::Tick(void* data)
 
     while (!nm->m_shutdown)
     {
-        now = SDL_GetTicks();
-        timeBetweenFrames = now - last;
+        SDL_Delay(16.67); // 60 / second
 
-        if (timeBetweenFrames > 1000.f / 60.0f)
+        if (SDL_TryLockMutex(nm->networkStateMutex) == 0)
         {
-            if (SDL_TryLockMutex(nm->networkStateMutex) == 0)
+            if (nm->IsServer())
             {
-                if (nm->IsServer())
+                if (nm->m_server->HasConnectionsToClose())
                 {
-                    if (nm->m_server->HasConnectionsToClose())
+                    for (auto& connection : nm->m_server->GetConnectionsToClose())
                     {
-                        for (auto& connection : nm->m_server->GetConnectionsToClose())
-                        {
-                            nm->m_server->SendKickPacketToClient(connection.first, connection.second, 5000);
-                        }
-                        nm->m_server->ClearConnectionsToClose();
+                        nm->m_server->SendKickPacketToClient(connection.first, connection.second, 5000);
                     }
+                    nm->m_server->ClearConnectionsToClose();
                 }
-
-                switch (nm->currentState)
-                {
-                    case NetworkState::UNINITIALIZED:
-                    case NetworkState::INITIALIZED:
-                        break;
-
-                    case NetworkState::CLIENT_CONNECTING:
-                    {
-                        const std::string& ip = nm->m_ipAddress;
-
-                        if (nm->m_client->ConnectToIP(ip))
-                        {
-                            EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-                            std::cout << "Connected to the server" << std::endl;
-
-                            SDL_UnlockMutex(nm->networkStateMutex);
-                            nm->SetState(NetworkState::SESSION_ACTIVE);
-                        }
-                        else
-                        {
-                            EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
-                            std::cout << "Couldn't connect to the server" << std::endl;
-
-                            SDL_UnlockMutex(nm->networkStateMutex);
-                            nm->SetState(NetworkState::SESSION_END);
-
-                            nm->EndSession();
-                        }
-                        break;
-                    }
-
-                    case NetworkState::SESSION_ACTIVE:
-                    {
-
-                        if (nm->m_server != nullptr && nm->m_server->IsRunning())
-                        {
-                            EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
-                            nm->m_server->Tick();
-                        }
-
-                        if (nm->m_client != nullptr)
-                        {
-                            if (nm->m_client->IsClientConnected())
-                                nm->m_client->Tick();
-                        }
-
-                        break;
-                    }
-
-                    case NetworkState::SESSION_END:
-                    {
-                        if (nm->m_client != nullptr)
-                        {
-                            if (!nm->HasAuthority() && nm->GetClient().IsConnected())
-                                nm->m_client->LeaveSession();
-
-                            nm->m_client.reset();
-                        }
-
-                        if (nm->m_server != nullptr)
-                        {
-                            if (nm->GetServer().InSession())
-                            {
-                                nm->m_server->EndSession();
-                            }
-
-                            if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
-                            {
-                                nm->m_server->Tick();
-                                break;
-                            }
-                            else
-                            {
-                                nm->m_server.reset();
-                            }
-                        }
-
-                        SDL_UnlockMutex(nm->networkStateMutex);
-                        nm->SetState(NetworkState::INITIALIZED);
-
-                        std::cout << "Session Ended." << std::endl << std::endl;
-                        EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
-
-                        return 0;
-                    }
-
-                    case NetworkState::SHUTDOWN:
-                    {
-                        nm->m_shutdown = true;
-                        nm->m_initialised = false;
-
-                        SDL_UnlockMutex(nm->networkStateMutex);
-                        nm->SetState(NetworkState::UNINITIALIZED);
-
-                        SDL_DestroyMutex(nm->networkStateMutex);
-
-                        Network::Shutdown();
-                        return 0;
-                    }
-
-                    default:
-                        break;
-                }
-                SDL_UnlockMutex(nm->networkStateMutex);
             }
-            last = now;
+
+            switch (nm->currentState)
+            {
+            case NetworkState::UNINITIALIZED:
+            case NetworkState::INITIALIZED:
+                break;
+
+            case NetworkState::CLIENT_CONNECTING:
+            {
+                const std::string& ip = nm->m_ipAddress;
+
+                if (nm->m_client->ConnectToIP(ip))
+                {
+                    EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
+                    std::cout << "Connected to the server" << std::endl;
+
+                    SDL_UnlockMutex(nm->networkStateMutex);
+                    nm->SetState(NetworkState::SESSION_ACTIVE);
+                }
+                else
+                {
+                    EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
+                    std::cout << "Couldn't connect to the server" << std::endl;
+
+                    SDL_UnlockMutex(nm->networkStateMutex);
+                    nm->SetState(NetworkState::SESSION_END);
+
+                    nm->EndSession();
+                }
+                break;
+            }
+
+            case NetworkState::SESSION_ACTIVE:
+            {
+
+                if (nm->m_server != nullptr && nm->m_server->IsRunning())
+                {
+                    EventDriver::Instance().CallEvent(Event::NETWORKING_SERVER_TICK);
+                    nm->m_server->Tick();
+                }
+
+                if (nm->m_client != nullptr)
+                {
+                    if (nm->m_client->IsClientConnected())
+                        nm->m_client->Tick();
+                }
+
+                break;
+            }
+
+            case NetworkState::SESSION_END:
+            {
+                if (nm->m_client != nullptr)
+                {
+                    if (!nm->HasAuthority() && nm->GetClient().IsConnected())
+                        nm->m_client->LeaveSession();
+
+                    nm->m_client.reset();
+                }
+
+                if (nm->m_server != nullptr)
+                {
+                    if (nm->GetServer().InSession())
+                    {
+                        nm->m_server->EndSession();
+                    }
+
+                    if (nm->GetServer().HasConnectionsToClose() || (!nm->GetServer().InSession() && nm->GetServer().GetConnections().size() > 0))
+                    {
+                        nm->m_server->Tick();
+                        break;
+                    }
+                    else
+                    {
+                        nm->m_server.reset();
+                    }
+                }
+
+                SDL_UnlockMutex(nm->networkStateMutex);
+                nm->SetState(NetworkState::INITIALIZED);
+
+                std::cout << "Session Ended." << std::endl << std::endl;
+                EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
+
+                return 0;
+            }
+
+            case NetworkState::SHUTDOWN:
+            {
+                nm->m_shutdown = true;
+                nm->m_initialised = false;
+
+                SDL_UnlockMutex(nm->networkStateMutex);
+                nm->SetState(NetworkState::UNINITIALIZED);
+
+                SDL_DestroyMutex(nm->networkStateMutex);
+
+                Network::Shutdown();
+                return 0;
+            }
+
+            default:
+                break;
+            }
+            SDL_UnlockMutex(nm->networkStateMutex);
         }
     }
     return 0;
@@ -333,17 +328,14 @@ std::unique_ptr<NetEntity>* NetworkManager::GetNetEntity(short id)
     return nullptr;
 }
 
-std::unique_ptr<NetEntity>* NetworkManager::CreateNewNetEntity(Scene* scene)
+std::unique_ptr<NetEntity>* NetworkManager::CreateNewNetEntity(std::shared_ptr<Scene>* scene)
 {
     if (scene)
     {
-        // this is the issue
-        std::shared_ptr<Scene> scenePtr{ scene };
-
         if (HasAuthority())
-            return GetServer().MakeEntity(scenePtr);
+            return GetServer().MakeEntity(*scene);
         else if (IsClient())
-            return GetClient().MakeEntity(scenePtr);
+            return GetClient().MakeEntity(*scene);
     }
 }
 

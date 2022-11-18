@@ -65,7 +65,7 @@ namespace GEngine
 			inline bool HasNetEntity(short id) { return netEntities.count(id); }
 			std::unique_ptr<NetEntity>* GetNetEntity(short id);
 			inline std::unordered_map<short, std::unique_ptr<NetEntity>*>* GetNetEntities() { return &netEntities; }
-			std::unique_ptr<NetEntity>* CreateNewNetEntity(Scene* scene);
+			std::unique_ptr<NetEntity>* CreateNewNetEntity(std::shared_ptr<Scene>* scene);
 			void AddNetEntity(std::unique_ptr<NetEntity>* entityPtr);
 			void SendNetEntityChanges(short id);
 

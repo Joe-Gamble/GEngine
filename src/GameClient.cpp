@@ -159,7 +159,7 @@ std::unique_ptr<NetEntity>* GameClient::MakeEntity(std::shared_ptr<Scene> scene)
 	std::unique_ptr<NetEntity> entityPtr { NetEntity::Instantiate(scene) };
 	pendingEntities.emplace_back(std::move(entityPtr));
 
-	return &entityPtr;
+	return &pendingEntities.front();
 }
 
 bool GameClient::ProcessLocalPacket(std::shared_ptr<Packet> packet)

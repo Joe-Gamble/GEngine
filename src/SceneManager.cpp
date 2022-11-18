@@ -33,7 +33,7 @@ namespace GEngine
 		if (scene)
 		{
 			std::cout << "Scene loaded successfully: " << mold.name << std::endl;
-			scene->get()->OnSceneLoad();
+			scene->get()->OnSceneLoad(scene);
 
 			scene->get()->SetBlocking(mold.blockInput);
 			scene->get()->SetType(mold.type);

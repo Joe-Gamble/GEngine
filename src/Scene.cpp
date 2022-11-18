@@ -2,15 +2,6 @@
 
 using namespace GEngine;
 
-Scene::Scene()
-{
-	
-}
-
-Scene::~Scene()
-{
-}
-
 void Scene::Update(double& dt)
 {
 	m_entityManager->Refresh();

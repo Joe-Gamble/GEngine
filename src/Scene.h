@@ -18,12 +18,9 @@ namespace GEngine
 	class Scene
 	{
 	public:
-		Scene();
-		~Scene();
-
 		void Update(double& dt);
 		void Render();
-		virtual void OnSceneLoad() {};
+		virtual void OnSceneLoad(std::shared_ptr<Scene>* scene) {};
 		virtual void OnSceneDestroy() {};
 
 	protected:		
