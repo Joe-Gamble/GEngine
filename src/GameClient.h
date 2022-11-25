@@ -23,9 +23,14 @@ namespace GEngine
 			~GameClient();
 
 			void SendPacket(std::shared_ptr<GamePacket> packet);
-			std::unique_ptr<NetEntity>* MakeEntity(std::shared_ptr<Scene> scene);
+
+			std::unique_ptr<NetEntity>* MakeTempEntity(std::shared_ptr<Scene> scene);
+			std::unique_ptr<NetEntity>* MakeEntity(short id, std::shared_ptr<Scene> scene);
+
 			void RequestEntityInstatiate(std::unique_ptr<NetEntity>* entity);
 			void RequestEntityChange(std::unique_ptr<NetEntity>* netEntity);
+
+			// void ResponseEntityInstantiate(Scene* scene, );
 			bool ProcessLocalPacket(std::shared_ptr<Packet> packet);
 
 			void Tick();
@@ -36,7 +41,7 @@ namespace GEngine
 			void OnConnect() override;
 			void OnDisconnect(std::string reason) override;
 		private:
-			std::unordered_map<std::shared_ptr<Scene>*, std::vector<std::unique_ptr<NetEntity>>> pendingEntities;
+			std::unordered_map<Scene*, std::vector<std::unique_ptr<NetEntity>>> pendingEntities;
 		};
 	}
 }

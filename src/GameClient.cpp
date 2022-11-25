@@ -96,25 +96,27 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 				if (scene != nullptr)
 				{
 					// Make an entity here
-					std::unique_ptr<NetEntity>* netEntity = MakeEntity(scene);
+					std::unique_ptr<NetEntity>* netEntity = MakeTempEntity(scene);
 
 					if (netEntity)
 					{
-						gamePacket >> *netEntity->get();
+						gamePacket >> **netEntity;
 
 						if (Application::HasScene(scene))
 						{
-							for (const std::unique_ptr<NetEntity>& entity : pendingEntities[&scene])
+							Scene* scenePtr = scene.get();
+							for (const std::unique_ptr<NetEntity>& entity : pendingEntities[scenePtr])
 							{
 								scene->AddNetEntity(std::move(entity.get()));
 							}
-							pendingEntities.erase(&scene);
+
+							if (pendingEntities.count(scenePtr) > 0)
+								pendingEntities.erase(scenePtr);
 						}
 					}
 				}
 			}
 			break;
-
 		}
 
 		case PacketType::PT_ENTITY_CHANGE: // Entity exists, and we ar emaking changes to new/preexisting components
@@ -167,23 +169,41 @@ void GameClient::SendPacket(std::shared_ptr<GamePacket> packet)
 	}
 }
 
-std::unique_ptr<NetEntity>* GameClient::MakeEntity(std::shared_ptr<Scene> scene)
+std::unique_ptr<NetEntity>* GameClient::MakeTempEntity(std::shared_ptr<Scene> scene)
 {
 	std::unique_ptr<NetEntity> entityPtr { NetEntity::Instantiate(scene) };
+	Scene* scenePtr = scene.get();
 
-	if (pendingEntities.count(&scene) > 0)
-		pendingEntities[&scene].push_back(std::move(entityPtr));
+	if (pendingEntities.count(scenePtr) > 0)
+		pendingEntities[scenePtr].push_back(std::move(entityPtr));
 
 	else
 	{
 		std::vector<std::unique_ptr<NetEntity>> entities = {};
-		pendingEntities.emplace(&scene, std::move(entities));
+		pendingEntities.emplace(scenePtr, std::move(entities));
 
-		pendingEntities[&scene].push_back(std::move(entityPtr));
+		pendingEntities[scenePtr].push_back(std::move(entityPtr));
 	}
-		
+	return &pendingEntities[scenePtr].front();
+}
 
-	return &pendingEntities[&scene].front();
+std::unique_ptr<NetEntity>* GameClient::MakeEntity(short id, std::shared_ptr<Scene> scene)
+{
+	std::unique_ptr<NetEntity> entityPtr { NetEntity::Instantiate(id, scene) };
+	Scene* scenePtr = scene.get();
+
+	if (pendingEntities.count(scenePtr) > 0)
+		pendingEntities[scenePtr].push_back(std::move(entityPtr));
+
+	else
+	{
+		std::vector<std::unique_ptr<NetEntity>> entities = {};
+		pendingEntities.emplace(scenePtr, std::move(entities));
+
+		pendingEntities[scenePtr].push_back(std::move(entityPtr));
+	}
+
+	return &pendingEntities[scenePtr].front();
 }
 
 void GameClient::RequestEntityInstatiate(std::unique_ptr<NetEntity>* entityPtr)
@@ -196,6 +216,11 @@ void GameClient::RequestEntityInstatiate(std::unique_ptr<NetEntity>* entityPtr)
 	*entityPacket << entity;
 
 	SendPacket(entityPacket);
+}
+
+void GameClient::RequestEntityChange(std::unique_ptr<NetEntity>* netEntity)
+{
+
 }
 
 bool GameClient::ProcessLocalPacket(std::shared_ptr<Packet> packet)

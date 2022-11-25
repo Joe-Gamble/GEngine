@@ -335,7 +335,7 @@ std::unique_ptr<NetEntity>* NetworkManager::CreateNewNetEntity(std::shared_ptr<S
         if (HasAuthority())
             return GetServer().MakeEntity(*scene);
         else if (IsClient())
-            return GetClient().MakeEntity(*scene);
+            return GetClient().MakeTempEntity(*scene);
     }
 }
 

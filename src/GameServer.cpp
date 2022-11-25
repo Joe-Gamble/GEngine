@@ -130,7 +130,7 @@ void GameServer::ValidateClientVersion(const short& version, const int& connecti
 {
 	std::string errorString;
 
-	if (!NetworkManager::VerifyNewConnection(version, connections.size() + 1, errorString))
+	if (!NetworkManager::VerifyNewConnection(version, connections.size(), errorString))
 	{
 		connectionsToClose.emplace(&connections.at(connection), errorString);
 	}

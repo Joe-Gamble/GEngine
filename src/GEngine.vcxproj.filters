@@ -151,7 +151,7 @@
       <Filter>Source Files\Engine\Data\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="NetComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine\ECS\NetComponents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

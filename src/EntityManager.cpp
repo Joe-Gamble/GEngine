@@ -11,6 +11,11 @@ void EntityManager::Update(double& dt)
 	{
 		entity->Update(dt);
 	}
+
+	for (const auto& netEntity : netEntities)
+	{
+		netEntity->Update(dt);
+	}
 }
 
 void EntityManager::Render()
@@ -18,6 +23,11 @@ void EntityManager::Render()
 	for (const auto& entity : entities)
 	{
 		entity->Render();
+	}
+
+	for (const auto& netEntity : netEntities)
+	{
+		netEntity->Render();
 	}
 }
 

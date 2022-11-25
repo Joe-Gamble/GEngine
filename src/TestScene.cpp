@@ -10,15 +10,19 @@ void GEngine::TestScene::OnSceneLoad(std::shared_ptr<Scene>* scene)
 {
 	if (NetworkManager::Instance().HasAuthority())
 	{
-		/*std::unique_ptr<NetEntity>* testEntity = NetworkManager::Instance().CreateNewNetEntity(scene);
+		std::unique_ptr<NetEntity>* testEntity = NetworkManager::Instance().CreateNewNetEntity(scene);
 		NetTransform& transform = *testEntity->get()->AddComponent<NetTransform>();
-		transform.SetPosition({ 1, 1 });*/
+		transform.SetPosition({ 1, 1 });
+
+		NetworkManager::Instance().SendNewEntity(testEntity);
 	}
 	else if (NetworkManager::Instance().IsClient())
 	{
-		std::unique_ptr<NetEntity>* testEntity = NetworkManager::Instance().CreateNewNetEntity(scene);		
+		/*std::unique_ptr<NetEntity>* testEntity = NetworkManager::Instance().CreateNewNetEntity(scene);		
 		NetTransform& transform = *testEntity->get()->AddComponent<NetTransform>();		
 		transform.SetPosition({ 2, 2 });
+
+		NetworkManager::Instance().SendNewEntity(testEntity);*/
 	}
 }
 		
