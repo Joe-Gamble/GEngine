@@ -28,6 +28,9 @@ namespace GEngine
 		
 		std::shared_ptr<Scene> GetScene(std::string& name)
 		{
+			if (!HasScene(name))
+				return nullptr;
+
 			auto it = scenes.find(name);
 			 if (it != scenes.end())
 			 {

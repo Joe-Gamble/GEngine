@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "NetworkManager.h"
 
 using namespace GEngine;
 
@@ -19,6 +20,7 @@ void Scene::Render()
 
 std::unique_ptr<NetEntity>* Scene::AddNetEntity(NetEntity* entity)
 {
+	NetworkManager::Instance().AddNetEntity(entity);
 	return &m_entityManager->AddNetEntity(entity);
 }
 

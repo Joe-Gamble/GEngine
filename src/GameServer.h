@@ -63,9 +63,9 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 			void ProcessLocalPacket(std::shared_ptr<GamePacket> packet);
 
-			std::unique_ptr<NetEntity>* MakeEntity(std::shared_ptr<Scene> scene);
+			NetEntity* MakeEntity(std::shared_ptr<Scene> scene);
 
-			void SendEntityToClients(std::unique_ptr<NetEntity>* entity, bool isNew);
+			void SendEntityToClients(NetEntity* entity, bool isNew);
 			void SendClientstoNewScene(const std::string& scene);
 
 		protected:

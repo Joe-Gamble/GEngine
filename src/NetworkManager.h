@@ -63,12 +63,12 @@ namespace GEngine
 			void SetState(NetworkState state);
 
 			inline bool HasNetEntity(short id) { return netEntities.count(id); }
-			std::unique_ptr<NetEntity>* GetNetEntity(short id);
-			inline std::unordered_map<short, std::unique_ptr<NetEntity>*>* GetNetEntities() { return &netEntities; }
+			NetEntity* GetNetEntity(short id);
+			inline std::unordered_map<short, NetEntity*>* GetNetEntities() { return &netEntities; }
 
-			std::unique_ptr<NetEntity>* CreateNewNetEntity(std::shared_ptr<Scene>* scene);
-			void SendNewEntity(std::unique_ptr<NetEntity>* entityPtr);
-			void AddNetEntity(std::unique_ptr<NetEntity>* entityPtr);
+			NetEntity* CreateNewNetEntity(std::shared_ptr<Scene>* scene);
+			void SendNewEntity(NetEntity* entityPtr);
+			void AddNetEntity(NetEntity* entityPtr);
 			void SendNetEntityChanges(short id);
 
 			void SendPacket(std::shared_ptr< GamePacket>& packet);
@@ -94,7 +94,7 @@ namespace GEngine
 			SDL_Thread* networkThread = nullptr;
 
 			// netEntity instances
-			std::unordered_map<short, std::unique_ptr<NetEntity>*> netEntities;
+			std::unordered_map<short, NetEntity*> netEntities;
 			
 			bool m_shutdown = false;
 			bool m_initialised = false;

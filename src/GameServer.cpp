@@ -103,8 +103,8 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 
 		if (scene)
 		{
-			std::unique_ptr<NetEntity>* entityPtr = MakeEntity(scene);
-			gamePacket >> *entityPtr->get();
+			NetEntity* entityPtr = MakeEntity(scene);
+			gamePacket >> *entityPtr;
 
 			SendEntityToClients(entityPtr, true);
 		}
@@ -199,24 +199,22 @@ void GameServer::Tick()
 	}
 }
 
-std::unique_ptr<NetEntity>* GameServer::MakeEntity(std::shared_ptr<Scene> scene)
+NetEntity* GameServer::MakeEntity(std::shared_ptr<Scene> scene)
 {
 	short netID = entityID++;
 	NetEntity* entity = NetEntity::Instantiate(netID, scene);
 
 	std::unique_ptr<NetEntity>* entityPtr = scene->AddNetEntity(entity);
-	NetworkManager::Instance().AddNetEntity(entityPtr);
-
-	return entityPtr;
+	return entityPtr->get();
 }
 
-void GameServer::SendEntityToClients(std::unique_ptr<NetEntity>* entityPtr, bool isNew)
+void GameServer::SendEntityToClients(NetEntity* entityPtr, bool isNew)
 {
 	PacketType type = isNew ? PacketType::PT_ENTITY_INSTANTIATE : PacketType::PT_ENTITY_CHANGE;
 
 	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(type);
 
-	NetEntity& entity = *entityPtr->get();
+	NetEntity& entity = *entityPtr;
 
 	*entityPacket << entity.GetID();
 	*entityPacket << entity.GetScene()->GetName();
