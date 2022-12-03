@@ -5,11 +5,24 @@ using namespace GEngine;
 
 Input::Input()
 {
-	m_KeyStates = SDL_GetKeyboardState(nullptr);
+	m_KeyStates = SDL_GetKeyboardState(&m_length);
+	m_PrevKeyStates = new Uint8[m_length];
+	memcpy(m_PrevKeyStates, m_KeyStates, m_length);
+
+	m_MouseState = SDL_GetMouseState(nullptr, nullptr);
+	m_PrevMouseState = m_MouseState;
 }
 
-void Input::Listen()
+Input::~Input()
 {
+	delete m_PrevKeyStates;
+}
+
+void Input::Listen()	
+{
+	memcpy(m_PrevKeyStates, m_KeyStates, m_length);
+	m_PrevMouseState = m_MouseState;
+	
 	SDL_PumpEvents();
 
 	m_KeyStates = SDL_GetKeyboardState(nullptr);
@@ -28,63 +41,66 @@ void Input::Listen()
 			case SDL_MOUSEMOTION:
 				ProcessMouseEvent(event.button);
 				break;
-
-			case SDL_KEYDOWN: KeyDown(); break;
-			case SDL_KEYUP: KeyUp(); break;
-
+			case SDL_KEYDOWN:
+				break;
 			default:
 				break;
 		}
 	}
 }
 
+bool Input::GetKey(SDL_Scancode key)
+{
+	return m_KeyStates[key] && m_PrevKeyStates[key];
+}
+
 bool Input::GetKeyDown(SDL_Scancode key)
 {
-	return (m_KeyStates[key] == 1);
+	return m_KeyStates[key] && !m_PrevKeyStates[key];
 }
 
-bool GEngine::Input::GetMouseButtonDown(int button)
+bool Input::GetKeyUp(SDL_Scancode key)
 {
-	if (m_mouseState)
-	{
-
-	}
-
-	return 1;
+	return !m_KeyStates[key] && m_PrevKeyStates[key];
 }
 
-Vector2 GEngine::Input::GetMousePosition()
+bool Input::GetMouseButton(int button)
+{
+	return m_MouseState & SDL_BUTTON(button);
+}
+
+bool Input::GetMouseButtonDown(int button)
+{
+	return (m_MouseState & SDL_BUTTON(button) && !(m_PrevMouseState & SDL_BUTTON(button)));
+}
+
+bool Input::GetMouseButtonUp(int button)
+{
+	return (!(m_MouseState & SDL_BUTTON(button)) && m_PrevMouseState & SDL_BUTTON(button));
+}
+
+Vector2 Input::GetMousePosition()
 {
 	if (SDL_GetMouseFocus() != nullptr)
 	{
-		return m_mousePos;
+		return m_MousePos;
 	}
 	return Vector2();
 }
 
-void Input::KeyUp()
-{
-	m_KeyStates = SDL_GetKeyboardState(nullptr);
-}
-
-void Input::KeyDown()
-{
-	m_KeyStates = SDL_GetKeyboardState(nullptr);
-}
-
-void GEngine::Input::ProcessMouseEvent(SDL_MouseButtonEvent& mouseButtonEvent)
+void Input::ProcessMouseEvent(SDL_MouseButtonEvent& mouseButtonEvent)
 {
 	int x, y;
-	m_mouseState = SDL_GetMouseState(&x, &y);
+	m_MouseState = SDL_GetMouseState(&x, &y);
 
-	m_mousePos.SetX(x);
-	m_mousePos.SetY(y);
+	m_MousePos.SetX(x);
+	m_MousePos.SetY(y);
 }
 
-void GEngine::Input::MouseUp()
+void Input::MouseUp()
 {
 }
 
-void GEngine::Input::MouseDown()
+void Input::MouseDown()
 {
 }

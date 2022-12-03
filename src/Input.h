@@ -5,6 +5,7 @@
 
 #include "SDL.h"
 #include "Vector.h"
+#include <vector>
 
 using namespace GEngine::GUtility;
 
@@ -20,17 +21,20 @@ namespace GEngine
 		}
 
 		void Listen();
+
+		bool GetKey(SDL_Scancode key);
 		bool GetKeyDown(SDL_Scancode key);
 		bool GetKeyUp(SDL_Scancode key);
 
+		bool GetMouseButton(int button);
 		bool GetMouseButtonDown(int button);
+		bool GetMouseButtonUp(int button);
 
 		Vector2 GetMousePosition();
 
 	private:
 		Input();
-		void KeyUp();
-		void KeyDown();
+		~Input();
 
 		void ProcessMouseEvent(SDL_MouseButtonEvent& event);
 
@@ -38,9 +42,14 @@ namespace GEngine
 		void MouseDown();
 
 		const Uint8* m_KeyStates;
-		Uint32 m_mouseState;
+		Uint8* m_PrevKeyStates;
 
-		Vector2 m_mousePos;
+		Uint32 m_MouseState;
+		Uint32 m_PrevMouseState;
+
+		Vector2 m_MousePos;
+
+		int m_KeysLength = 0;
 	};
 }
 

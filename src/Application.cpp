@@ -80,7 +80,6 @@ void Application::Run()
 			if (isRunning)
 			{
 				Update(delta);
-
 				Draw();
 			}
 
@@ -114,6 +113,11 @@ void Application::Update(double& dt)
 	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_E))
 	{
 		NetworkManager::Instance().EndSession();
+	}
+	else if (Input::Instance().GetKeyDown(SDL_SCANCODE_R))
+	{
+		if (NetworkManager::Instance().HasAuthority())
+			NetworkManager::Instance().GetServer().SendClientstoNewScene("Test Scene");
 	}
 }
 
