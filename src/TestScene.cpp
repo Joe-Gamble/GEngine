@@ -18,11 +18,11 @@ void GEngine::TestScene::OnSceneLoad(std::shared_ptr<Scene>* scene)
 	}
 	else if (NetworkManager::Instance().IsClient())
 	{
-		NetEntity* testEntity = NetworkManager::Instance().CreateNewNetEntity(scene);
+		/*NetEntity* testEntity = NetworkManager::Instance().CreateNewNetEntity(scene);
 		NetTransform& transform = *testEntity->AddComponent<NetTransform>();		
 		transform.SetPosition({ 2, 2 });
 
-		NetworkManager::Instance().SendNewEntity(testEntity);
+		NetworkManager::Instance().SendNewEntity(testEntity);*/
 	}
 }
 		

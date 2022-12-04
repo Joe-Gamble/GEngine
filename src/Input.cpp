@@ -5,9 +5,9 @@ using namespace GEngine;
 
 Input::Input()
 {
-	m_KeyStates = SDL_GetKeyboardState(&m_length);
-	m_PrevKeyStates = new Uint8[m_length];
-	memcpy(m_PrevKeyStates, m_KeyStates, m_length);
+	m_KeyStates = SDL_GetKeyboardState(&m_KeysLength);
+	m_PrevKeyStates = new Uint8[m_KeysLength];
+	memcpy(m_PrevKeyStates, m_KeyStates, m_KeysLength);
 
 	m_MouseState = SDL_GetMouseState(nullptr, nullptr);
 	m_PrevMouseState = m_MouseState;
@@ -20,7 +20,7 @@ Input::~Input()
 
 void Input::Listen()	
 {
-	memcpy(m_PrevKeyStates, m_KeyStates, m_length);
+	memcpy(m_PrevKeyStates, m_KeyStates, m_KeysLength);
 	m_PrevMouseState = m_MouseState;
 	
 	SDL_PumpEvents();

@@ -202,7 +202,6 @@ GamePacket& GamePacket::operator>>(ComponentID& componentType)
 GamePacket& GamePacket::operator<<(NetEntity& entity)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
-    *packet << entity.GetID();
 
     uint32_t componentCount = entity.GetComponents()->size();
     *packet << componentCount;
@@ -224,12 +223,6 @@ GamePacket& GamePacket::operator>>(NetEntity& entity)
 {
     Packet* packet = reinterpret_cast<Packet*>(this);
     uint32_t componentCount = 0;
-
-    short id;
-    *this >> id;
-
-    if (entity.GetID() != id)
-        return *this;
 
     *packet >> componentCount;
 

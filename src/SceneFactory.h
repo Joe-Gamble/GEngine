@@ -19,14 +19,14 @@ namespace GEngine
 			return factoy;
 		}
 
-		inline bool HasScene(std::string& name) { return scenes.count(name) > 0; }
+		inline bool HasScene(const std::string& name) { return scenes.count(name) > 0; }
 		void AddScene(std::string name, std::shared_ptr<Scene> scenePtr)
 		{
 			std::function<std::shared_ptr<Scene>()> sceneFunc = ([scenePtr = std::move(scenePtr)] { return scenePtr; });
 			scenes.emplace(name, sceneFunc);
 		}
 		
-		std::shared_ptr<Scene> GetScene(std::string& name)
+		std::shared_ptr<Scene> GetScene(const std::string& name)
 		{
 			if (!HasScene(name))
 				return nullptr;

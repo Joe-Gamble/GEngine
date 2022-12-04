@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "EventDriver.h"
 #include "NetworkManager.h"
+#include "Logging.h"
 
 using namespace GEngine;
 using namespace GEngine::Networking;
@@ -26,7 +27,7 @@ void Application::Init(AppSettings& settings)
 
 	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS) == 0)
 	{
-		std::cout << "Subsystems Initialised!..." << std::endl;
+		Logging::INFO("Subsystems Initialised!...");
 
 		m_sceneManager->Init();
 
@@ -36,13 +37,13 @@ void Application::Init(AppSettings& settings)
 		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, settings.ScreenWidth, settings.ScreenHeight, flags);
 		if (window)
 		{
-			std::cout << "Window created" << std::endl;
+			Logging::INFO("Window created");
 		}
 
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 		if (renderer)
 		{
-			std::cout << "Renderer created" << std::endl;
+			Logging::INFO("Renderer created");
 			SDL_SetRenderDrawColor(renderer, 32, 90, 48, 255);
 		}
 
@@ -140,11 +141,11 @@ void Application::Quit()
 	NetworkManager::Instance().ShutDown();
 	SDL_Delay(100);
 
-	std::cout << "Game Destroyed" << std::endl;
+	Logging::INFO("Game Destroyed");
 }
 
 void GEngine::Application::OpenScene(const std::string& sceneName)
 {
-	std::cout << "Opening Scene: " << sceneName << std::endl;
+	Logging::INFO("Opening Scene: " + sceneName);
 	m_sceneManager->LoadScene(sceneName);
 }

@@ -59,7 +59,10 @@ namespace GEngine
 			static bool VerifyNewConnection(const short& version, const int& playerCount, std::string& error);
 
 			inline bool IsInitialised() { return m_initialised; }
+
 			bool HasAuthority();
+			bool IsVerified();
+
 			void SetState(NetworkState state);
 
 			inline bool HasNetEntity(short id) { return netEntities.count(id); }

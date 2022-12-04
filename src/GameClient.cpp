@@ -4,6 +4,7 @@
 #include "NetworkManager.h"
 #include "SceneFactory.h"
 #include "Application.h"
+#include "Logging.h"
 
 // How do I register components for being sent over the network?
 // Will this be on a per/component basis?
@@ -52,6 +53,7 @@ GameClient::~GameClient()
 /// <returns> True if the packet was processed successfully. </returns>
 bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 {
+	Logging::INFO("Received Packet.");
 	GamePacket& gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
 	switch (packet->GetPacketType())
 	{
@@ -81,15 +83,21 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 
 		case PacketType::PT_ENTITY_INSTANTIATE:
 		{
-			short id = -1;
-			gamePacket >> id;
+			short machineID = -1;
+			gamePacket >> machineID;
+
+			short clientID = -1;
+			gamePacket >> clientID;
+
+			short serverNetID = -1;
+			gamePacket >> serverNetID;
 
 			std::string sceneName;
 			Packet& packet = static_cast<Packet&>(gamePacket);
 
 			packet >> sceneName;
 
-			if (!NetworkManager::Instance().HasNetEntity(id))
+			if (!NetworkManager::Instance().HasNetEntity(serverNetID))
 			{
 				std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
 
@@ -97,13 +105,10 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 				{
 					if (Application::HasScene(scene))
 					{
-						NetEntity* netEntity = MakeEntity(id, scene);
+						NetEntity* netEntity = MakeEntity(machineID, serverNetID, machineID, scene);
 						gamePacket >> *netEntity;
 
-						if (!NetworkManager::Instance().HasNetEntity(netEntity->GetID()))
-						{
-							scene->AddNetEntity(netEntity);
-						}
+						scene->AddNetEntity(netEntity);
 					}
 					else
 					{
@@ -127,6 +132,16 @@ bool GameClient::ProcessPacket(std::shared_ptr<Packet> packet)
 				gamePacket >> *entity;
 			}
 
+			break;
+		}
+
+		case PacketType::PT_VERIFY:
+		{
+			if (NetworkManager::Instance().HasAuthority())
+				break;
+
+			gamePacket >> clientID;
+			OnVerified();
 			break;
 		}
 
@@ -173,36 +188,73 @@ NetEntity* GameClient::MakeTempEntity(std::shared_ptr<Scene> scene)
 
 	std::unique_ptr<NetEntity> entityPtr{ std::move(entity) };
 
-	pendingEntities.emplace(tempID, std::move(entityPtr));
-	return pendingEntities[tempID].get();
+	if (pendingEntities.count(scene) == 0)
+	{
+		std::unordered_map<short, std::unique_ptr<NetEntity>> entities = {};
+		pendingEntities.emplace(scene, std::move(entities));
+	}
+
+	pendingEntities[scene].emplace(tempID, std::move(entityPtr));
+
+	return pendingEntities[scene][tempID].get();
 }
 
-NetEntity* GameClient::MakeEntity(short id, std::shared_ptr<Scene> scene)
+NetEntity* GameClient::MakeEntity(short machineID, short serverID, short clientID, std::shared_ptr<Scene> scene)
 {
 	NetEntity* entity = nullptr;
 
-	if (pendingEntities.count(id) > 0)
+	if (machineID == GetClientID())
 	{
-		auto it = pendingEntities.find(id);
-
-		if (it != pendingEntities.end())
+		if (pendingEntities.count(scene) > 0 && pendingEntities[scene].count(clientID) > 0)
 		{
-			entity = it->second.release();
-			pendingEntities.erase(id);
+			auto it = pendingEntities[scene].find(clientID);
+
+			if (it != pendingEntities[scene].end())
+			{
+				entity = it->second.release();
+				pendingEntities[scene].erase(clientID);
+
+				if (pendingEntities[scene].size() == 0)
+					pendingEntities.erase(scene);
+			}
 		}
 	}
-	else
-		entity = NetEntity::Instantiate(id, scene);
+
+	if (entity == nullptr)
+		entity = NetEntity::Instantiate(serverID, scene);
+	
 
 	std::unique_ptr<NetEntity>* entityPtr = scene->AddNetEntity(entity);
 	return entityPtr->get();
+
+}
+
+void GameClient::OnVerified()
+{
+	m_isVerified = true;
+
+	for (const auto& element : pendingEntities) 
+	{
+		if (Application::HasScene(element.first))
+		{
+			for (const auto& entity : element.second)
+			{
+				RequestEntityInstatiate(entity.second.get());
+			}
+		}
+	}
+
+	pendingEntities.clear();
 }
 
 void GameClient::RequestEntityInstatiate(NetEntity* entityPtr)
 {
 	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(PacketType::PT_ENTITY_INSTANTIATE);
-
+	
 	NetEntity& entity = *entityPtr;
+
+	*entityPacket << GetClientID();
+	*entityPacket << entity.GetID();
 
 	*entityPacket << entity.GetScene()->GetName();
 	*entityPacket << entity;

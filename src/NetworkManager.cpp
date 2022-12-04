@@ -1,5 +1,5 @@
 #include "NetworkManager.h"
-#include <mutex>
+#include "Logging.h"
 
 using namespace GEngine::Networking;
 using namespace GEngine::Callbacks;
@@ -80,7 +80,7 @@ bool NetworkManager::MakeServer(ServerType type)
             {
                 m_client = std::make_unique<GameClient>();
 
-                std::cout << "Server machine client created" << std::endl;
+                Logging::INFO("Server machine client created");
             }
 
             SetState(NetworkState::SESSION_ACTIVE);
@@ -162,7 +162,7 @@ int NetworkManager::Tick(void* data)
                 if (nm->m_client->ConnectToIP(ip))
                 {
                     EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_SUCCESSFUL);
-                    std::cout << "Connected to the server" << std::endl;
+                    Logging::INFO("Connected to the server");
 
                     SDL_UnlockMutex(nm->networkStateMutex);
                     nm->SetState(NetworkState::SESSION_ACTIVE);
@@ -170,7 +170,7 @@ int NetworkManager::Tick(void* data)
                 else
                 {
                     EventDriver::Instance().CallEvent(Event::NETWORKING_CLIENT_CONNECT_UNSUCCESSFUL);
-                    std::cout << "Couldn't connect to the server" << std::endl;
+                    Logging::ERROR("Couldn't connect to the server");
 
                     SDL_UnlockMutex(nm->networkStateMutex);
                     nm->SetState(NetworkState::SESSION_END);
@@ -229,7 +229,6 @@ int NetworkManager::Tick(void* data)
                 SDL_UnlockMutex(nm->networkStateMutex);
                 nm->SetState(NetworkState::INITIALIZED);
 
-                std::cout << "Session Ended." << std::endl << std::endl;
                 EventDriver::Instance().CallEvent(Event::NETWORKING_SESSION_ENDED);
 
                 return 0;
@@ -272,7 +271,7 @@ bool NetworkManager::VerifyNewConnection(const short& version, const int& player
         return false;
     }
     else
-        std::cout << "Version verified." << std::endl;
+        Logging::INFO("Version verified.");
 
 
     if (playerCount > MaxPlayers)
@@ -288,12 +287,15 @@ bool NetworkManager::HasAuthority()
 {
     if (IsServer())
     {
-        if (m_server->GetServerType() == ServerType::HOSTED && IsClient())
-        {
-            return true;
-        }
+        return true;
     }
     return false;
+}
+
+bool NetworkManager::IsVerified()
+{
+    if (HasAuthority() || GetClient().IsVerified())
+        return false;
 }
 
 void NetworkManager::SetState(NetworkState state)
@@ -343,7 +345,7 @@ void NetworkManager::SendNewEntity(NetEntity* entityPtr)
 {
     if (HasAuthority())
         GetServer().SendEntityToClients(entityPtr, true);
-    else if (IsClient())
+    else if (IsClient() && GetClient().IsVerified())
         GetClient().RequestEntityInstatiate(entityPtr);
 }
 

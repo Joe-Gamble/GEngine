@@ -25,7 +25,9 @@ namespace GEngine
 			void SendPacket(std::shared_ptr<GamePacket> packet);
 
 			NetEntity* MakeTempEntity(std::shared_ptr<Scene> scene);
-			NetEntity* MakeEntity(short id, std::shared_ptr<Scene> scene);
+			NetEntity* MakeEntity(short machineID, short serverID, short clientID, std::shared_ptr<Scene> scene);
+
+			void OnVerified();
 
 			void RequestEntityInstatiate(NetEntity* entity);
 			void RequestEntityChange(NetEntity* netEntity);
@@ -35,13 +37,18 @@ namespace GEngine
 			void Tick();
 
 			inline bool IsClientConnected() { return IsConnected(); }
+			inline bool IsVerified() { return m_isVerified; }
+			inline short GetClientID() { return clientID; }
+
 		protected:
 			bool ProcessPacket(std::shared_ptr<Packet> packet) override;
 			void OnConnect() override;
 			void OnDisconnect(std::string reason) override;
 		private:
-			std::unordered_map<short, std::unique_ptr<NetEntity>> pendingEntities;
+			std::unordered_map<std::shared_ptr<Scene>, std::unordered_map<short, std::unique_ptr<NetEntity>>> pendingEntities;
 			short pendingEntityID = 0;
+			short clientID = -1;
+			bool m_isVerified = false;
 		};
 	}
 }

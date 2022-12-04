@@ -65,7 +65,7 @@ namespace GEngine
 
 			NetEntity* MakeEntity(std::shared_ptr<Scene> scene);
 
-			void SendEntityToClients(NetEntity* entity, bool isNew);
+			void SendEntityToClients(NetEntity* entityPtr, bool isNew, short ownerMachineID = -1, short ownerClientID = -1);
 			void SendClientstoNewScene(const std::string& scene);
 
 		protected:
@@ -82,6 +82,7 @@ namespace GEngine
 			std::map<TCPConnection*, std::string> connectionsToClose;
 
 			ServerType serverType = ServerType::UNKNOWN;
+
 			short entityID = 0;
 			short clientID = 0;
 		};

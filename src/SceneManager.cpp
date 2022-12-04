@@ -35,9 +35,10 @@ namespace GEngine
 			std::cout << "Scene loaded successfully: " << mold.name << std::endl;
 
 			scene->get()->SetName(mold.name);
-			scene->get()->OnSceneLoad(scene);
 			scene->get()->SetBlocking(mold.blockInput);
 			scene->get()->SetType(mold.type);
+
+			scene->get()->OnSceneLoad(scene);
 		}
 	}
 
@@ -50,16 +51,19 @@ namespace GEngine
 		try
 		{
 			file >> data;
-			SceneMold sceneMold =  data[0][sceneName].get<SceneMold>();
+			file.close();
+
+			SceneMold sceneMold =  data[sceneName].get<SceneMold>();
 
 			sceneMold.name = sceneName;
 			return std::make_unique<SceneMold>(sceneMold);
 		}
 		catch (json::exception e)
 		{
-			std::cout << e.what() << std::endl;
+			std::cout << "Could not Load Scene of name: " << sceneName << " - Error: "  << e.what() << std::endl;
 		}
 
+		file.close();
 		return nullptr;
 	}
 

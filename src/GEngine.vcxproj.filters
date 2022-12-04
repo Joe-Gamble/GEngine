@@ -85,6 +85,12 @@
     <Filter Include="Header Files\Engine\Data\Scenes\Generic">
       <UniqueIdentifier>{245acde9-13a5-4919-ba70-2a9431af2ba7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility\Logging">
+      <UniqueIdentifier>{0aa58b15-8739-43cd-a5b4-1e678442cb55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\Logging">
+      <UniqueIdentifier>{68103d92-54d6-4da8-8b34-7f0ac62b49c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -152,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="NetComponent.cpp">
       <Filter>Source Files\Engine\ECS\NetComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Logging.cpp">
+      <Filter>Source Files\Utility\Logging</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +277,12 @@
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Header Files\Engine\Data\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Logging.h">
+      <Filter>Header Files\Utility\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Header Files\Utility\Logging</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

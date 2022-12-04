@@ -2,6 +2,7 @@
 #include "GamePacket.h"
 #include "EventDriver.h"
 #include "NetworkManager.h"
+#include "Logging.h"
 #include "Scene.h"
 #include "SceneFactory.h"
 
@@ -33,10 +34,7 @@ bool GameServer::InitialiseServer()
 	return false;
 }
 
-void GameServer::OnConnect(TCPConnection& newConnection) noexcept
-{
-	SendClientstoNewScene("Test Scene");
-}
+void GameServer::OnConnect(TCPConnection& newConnection) noexcept {}
 
 void GameServer::OnDisconnect(TCPConnection& lostConnection, const std::string& reason)
 {
@@ -59,6 +57,8 @@ void GameServer::SendPacket(std::shared_ptr<GamePacket> packet)
 
 bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionIndex)
 {
+	Logging::INFO("Received Packet.");
+
 	GamePacket gamePacket = *reinterpret_cast<GamePacket*>(packet.get());
 	switch (packet->GetPacketType())
 	{
@@ -94,9 +94,15 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 	case PacketType::PT_ENTITY_INSTANTIATE:
 	{
 		// Send all clients an entity to spawn
-		std::string sceneName;
 		Packet& packet = static_cast<Packet&>(gamePacket);
 
+		short clientMachineID = -1;
+		gamePacket >> clientMachineID;
+
+		short clientEntityID = -1;
+		gamePacket >> clientEntityID;
+
+		std::string sceneName;
 		packet >> sceneName;
 
 		std::shared_ptr<Scene> scene = SceneFactory::Instance().GetScene(sceneName);
@@ -106,7 +112,7 @@ bool GameServer::ProcessPacket(std::shared_ptr<Packet> packet, int connectionInd
 			NetEntity* entityPtr = MakeEntity(scene);
 			gamePacket >> *entityPtr;
 
-			SendEntityToClients(entityPtr, true);
+			SendEntityToClients(entityPtr, true, clientMachineID, clientEntityID);
 		}
 		
 		break;
@@ -126,26 +132,33 @@ void GameServer::ProcessLocalPacket(std::shared_ptr<GamePacket> packet)
 	ProcessPacket(packet, -1);
 }
 
-void GameServer::ValidateClientVersion(const short& version, const int& connection)
+void GameServer::ValidateClientVersion(const short& version, const int& connectionID)
 {
 	std::string errorString;
+	TCPConnection* connection = &connections.at(connectionID);
 
 	if (!NetworkManager::VerifyNewConnection(version, connections.size(), errorString))
 	{
-		connectionsToClose.emplace(&connections.at(connection), errorString);
+		connectionsToClose.emplace(connection, errorString);
 	}
 	else
 	{
-		// Create some kind of Identifier and send back to client? NetID? 
+		short id = clientID++;
 
-		// Server -> have a collection of
+		// collection of Clients
+		// map of clientID < and client data?
+		//
+
+		std::shared_ptr<GamePacket> verifyPacket = std::make_shared<GamePacket>(PacketType::PT_VERIFY);
+		*verifyPacket << id;
+
+		SendPacket(verifyPacket);
 	}
 }
 
 void GameServer::SendKickPacketToClient(TCPConnection* connection, std::string& reason, long long timeout)
 {
 	std::shared_ptr<Packet> kickPacket = std::make_shared<Packet>(PacketType::PT_KICK);
-	//Packet* packet = reinterpret_cast<Packet*>(kickPacket.get());
 
 	*kickPacket << reason;
 	connection->pm_outgoing.Append(kickPacket);
@@ -170,6 +183,12 @@ int GameServer::CloseConnectionDelayed(void* data)
 
 	while (connection.IsActive())
 	{
+		if (!connection.pm_incoming.HasPendingPackets() && !connection.pm_outgoing.HasPendingPackets())
+		{
+			connection.SetActive(false);
+			break;
+		}
+
 		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
 		long long passed = std::chrono::duration_cast<std::chrono::milliseconds>(current - begin).count();
 
@@ -179,6 +198,7 @@ int GameServer::CloseConnectionDelayed(void* data)
 		}
 	}
 
+	// check if the server object is still valid
 	if (NetworkManager::Instance().IsServer())
 		server.CloseConnection(connection, reason);
 
@@ -208,13 +228,16 @@ NetEntity* GameServer::MakeEntity(std::shared_ptr<Scene> scene)
 	return entityPtr->get();
 }
 
-void GameServer::SendEntityToClients(NetEntity* entityPtr, bool isNew)
+void GameServer::SendEntityToClients(NetEntity* entityPtr, bool isNew, short ownerMachineID, short ownerClientID)
 {
 	PacketType type = isNew ? PacketType::PT_ENTITY_INSTANTIATE : PacketType::PT_ENTITY_CHANGE;
 
 	std::shared_ptr<GamePacket> entityPacket = std::make_shared<GamePacket>(type);
 
 	NetEntity& entity = *entityPtr;
+
+	*entityPacket << ownerMachineID;
+	*entityPacket << ownerClientID;
 
 	*entityPacket << entity.GetID();
 	*entityPacket << entity.GetScene()->GetName();
@@ -235,6 +258,8 @@ void GameServer::EndSession()
 { 
 	inSession = false;
 	serverType = ServerType::UNKNOWN;
+
+	Logging::INFO("Session Ended");
 
 	for (TCPConnection& connection : connections)
 	{
